@@ -1,0 +1,5 @@
+position,name,type,unit,role,description,train_dtype,test_dtype
+42,attack_name,nominal,không áp dụng,label_not_predictor,Nhãn gốc TXT bảo toàn,object,object
+43,difficulty,integer,không áp dụng,metadata_not_predictor,"Số bộ phân loại gốc dự đoán đúng, 0–21; không phải đặc trưng mạng",int64,int64
+44,attack_category,nominal,không áp dụng,label_not_predictor,"Normal, DoS, Probe, R2L, U2R",category,category
+45,label_binary,binary,không áp dụng,label_not_predictor,Normal=0; Attack=1,int64,int64

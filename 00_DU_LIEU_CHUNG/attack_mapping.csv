@@ -1,0 +1,41 @@
+attack_name,attack_category,label_binary,train_count,test_count,source,source_url,note
+normal,Normal,0,67343,9711,literal normal,https://www.unb.ca/cic/datasets/nsl.html,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+back,DoS,1,956,359,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+land,DoS,1,18,7,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+neptune,DoS,1,41214,4657,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+pod,DoS,1,201,41,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+smurf,DoS,1,2646,665,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+teardrop,DoS,1,892,12,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+apache2,DoS,1,0,737,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+mailbomb,DoS,1,0,293,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+processtable,DoS,1,0,685,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+udpstorm,DoS,1,0,2,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+worm,DoS,1,0,2,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Quy ước DoS theo Bảng 3 Imrana; một số nguồn xếp R2L
+ipsweep,Probe,1,3599,141,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+nmap,Probe,1,1493,73,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+portsweep,Probe,1,2931,157,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+satan,Probe,1,3633,735,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+mscan,Probe,1,0,996,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+saint,Probe,1,0,319,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+ftp_write,R2L,1,8,3,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+guess_passwd,R2L,1,53,1231,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+imap,R2L,1,11,1,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+multihop,R2L,1,7,18,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+phf,R2L,1,4,2,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+spy,R2L,1,2,0,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+warezclient,R2L,1,890,0,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+warezmaster,R2L,1,20,944,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+sendmail,R2L,1,0,14,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+named,R2L,1,0,17,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+snmpgetattack,R2L,1,0,178,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+snmpguess,R2L,1,0,331,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+xlock,R2L,1,0,9,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+xsnoop,R2L,1,0,4,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+httptunnel,R2L,1,0,133,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Quy ước R2L theo Bảng 3 Imrana; một số nguồn xếp U2R
+buffer_overflow,U2R,1,30,20,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+loadmodule,U2R,1,9,2,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+perl,U2R,1,3,2,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+rootkit,U2R,1,10,13,UCI training_attack_types,https://kdd.ics.uci.edu/databases/kddcup99/training_attack_types,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+ps,U2R,1,0,15,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+sqlattack,U2R,1,0,2,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
+xterm,U2R,1,0,13,"Imrana et al. 2022, Table 3",https://www.mdpi.com/1424-8220/22/5/2018,Giữ chính tả nhãn TXT; không sao chép số tổng từ bài báo
