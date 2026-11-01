@@ -1,0 +1,11 @@
+Feature 1,Feature 2,Pearson Correlation,Absolute Correlation
+num_compromised,num_root,0.9988334525784719,0.9988334525784719
+serror_rate,srv_serror_rate,0.9932892425370462,0.9932892425370462
+rerror_rate,srv_rerror_rate,0.9890076529820762,0.9890076529820762
+srv_serror_rate,dst_host_srv_serror_rate,0.9862517164931046,0.9862517164931046
+dst_host_serror_rate,dst_host_srv_serror_rate,0.9850522227996314,0.9850522227996314
+serror_rate,dst_host_srv_serror_rate,0.9811389586179897,0.9811389586179897
+serror_rate,dst_host_serror_rate,0.979373082984311,0.979373082984311
+srv_serror_rate,dst_host_serror_rate,0.9775960119654399,0.9775960119654399
+srv_rerror_rate,dst_host_srv_rerror_rate,0.9702079974522381,0.9702079974522381
+rerror_rate,dst_host_srv_rerror_rate,0.9644486655034351,0.9644486655034351
