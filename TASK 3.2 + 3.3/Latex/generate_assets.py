@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "anova_analysis"))
+sys.path.insert(0, str(ROOT / "TASK 3.2 + 3.3" / "Code"))
 
 from anova_utils import DATA_PATH, duration_two_part, load_and_validate_data, run_omnibus  # noqa: E402
 from report_assets import generate_report_figures  # noqa: E402

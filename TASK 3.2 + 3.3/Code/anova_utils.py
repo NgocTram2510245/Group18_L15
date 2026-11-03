@@ -28,7 +28,7 @@ from statsmodels.stats.oneway import anova_oneway
 from report_assets import generate_report_figures
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DATA_PATH = (
     ROOT
     / "00_DU_LIEU_CHUNG_CHO_TEAM"
@@ -657,7 +657,19 @@ def create_figures(
             labels.loc[row["group2"], row["group1"]] = label
         np.fill_diagonal(matrix.values, 1.0)
         fig, ax = plt.subplots(figsize=(7.2, 5.8))
-        sns.heatmap(matrix, annot=labels, fmt="", cmap="viridis_r", vmin=0, vmax=0.05, cbar_kws={"label": "p hiệu chỉnh (cắt màu tại 0,05)"}, ax=ax)
+        sns.heatmap(
+            matrix,
+            annot=labels,
+            fmt="",
+            cmap="viridis_r",
+            vmin=0,
+            vmax=0.05,
+            square=True,
+            linewidths=1.25,
+            linecolor="white",
+            cbar_kws={"label": "p hiệu chỉnh (giá trị ≥ 0,05 bão hòa tại 0,05)"},
+            ax=ax,
+        )
         ax.set_title(f"{RQ_BY_FEATURE[feature]} — Games–Howell (†: p_adj < 0,05)")
         fig.tight_layout()
         _save(fig, out, "06_posthoc_heatmap")
@@ -666,7 +678,7 @@ def create_figures(
                 "rq": RQ_BY_FEATURE[feature],
                 "feature": feature,
                 "figure": f"figures/{feature}/06_posthoc_heatmap.png",
-                "caption": "Heatmap p-value Games–Howell đã hiệu chỉnh trong 10 cặp; số in trong ô và ký hiệu † cho phép đọc không chỉ dựa vào màu. Chênh lệch cụ thể và CI nằm trong bảng posthoc.",
+                "caption": "Heatmap p-value Games–Howell đã hiệu chỉnh trong 10 cặp; đường viền trắng phân tách rõ từng ô, còn thanh màu biểu diễn miền p từ 0 đến 0,05. Số in trong ô và ký hiệu † cho phép đọc không chỉ dựa vào màu; chênh lệch cụ thể và CI nằm trong bảng posthoc.",
             }
         )
     # Duration zero proportion is a distinct estimand.
@@ -873,7 +885,7 @@ def run_analysis(data_path: Path = DATA_PATH) -> dict[str, pd.DataFrame]:
 
     report_figure_dir = FIGURE_DIR / "report"
     report_assets = generate_report_figures(data, posthoc, zero_duration, report_figure_dir)
-    latex_figure_dir = ROOT / "Latex" / "ANOVA" / "figures"
+    latex_figure_dir = ROOT / "TASK 3.2 + 3.3" / "Latex" / "figures"
     latex_assets = generate_report_figures(data, posthoc, zero_duration, latex_figure_dir)
     manifest = {
         "data_path": str(Path(data_path).resolve()),

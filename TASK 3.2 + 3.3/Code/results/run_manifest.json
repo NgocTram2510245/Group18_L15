@@ -77,15 +77,15 @@
     "figures/report/duration_zero_wilson.pdf"
   ],
   "latex_report_figures": [
-    "Latex/ANOVA/figures/wilson_95ci_five_groups.png",
-    "Latex/ANOVA/figures/wilson_95ci_five_groups.pdf",
-    "Latex/ANOVA/figures/anova_ecdf_four_features.png",
-    "Latex/ANOVA/figures/anova_ecdf_four_features.pdf",
-    "Latex/ANOVA/figures/games_howell_heatmaps.png",
-    "Latex/ANOVA/figures/games_howell_heatmaps.pdf",
-    "Latex/ANOVA/figures/qq_log_features.png",
-    "Latex/ANOVA/figures/qq_log_features.pdf",
-    "Latex/ANOVA/figures/duration_zero_wilson.png",
-    "Latex/ANOVA/figures/duration_zero_wilson.pdf"
+    "TASK 3.2 + 3.3/Latex/figures/wilson_95ci_five_groups.png",
+    "TASK 3.2 + 3.3/Latex/figures/wilson_95ci_five_groups.pdf",
+    "TASK 3.2 + 3.3/Latex/figures/anova_ecdf_four_features.png",
+    "TASK 3.2 + 3.3/Latex/figures/anova_ecdf_four_features.pdf",
+    "TASK 3.2 + 3.3/Latex/figures/games_howell_heatmaps.png",
+    "TASK 3.2 + 3.3/Latex/figures/games_howell_heatmaps.pdf",
+    "TASK 3.2 + 3.3/Latex/figures/qq_log_features.png",
+    "TASK 3.2 + 3.3/Latex/figures/qq_log_features.pdf",
+    "TASK 3.2 + 3.3/Latex/figures/duration_zero_wilson.png",
+    "TASK 3.2 + 3.3/Latex/figures/duration_zero_wilson.pdf"
   ]
 }

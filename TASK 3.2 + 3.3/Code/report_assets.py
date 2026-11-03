@@ -15,6 +15,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from matplotlib.cm import ScalarMappable
+from matplotlib.colors import Normalize
 from scipy import stats
 from statsmodels.stats.proportion import proportion_confint
 
@@ -95,7 +97,7 @@ def generate_report_figures(
     fig.tight_layout(rect=[0, 0, 1, 0.89])
     generated.extend(_save(fig, output_dir, "anova_ecdf_four_features"))
 
-    fig, axes = plt.subplots(2, 2, figsize=(11.5, 9.2))
+    fig, axes = plt.subplots(2, 2, figsize=(12.4, 9.2))
     for ax, feature in zip(axes.flat, FEATURES):
         part = posthoc.loc[posthoc["feature"] == feature]
         matrix = pd.DataFrame(np.nan, index=GROUP_ORDER, columns=GROUP_ORDER)
@@ -106,11 +108,30 @@ def generate_report_figures(
             label = "<.001*" if p_value < 0.001 else f"{p_value:.3f}" + ("*" if p_value < 0.05 else "")
             annotations.loc[row.group1, row.group2] = annotations.loc[row.group2, row.group1] = label
         np.fill_diagonal(matrix.values, 0.05)
-        sns.heatmap(matrix, annot=annotations, fmt="", cmap="viridis_r", vmin=0, vmax=0.05,
-                    cbar=False, square=True, linewidths=0.4, ax=ax, annot_kws={"fontsize": 8})
+        sns.heatmap(
+            matrix,
+            annot=annotations,
+            fmt="",
+            cmap="viridis_r",
+            vmin=0,
+            vmax=0.05,
+            cbar=False,
+            square=True,
+            linewidths=1.1,
+            linecolor="white",
+            ax=ax,
+            annot_kws={"fontsize": 8},
+        )
         ax.set(title=feature, xlabel="", ylabel="")
     fig.suptitle("Hậu kiểm Games--Howell: p-value đã hiệu chỉnh (*: p < 0,05)", y=0.99, fontsize=15)
-    fig.tight_layout(rect=[0, 0, 1, 0.96])
+    fig.subplots_adjust(left=0.07, right=0.86, bottom=0.07, top=0.92, wspace=0.25, hspace=0.28)
+    colorbar_axis = fig.add_axes([0.89, 0.17, 0.018, 0.66])
+    colorbar = fig.colorbar(
+        ScalarMappable(norm=Normalize(vmin=0, vmax=0.05), cmap="viridis_r"),
+        cax=colorbar_axis,
+        ticks=np.linspace(0, 0.05, 6),
+    )
+    colorbar.set_label("p-value Games–Howell đã hiệu chỉnh\n(giá trị ≥ 0,05 bão hòa tại 0,05)")
     generated.extend(_save(fig, output_dir, "games_howell_heatmaps"))
 
     fig, axes = plt.subplots(2, 5, figsize=(13.5, 6.2))
