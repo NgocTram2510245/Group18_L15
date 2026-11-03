@@ -1,0 +1,205 @@
+% Nội dung mục 4.5 -- tạo từ kết quả trong anova_analysis/results.
+% Không đặt \documentclass hay \begin{document} trong tệp thành phần.
+\section{Kết quả ANOVA, kiểm tra giả định và hậu kiểm}
+\label{sec:ketqua-anova}
+
+Phần này áp dụng quy trình tại Mục~\ref{sec:phuongphap-anova} cho bốn câu hỏi nghiên
+cứu. Kết quả chính dùng Welch ANOVA; hậu kiểm dùng Games--Howell và bốn p-value tổng thể
+được hiệu chỉnh Holm. Các bảng mô tả vẫn giữ đơn vị gốc để hỗ trợ diễn giải thực tế.
+
+\subsection{Thống kê mô tả và kiểm tra giả định}
+
+Bảng~\ref{tab:anova:descriptive} cho thấy trung bình và trung vị khác nhau đáng kể ở
+nhiều nhóm. Đặc biệt, trung bình \texttt{src\_bytes} của Probe đạt 385.679,84 byte nhưng
+trung vị chỉ là 1 byte; \texttt{duration} của Probe có trung bình 2.074,86 giây nhưng
+trung vị bằng 0. Đây là dấu hiệu đuôi phải dài và khối lượng lớn tại 0, không phải bằng
+chứng để tùy tiện loại ngoại lệ.
+
+\begin{table}[H]
+\centering
+\caption{Trung bình và trung vị theo nhóm trên thang gốc}
+\label{tab:anova:descriptive}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrr}
+\toprule
+Đặc trưng & Thống kê & Normal & DoS & Probe & R2L & U2R \\
+\midrule
+\texttt{count} & Trung bình & 22,52 & 178,09 & 77,05 & 1,30 & 5,81 \\
+                & Trung vị   & 4 & 172 & 1 & 1 & 1 \\
+\texttt{serror\_rate} & Trung bình & 0,013 & 0,748 & 0,047 & 0,012 & 0,038 \\
+                & Trung vị   & 0 & 1 & 0 & 0 & 0 \\
+\texttt{src\_bytes} & Trung bình & 13.133,28 & 1.176,32 & 385.679,84 & 307.727,30 & 906,23 \\
+                & Trung vị   & 233 & 0 & 1 & 334 & 273 \\
+\texttt{duration} & Trung bình & 168,59 & 0,006 & 2.074,86 & 633,42 & 80,94 \\
+                & Trung vị   & 0 & 0 & 0 & 0 & 46 \\
+\bottomrule
+\end{tabular}}
+\par\smallskip
+\footnotesize Cỡ mẫu theo thứ tự Normal, DoS, Probe, R2L, U2R là 67.343, 45.927,
+11.656, 995 và 52. \texttt{count}: kết nối; \texttt{src\_bytes}: byte;
+\texttt{duration}: giây; \texttt{serror\_rate}: tỷ lệ 0--1.
+\end{table}
+
+Brown--Forsythe bác bỏ đồng nhất phương sai ở cả bốn đặc trưng
+(Bảng~\ref{tab:anova:assumptions}); tỷ số cỡ mẫu lớn nhất/nhỏ nhất đạt 1.295,1. ECDF ở
+Hình~\ref{fig:anova:ecdf} và Q--Q plot ở Hình~\ref{fig:anova:qq} đồng thời cho thấy dữ
+liệu bị chặn, nhiều số 0 hoặc có đuôi dài. Các dấu hiệu này, thay vì chỉ một p-value
+Shapiro--Wilk, là cơ sở chọn Welch và thang $\ln(1+x)$ cho hai biến lệch mạnh.
+
+\begin{table}[H]
+\centering
+\caption{Kiểm tra giả định trên thang dùng cho kiểm định chính}
+\label{tab:anova:assumptions}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{l l r l X}
+\toprule
+Đặc trưng & Thang phân tích & Brown--Forsythe & p-value & Chẩn đoán trọng tâm \\
+\midrule
+\texttt{count} & Gốc & 5.817,05 & $<10^{-300}$ & Biến đếm; $|\mathrm{skew}|$ tối đa 5,56; U2R nhỏ. \\
+\texttt{serror\_rate} & Gốc & 5.279,29 & $<10^{-300}$ & Bị chặn 0--1, dồn tại hai biên; $|\mathrm{skew}|$ tối đa 8,85. \\
+\texttt{src\_bytes} & $\ln(1+x)$ & 364,36 & $1{,}59\times10^{-312}$ & Thang gốc có cực trị lớn; sau log vẫn chưa chuẩn hoàn toàn. \\
+\texttt{duration} & $\ln(1+x)$ & 1.318,15 & $<10^{-300}$ & Nhiều số 0; $|\mathrm{skew}|$ tối đa 38,03 do nhóm DoS. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{../ANOVA/figures/anova_ecdf_four_features.pdf}
+\caption{ECDF theo năm nhóm. \texttt{src\_bytes} và \texttt{duration} dùng
+$\ln(1+x)$; lấy mẫu cố định tối đa 5.000 quan sát/nhóm chỉ để vẽ theo quy trình ở
+Mục~\ref{sec:phuongphap-anova}. Mọi kiểm định sử dụng toàn bộ dữ liệu.}
+\label{fig:anova:ecdf}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{../ANOVA/figures/qq_log_features.pdf}
+\caption{Q--Q plot của $\log(1+\texttt{src\_bytes})$ và
+$\log(1+\texttt{duration})$, dùng tối đa 1.000 quan sát/nhóm. Các điểm lệch đường tham
+chiếu cho thấy phép log giảm nhưng không loại bỏ hoàn toàn sai lệch chuẩn.}
+\label{fig:anova:qq}
+\end{figure}
+
+\subsection{Kết quả kiểm định tổng thể và kích thước ảnh hưởng}
+
+Bảng~\ref{tab:anova:omnibus} bác bỏ $H_0$ cho cả bốn câu hỏi, kể cả sau hiệu chỉnh Holm.
+Các p-value dưới giới hạn hiển thị được báo cáo là $p<10^{-300}$, không viết $p=0$.
+Kết quả của \texttt{src\_bytes} và \texttt{duration} áp dụng cho trung bình trên thang
+$\ln(1+x)$, không phải chênh lệch byte hoặc giây trung bình trên thang gốc.
+
+\begin{table}[H]
+\centering
+\caption{Kết quả Welch ANOVA cho bốn câu hỏi nghiên cứu}
+\label{tab:anova:omnibus}
+\small
+\setlength{\tabcolsep}{3.5pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllrrrr}
+\toprule
+RQ & Biến phân tích & $F$ & Bậc tự do $(df_1;df_2)$ & p thô & p Holm & $\eta^2_{\mathrm{mô\ tả}}$ & $\omega^2_{\mathrm{mô\ tả}}$ \\
+\midrule
+RQ1 & \texttt{count} & 35.907,45 & (4; 405,490) & $<10^{-300}$ & $<10^{-300}$ & 0,4049 & 0,4049 \\
+RQ2 & \texttt{serror\_rate} & 31.976,20 & (4; 386,813) & $<10^{-300}$ & $<10^{-300}$ & 0,6202 & 0,6202 \\
+RQ3 & $\ln(1+\texttt{src\_bytes})$ & 42.494,96 & (4; 387,016) & $<10^{-300}$ & $<10^{-300}$ & 0,5639 & 0,5639 \\
+RQ4 & $\ln(1+\texttt{duration})$ & 1.652,44 & (4; 386,205) & $2{,}16\times10^{-241}$ & $2{,}16\times10^{-241}$ & 0,0412 & 0,0412 \\
+\bottomrule
+\end{tabular}}
+\par\smallskip
+\footnotesize $\eta^2$ và $\omega^2$ được tính từ tổng bình phương cổ điển trên thang
+phân tích, nên là chỉ số mô tả, không phải effect size suy ra trực tiếp từ Welch $F$.
+Không dùng các giá trị này để xếp hạng khả năng dự đoán của đặc trưng.
+\end{table}
+
+Effect size cho thấy p-value rất nhỏ không đồng nghĩa mức phân tách thực tiễn giống nhau:
+$\eta^2$ mô tả của \texttt{serror\_rate} là 0,6202, trong khi \texttt{duration} chỉ là
+0,0412 trên thang phân tích.
+
+\subsection{Hậu kiểm Games--Howell và trả lời câu hỏi nghiên cứu}
+
+Games--Howell kiểm soát so sánh nhiều cặp trong từng RQ và không giả định phương sai hay
+cỡ mẫu bằng nhau. Bảng~\ref{tab:anova:posthoc-summary} tóm tắt toàn bộ 10 cặp/RQ;
+Hình~\ref{fig:anova:posthoc} trình bày p-value hiệu chỉnh bằng cả số và ký hiệu, nên
+không cần suy luận chỉ dựa trên màu.
+
+\begin{table}[H]
+\centering
+\caption{Tóm tắt hậu kiểm Games--Howell trong từng câu hỏi}
+\label{tab:anova:posthoc-summary}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{l c X}
+\toprule
+RQ & Cặp có ý nghĩa & Các cặp chưa đủ bằng chứng khác biệt ở mức 5\% \\
+\midrule
+RQ1 -- \texttt{count} & 9/10 & R2L--U2R: chênh lệch $-4{,}51$, KTC 95\% $[-13{,}71;4{,}69]$, $p_{adj}=0{,}639$. \\
+RQ2 -- \texttt{serror\_rate} & 6/10 & Normal--R2L; Normal--U2R; Probe--U2R; R2L--U2R. \\
+RQ3 -- $\ln(1+\texttt{src\_bytes})$ & 9/10 & Normal--U2R: chênh lệch 0,455, KTC 95\% $[-0{,}733;1{,}643]$, $p_{adj}=0{,}815$. \\
+RQ4 -- $\ln(1+\texttt{duration})$ & 10/10 & Không có; cả 10 khoảng tin cậy đồng thời không chứa 0. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\linewidth]{../ANOVA/figures/games_howell_heatmaps.pdf}
+\caption{P-value Games--Howell đã hiệu chỉnh trong 10 so sánh cặp của từng RQ.
+Dấu * biểu thị $p_{adj}<0{,}05$; ô không có dấu * không được diễn giải là hai trung bình
+bằng nhau, mà chỉ là chưa đủ bằng chứng khác biệt với dữ liệu hiện có.}
+\label{fig:anova:posthoc}
+\end{figure}
+
+\paragraph{RQ1 -- số lượng kết nối gần đây.}
+Trung bình \texttt{count} khác nhau giữa ít nhất hai nhóm. DoS cao nhất (178,09), tiếp
+đến Probe (77,05) và Normal (22,52); R2L và U2R lần lượt là 1,30 và 5,81. Games--Howell
+cho thấy 9/10 cặp khác biệt, ngoại trừ R2L--U2R. Kết quả ủng hộ nhận định hành vi tạo kết
+nối trong cửa sổ hai giây khác nhau rõ giữa DoS, Probe và Normal, nhưng không chứng minh
+mọi dạng tấn công đều có \texttt{count} cao.
+
+\paragraph{RQ2 -- tỷ lệ lỗi SYN.}
+DoS có trung bình \texttt{serror\_rate}=0,748 và trung vị 1, vượt xa Normal
+(trung bình 0,013; trung vị 0). Chênh lệch DoS--Normal là 0,735 với KTC đồng thời 95\%
+$[0{,}729;0{,}741]$, $p_{adj}<10^{-300}$. Tuy vậy, chỉ 6/10 cặp có ý nghĩa và phân bố
+dồn mạnh ở 0 hoặc 1. ANOVA vì thế cung cấp xấp xỉ hữu ích về trung bình tỷ lệ trong mẫu,
+không phải một mô hình đầy đủ cho biến tỷ lệ bị dồn biên.
+
+\paragraph{RQ3 -- lượng byte gửi từ nguồn.}
+Trên thang gốc, Probe và R2L có trung bình rất cao (385.679,84 và 307.727,30 byte) nhưng
+trung vị chỉ là 1 và 334 byte, cho thấy trung bình bị chi phối bởi đuôi phải. Welch ANOVA
+trên $\ln(1+\texttt{src\_bytes})$ bác bỏ $H_0$; 9/10 cặp có ý nghĩa, riêng Normal--U2R
+chưa đủ bằng chứng. Phát hiện này trả lời câu hỏi về trung bình sau biến đổi log, không
+được chuyển thành phát biểu rằng một nhóm chênh một số byte trung bình tương ứng.
+
+\paragraph{RQ4 -- thời gian kết nối.}
+Welch ANOVA trên $\ln(1+\texttt{duration})$ bác bỏ $H_0$ và cả 10 cặp Games--Howell có
+ý nghĩa. Tuy nhiên, trung vị bằng 0 ở bốn nhóm và tỷ lệ bằng 0 thay đổi từ 28,85\% đến
+99,91\% (Hình~\ref{fig:anova:duration-zero}), nên kết quả chỉ được xem là bằng chứng
+tổng hợp trên thang log, không phải một mô hình hoàn chỉnh cho dữ liệu zero-inflated.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\linewidth]{../ANOVA/figures/duration_zero_wilson.pdf}
+\caption{Tỷ lệ \texttt{duration}=0 và khoảng tin cậy Wilson 95\% theo nhóm. Đây là
+phần nhị phân của phân tích hai phần, không phải khoảng tin cậy của thời lượng trung bình.}
+\label{fig:anova:duration-zero}
+\end{figure}
+
+Trong 10.018 kết nối có \texttt{duration}$>0$, phân tích bổ sung bằng Welch trên
+$\ln(1+\texttt{duration})$ vẫn có ý nghĩa,
+$F(4;158{,}324)=315{,}82$, $p=2{,}48\times10^{-74}$. Đây là kết quả có điều kiện và
+không thay thế kết quả trên toàn bộ mẫu.
+
+\noindent\textbf{Ý nghĩa khoa học.}
+ANOVA cho thấy bốn khía cạnh hành vi mạng có phân bố trung bình khác nhau theo nhóm,
+nhưng mức chồng lấp, thang đo và độ ổn định của U2R khác nhau đáng kể. Kết quả hỗ trợ
+diễn giải những tín hiệu mà mô hình học máy có thể khai thác, song p-value nhỏ không đo
+trực tiếp năng lực dự đoán và không chứng minh quan hệ nhân quả. Do NSL-KDD là bộ chuẩn
+lịch sử và không có định danh phiên đủ để kiểm chứng độc lập, suy luận chỉ áp dụng cho
+mẫu đang phân tích; Welch xử lý phương sai không bằng nhau nhưng không khắc phục được
+phụ thuộc tiềm ẩn giữa các kết nối.
+
+\FloatBarrier
+

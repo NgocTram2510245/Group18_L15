@@ -1,0 +1,38 @@
+% CHU SO HUU: Ngọc Trâm | KHONG THEO PREAMBLE, KHONG BEGIN DOCUMENT TRONG THAN PHAN NAY.
+\section{Ước lượng khoảng tin cậy Wilson cho tỷ lệ}
+\label{sec:phuongphap-wilson}
+
+\subsection{Mục đích và tham số}
+Nhóm sử dụng khoảng tin cậy Wilson để lượng hóa độ bất định của tỷ lệ năm nhóm
+Normal, DoS, Probe, R2L và U2R trong KDDTrain+. Với nhóm $g$, tham số cần ước lượng là
+$p_g=P(Y=g)$; nếu có $x_g$ trong tổng số $n$ bản ghi thuộc nhóm đó thì ước lượng điểm là
+$\widehat p_g=\frac{x_g}{n}$. Mỗi nhóm được xét như một biến chỉ báo nhị thức ``thuộc
+nhóm $g$'' hoặc ``không thuộc nhóm $g$''.
+
+\subsection{Công thức}
+Với mức tin cậy $1-\alpha$ và $z=z_{1-\frac{\alpha}{2}}$, khoảng Wilson là
+\[
+\frac{
+  \widehat p+\frac{z^2}{2n}
+  \ \pm\ z\sqrt{\frac{\widehat p(1-\widehat p)}{n}+\frac{z^2}{4n^2}}
+}{1+\frac{z^2}{n}}.
+\]
+Nghiên cứu dùng $\alpha=0{,}05$, do đó $z\approx1{,}96$. So với khoảng Wald
+$\widehat p\pm z\sqrt{\frac{\widehat p(1-\widehat p)}{n}}$, Wilson ổn định hơn khi
+tỷ lệ gần 0 hoặc 1 và không tạo cận ngoài miền $[0,1]$; đặc điểm này quan trọng đối
+với nhóm U2R rất hiếm.
+
+\subsection{Giả định và điều kiện áp dụng}
+Các bản ghi được giả định độc lập, nhãn nhóm loại trừ lẫn nhau và phép ánh xạ nhãn
+không sai. Khoảng Wilson không đòi hỏi xấp xỉ chuẩn của $\widehat p$ tốt như khoảng
+Wald, nhưng vẫn dựa trên mô hình nhị thức và không tự xử lý sự phụ thuộc giữa các kết
+nối. Năm khoảng được tính riêng, không phải một miền tin cậy đồng thời cho toàn bộ
+vector $(p_1,\ldots,p_5)$; sự chồng lấp hay không chồng lấp của chúng cũng không thay
+thế một kiểm định so sánh tỷ lệ.
+
+\subsection{Cách sử dụng trong bộ dữ liệu}
+Nhóm đếm năm nhãn trên toàn bộ 125.973 bản ghi KDDTrain+, không gộp KDDTest+ và không
+dùng dữ liệu SMOTE. Kết quả chỉ mô tả cơ cấu của mẫu train đã tuyển chọn, không được
+diễn giải thành tỷ lệ tấn công của Internet hiện tại. Ước lượng điểm, cận dưới và cận
+trên được trình bày tại Mục~\ref{sec:ketqua-wilson}.
+

@@ -1,0 +1,5 @@
+﻿rq,feature,analysis_variable,reject_h0_holm,holm_adjusted_p_display,eta_squared_descriptive,omega_squared_descriptive,effect_size_note,interpretation_guardrail
+RQ1,count,count,True,< 1e-300,0.40491817194579854,0.40489736289607875,"Classic sums-of-squares effect size on analysis scale; descriptive, not derived from Welch F.",Mean difference on original count scale; not a prediction score.
+RQ2,serror_rate,serror_rate,True,< 1e-300,0.6202042692689529,0.6201903393139958,"Classic sums-of-squares effect size on analysis scale; descriptive, not derived from Welch F.",Bounded/endpoint-inflated mean comparison; model is approximate.
+RQ3,src_bytes,log1p(src_bytes),True,< 1e-300,0.5639014640070998,0.5638856639320294,"Classic sums-of-squares effect size on analysis scale; descriptive, not derived from Welch F.","Effect is on log1p scale, not raw-byte mean difference."
+RQ4,duration,log1p(duration),True,2.161e-241,0.04120425297150385,0.04117349389015822,"Classic sums-of-squares effect size on analysis scale; descriptive, not derived from Welch F.",Effect is on full-data log1p scale; read with two-part analysis.

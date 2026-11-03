@@ -1,0 +1,14 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Tỷ lệ Normal và bốn nhóm tấn công trên KDDTrain+ ($n=125.973$). Trục tung tuyến tính; giá trị ghi trên cột giúp nhận biết hai nhóm hiếm.\relax }}{15}{figure.caption.12}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Histogram so sánh trên KDDTrain+: mỗi nhóm được chuẩn hóa riêng để tổng chiều cao các khoảng bằng 100\%; dùng cùng 40 khoảng chia đều cho hai nhóm ở từng ô. \texttt {src\_bytes} chỉ đổi thang trực quan thành $\qopname \relax o{ln}(1+x/\mathrm {byte})$; hai biến còn lại giữ thang gốc. Không cắt miền giá trị.\relax }}{16}{figure.caption.14}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Boxplot theo nhãn trên KDDTrain+. Hộp biểu diễn $Q_1$--$Q_3$, đường giữa là trung vị; râu tới quan sát xa nhất còn trong ngưỡng $1{,}5\,IQR$ trên thang vẽ; các điểm ngoài râu vẫn được hiển thị. Chỉ \texttt {src\_bytes} dùng $\qopname \relax o{ln}(1+x/\mathrm {byte})$, giữ toàn bộ miền.\relax }}{17}{figure.caption.15}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Ước lượng điểm và khoảng tin cậy Wilson 95\% cho năm nhóm. Trục tỷ lệ dùng thang logarit để khoảng của R2L và U2R vẫn quan sát được; kích thước mẫu được ghi cạnh mỗi điểm.\relax }}{18}{figure.caption.17}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces ECDF theo năm nhóm. \texttt {src\_bytes} và \texttt {duration} dùng $\qopname \relax o{ln}(1+x)$; lấy mẫu cố định tối đa 5.000 quan sát/nhóm chỉ để vẽ theo quy trình ở Mục\nobreakspace {}\ref {sec:phuongphap-anova}. Mọi kiểm định sử dụng toàn bộ dữ liệu.\relax }}{20}{figure.caption.20}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Q--Q plot của $\qopname \relax o{log}(1+\texttt {src\_bytes})$ và $\qopname \relax o{log}(1+\texttt {duration})$, dùng tối đa 1.000 quan sát/nhóm. Các điểm lệch đường tham chiếu cho thấy phép log giảm nhưng không loại bỏ hoàn toàn sai lệch chuẩn.\relax }}{20}{figure.caption.21}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces P-value Games--Howell đã hiệu chỉnh trong 10 so sánh cặp của từng RQ. Dấu * biểu thị $p_{adj}<0{,}05$; ô không có dấu * không được diễn giải là hai trung bình bằng nhau, mà chỉ là chưa đủ bằng chứng khác biệt với dữ liệu hiện có.\relax }}{22}{figure.caption.24}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Tỷ lệ \texttt {duration}=0 và khoảng tin cậy Wilson 95\% theo nhóm. Đây là phần nhị phân của phân tích hai phần, không phải khoảng tin cậy của thời lượng trung bình.\relax }}{23}{figure.caption.29}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }

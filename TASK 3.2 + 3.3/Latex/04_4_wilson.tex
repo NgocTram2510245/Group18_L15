@@ -1,0 +1,48 @@
+% Nội dung mục 4.4 -- tạo từ KDDTrain+ và kiểm tra bằng Python.
+% Không đặt \documentclass hay \begin{document} trong tệp thành phần.
+\section{Kết quả khoảng tin cậy 95\% cho năm nhóm}
+\label{sec:ketqua-wilson}
+
+Theo quy trình tại Mục~\ref{sec:phuongphap-wilson}, Bảng~\ref{tab:anova:wilson} và
+Hình~\ref{fig:anova:wilson} trình bày ước lượng Wilson từ toàn bộ KDDTrain+
+($n=125.973$). Các giá trị mô tả cơ cấu của mẫu train, không phải tỷ lệ tấn công của
+Internet hiện tại.
+
+\begin{table}[H]
+\centering
+\caption{Ước lượng tỷ lệ và khoảng tin cậy Wilson 95\% trên KDDTrain+}
+\label{tab:anova:wilson}
+\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{lrrr}
+\toprule
+Nhóm & Số quan sát & Tỷ lệ (\%) & Khoảng tin cậy 95\% (\%) \\
+\midrule
+Normal & 67.343 & 53,458 & [53,183; 53,734] \\
+DoS    & 45.927 & 36,458 & [36,192; 36,724] \\
+Probe  & 11.656 &  9,253 & [ 9,094;  9,414] \\
+R2L    &    995 &  0,790 & [ 0,742;  0,840] \\
+U2R    &     52 &  0,041 & [ 0,031;  0,054] \\
+\midrule
+Tổng   & 125.973 & 100,000 & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\linewidth]{../ANOVA/figures/wilson_95ci_five_groups.pdf}
+\caption{Ước lượng điểm và khoảng tin cậy Wilson 95\% cho năm nhóm. Trục tỷ lệ dùng
+thang logarit để khoảng của R2L và U2R vẫn quan sát được; kích thước mẫu được ghi cạnh
+mỗi điểm.}
+\label{fig:anova:wilson}
+\end{figure}
+
+Normal chiếm tỷ trọng lớn nhất, 53,458\% (KTC 95\%: 53,183--53,734\%), tiếp đến là
+DoS với 36,458\% (36,192--36,724\%) và Probe với 9,253\% (9,094--9,414\%). Hai nhóm
+hiếm R2L và U2R chỉ chiếm lần lượt 0,790\% và 0,041\%. Khoảng của U2R rộng hơn theo tỷ
+lệ tương đối vì chỉ có 52 quan sát. Sự mất cân bằng này báo trước độ bất định lớn hơn
+cho các ước lượng và hậu kiểm liên quan đến U2R; các khoảng riêng lẻ không được dùng như
+một kiểm định so sánh tỷ lệ.
+\FloatBarrier
+

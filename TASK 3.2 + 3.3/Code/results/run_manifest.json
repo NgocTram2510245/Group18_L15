@@ -1,0 +1,91 @@
+{
+  "data_path": "C:\\Users\\Ngoc Tram\\Downloads\\Group18_L15-main (1)\\Group18_L15-main\\00_DU_LIEU_CHUNG_CHO_TEAM\\00_DU_LIEU_CHUNG\\data\\processed\\train_clean.csv",
+  "n": 125973,
+  "alpha": 0.05,
+  "random_state": 18015,
+  "group_order": [
+    "Normal",
+    "DoS",
+    "Probe",
+    "R2L",
+    "U2R"
+  ],
+  "features": [
+    "count",
+    "serror_rate",
+    "src_bytes",
+    "duration"
+  ],
+  "library_versions": {
+    "python": "3.10.9",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "statsmodels": "0.14.5",
+    "matplotlib": "3.10.7",
+    "seaborn": "0.13.2"
+  },
+  "generated_tables": [
+    "results/data_validation.csv",
+    "results/descriptive_statistics.csv",
+    "results/assumption_checks.csv",
+    "results/anova_results.csv",
+    "results/posthoc_results.csv",
+    "results/sensitivity_analysis.csv",
+    "results/duration_zero_analysis.csv",
+    "results/duration_positive_analysis.csv",
+    "results/summary_results.csv",
+    "results/feature_comparison.csv",
+    "results/figure_captions.csv"
+  ],
+  "generated_figures": [
+    "figures/count/01_boxplot_original.png",
+    "figures/count/02_boxplot_log1p.png",
+    "figures/count/03_mean_ci95.png",
+    "figures/count/04_ecdf.png",
+    "figures/count/05_qq_diagnostics.png",
+    "figures/count/06_posthoc_heatmap.png",
+    "figures/serror_rate/01_boxplot_original.png",
+    "figures/serror_rate/03_mean_ci95.png",
+    "figures/serror_rate/04_ecdf.png",
+    "figures/serror_rate/05_qq_diagnostics.png",
+    "figures/serror_rate/06_posthoc_heatmap.png",
+    "figures/src_bytes/01_boxplot_original.png",
+    "figures/src_bytes/02_boxplot_log1p.png",
+    "figures/src_bytes/03_mean_ci95.png",
+    "figures/src_bytes/04_ecdf.png",
+    "figures/src_bytes/05_qq_diagnostics.png",
+    "figures/src_bytes/06_posthoc_heatmap.png",
+    "figures/duration/01_boxplot_original.png",
+    "figures/duration/02_boxplot_log1p.png",
+    "figures/duration/03_mean_ci95.png",
+    "figures/duration/04_ecdf.png",
+    "figures/duration/05_qq_diagnostics.png",
+    "figures/duration/06_posthoc_heatmap.png",
+    "figures/duration/07_zero_proportion.png"
+  ],
+  "generated_report_figures": [
+    "figures/report/wilson_95ci_five_groups.png",
+    "figures/report/wilson_95ci_five_groups.pdf",
+    "figures/report/anova_ecdf_four_features.png",
+    "figures/report/anova_ecdf_four_features.pdf",
+    "figures/report/games_howell_heatmaps.png",
+    "figures/report/games_howell_heatmaps.pdf",
+    "figures/report/qq_log_features.png",
+    "figures/report/qq_log_features.pdf",
+    "figures/report/duration_zero_wilson.png",
+    "figures/report/duration_zero_wilson.pdf"
+  ],
+  "latex_report_figures": [
+    "Latex/ANOVA/figures/wilson_95ci_five_groups.png",
+    "Latex/ANOVA/figures/wilson_95ci_five_groups.pdf",
+    "Latex/ANOVA/figures/anova_ecdf_four_features.png",
+    "Latex/ANOVA/figures/anova_ecdf_four_features.pdf",
+    "Latex/ANOVA/figures/games_howell_heatmaps.png",
+    "Latex/ANOVA/figures/games_howell_heatmaps.pdf",
+    "Latex/ANOVA/figures/qq_log_features.png",
+    "Latex/ANOVA/figures/qq_log_features.pdf",
+    "Latex/ANOVA/figures/duration_zero_wilson.png",
+    "Latex/ANOVA/figures/duration_zero_wilson.pdf"
+  ]
+}

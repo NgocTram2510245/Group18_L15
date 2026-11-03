@@ -1,0 +1,52 @@
+\contentsline {chapter}{\numberline {1}Đặt vấn đề}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Bối cảnh và lý do lựa chọn đề tài}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Vấn đề nghiên cứu và ý nghĩa thực tiễn}{1}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Mục tiêu và câu hỏi nghiên cứu}{1}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Phạm vi nghiên cứu và bố cục báo cáo}{1}{section.1.4}%
+\contentsline {chapter}{\numberline {2}Dữ liệu và tiền xử lý}{2}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Nguồn gốc và cách hình thành NSL-KDD}{2}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Quy mô, cấu trúc và vai trò các tập dữ liệu}{3}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Các đặc trưng mạng, loại biến và ý nghĩa}{3}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Hệ thống nhãn và các nhóm hành vi tấn công}{4}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Khảo sát chất lượng dữ liệu ban đầu}{5}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Các bước làm sạch và chuẩn hóa nhãn}{7}{section.2.6}%
+\contentsline {section}{\numberline {2.7}Quy ước bộ dữ liệu dùng cho từng phân tích}{8}{section.2.7}%
+\contentsline {chapter}{\numberline {3}Phương pháp Xác suất và Thống kê}{9}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Thiết kế phân tích và quy ước thống kê chung}{9}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Thống kê mô tả và trực quan hóa dữ liệu}{9}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Phân tích tương quan Pearson}{9}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Ước lượng khoảng tin cậy Wilson cho tỷ lệ}{9}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Mục đích và tham số}{9}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Công thức}{9}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}Giả định và điều kiện áp dụng}{10}{subsection.3.4.3}%
+\contentsline {subsection}{\numberline {3.4.4}Cách sử dụng trong bộ dữ liệu}{10}{subsection.3.4.4}%
+\contentsline {section}{\numberline {3.5}\hspace {0.2em}Phân tích phương sai một yếu tố và phương án Welch}{10}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Mục đích và lựa chọn biến}{10}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Giả thuyết}{10}{subsection.3.5.2}%
+\contentsline {subsection}{\numberline {3.5.3}ANOVA cổ điển và kích thước ảnh hưởng}{11}{subsection.3.5.3}%
+\contentsline {subsection}{\numberline {3.5.4}Phương án Welch}{11}{subsection.3.5.4}%
+\contentsline {subsection}{\numberline {3.5.5}Giả định, chẩn đoán và thang phân tích}{11}{subsection.3.5.5}%
+\contentsline {subsection}{\numberline {3.5.6}Lấy mẫu phục vụ biểu đồ}{12}{subsection.3.5.6}%
+\contentsline {section}{\numberline {3.6}Kiểm định độc lập Chi-square và Cramér’s V}{12}{section.3.6}%
+\contentsline {section}{\numberline {3.7}Hồi quy Logistic nhị phân và đánh giá mô hình}{12}{section.3.7}%
+\contentsline {chapter}{\numberline {4}Kết quả và thảo luận}{13}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Kết quả thống kê mô tả}{13}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Phân bố nhãn và so sánh đặc trưng Normal/Attack}{14}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Kết quả phân tích tương quan Pearson}{17}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Kết quả khoảng tin cậy 95\% cho năm nhóm}{17}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Kết quả ANOVA, kiểm tra giả định và hậu kiểm}{18}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Thống kê mô tả và kiểm tra giả định}{18}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Kết quả kiểm định tổng thể và kích thước ảnh hưởng}{20}{subsection.4.5.2}%
+\contentsline {subsection}{\numberline {4.5.3}Hậu kiểm Games--Howell và trả lời câu hỏi nghiên cứu}{21}{subsection.4.5.3}%
+\contentsline {paragraph}{RQ1 -- số lượng kết nối gần đây.}{22}{paragraph*.25}%
+\contentsline {paragraph}{RQ2 -- tỷ lệ lỗi SYN.}{22}{paragraph*.26}%
+\contentsline {paragraph}{RQ3 -- lượng byte gửi từ nguồn.}{22}{paragraph*.27}%
+\contentsline {paragraph}{RQ4 -- thời gian kết nối.}{23}{paragraph*.28}%
+\contentsline {section}{\numberline {4.6}Kết quả kiểm định Chi-square và mức độ liên hệ}{23}{section.4.6}%
+\contentsline {section}{\numberline {4.7}Kết quả huấn luyện và đánh giá hồi quy Logistic}{24}{section.4.7}%
+\contentsline {section}{\numberline {4.8}Tổng hợp và đối chiếu các phát hiện}{24}{section.4.8}%
+\contentsline {section}{\numberline {4.9}Hạn chế dữ liệu, phương pháp và khả năng khái quát}{24}{section.4.9}%
+\contentsline {chapter}{\numberline {5}Kết luận và kiến nghị}{25}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Kết luận theo từng câu hỏi nghiên cứu}{25}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Kiến nghị và hướng phát triển}{25}{section.5.2}%
+\contentsline {chapter}{\numberline {A}Phân công và đóng góp của các thành viên}{27}{appendix.A}%
