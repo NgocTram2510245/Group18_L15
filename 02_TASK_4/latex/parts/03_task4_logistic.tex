@@ -1,0 +1,89 @@
+% CHU SO HUU: Ngọc Dư | KHONG THEO PREAMBLE, KHONG BEGIN DOCUMENT TRONG THAN PHAN NAY.
+\section{Hồi quy Logistic nhị phân và đánh giá mô hình}
+\label{sec:t4:method}
+
+Mục này trình bày mô hình, cách ước lượng, cách diễn giải hệ số và các độ đo dùng để đánh giá khả năng phân loại lưu lượng thành Normal hoặc Attack. Biến đáp ứng là \texttt{label\_binary}, với $Y=1$ nếu kết nối là Attack và $Y=0$ nếu là Normal. Mô hình được học trên KDDTrain+ ($n=125.973$) và chỉ đánh giá một lần trên KDDTest+ ($n=22.544$), đúng quy ước dữ liệu đã nêu ở Chương~2.
+
+\subsection{Mô hình hồi quy Logistic}
+Gọi $\mathbf{x}_i\in\mathbb{R}^p$ là véc-tơ đặc trưng của quan sát thứ $i$ và $\pi_i=P(Y_i=1\mid\mathbf{x}_i)$. Hồi quy Logistic giả định logarit tỷ số odds (logit) là hàm tuyến tính của các đặc trưng \cite{task4_hosmer2013,task4_agresti2013}:
+\begin{equation}
+\operatorname{logit}(\pi_i)=\ln\frac{\pi_i}{1-\pi_i}=\beta_0+\boldsymbol{\beta}^{\top}\mathbf{x}_i,
+\qquad
+\pi_i=\frac{1}{1+e^{-(\beta_0+\boldsymbol{\beta}^{\top}\mathbf{x}_i)}}.
+\label{eq:t4:logit}
+\end{equation}
+Với $Y_i\mid\mathbf{x}_i\sim\text{Bernoulli}(\pi_i)$ độc lập, tham số được ước lượng bằng phương pháp hợp lý cực đại (MLE), tức cực đại hóa hàm log-hợp lý
+\begin{equation}
+\ell(\beta_0,\boldsymbol{\beta})=\sum_{i=1}^{n}\Big[y_i\ln\pi_i+(1-y_i)\ln(1-\pi_i)\Big].
+\label{eq:t4:loglik}
+\end{equation}
+Phương trình $\partial\ell/\partial\boldsymbol\beta=\mathbf{0}$ không có nghiệm dạng đóng nên được giải bằng thuật toán lặp (Newton--Raphson cho mô hình diễn giải; L-BFGS cho mô hình dự đoán).
+
+Khi số biến lớn, có nhiều biến giả từ mã hóa one-hot và các đặc trưng tương quan rất mạnh, MLE thuần có thể không ổn định hoặc không hội tụ (hiện tượng tách gần hoàn toàn). Vì vậy mô hình dự đoán dùng hiệu chỉnh L2 (ridge) \cite{task4_hastie2009,task4_sklearn2011}:
+\begin{equation}
+\min_{\beta_0,\boldsymbol\beta}\;\frac{1}{2}\lVert\boldsymbol\beta\rVert_2^2-C\,\ell(\beta_0,\boldsymbol\beta),
+\label{eq:t4:l2}
+\end{equation}
+trong đó $C>0$ là nghịch đảo cường độ hiệu chỉnh: $C$ càng nhỏ, hệ số càng bị co về 0.
+
+\subsection{Diễn giải hệ số và kiểm định}
+Với biến $x_j$ đã chuẩn hóa, $e^{\beta_j}$ là \emph{tỷ số odds} (OR): khi $x_j$ tăng một độ lệch chuẩn (tính trên Train) và các biến khác giữ nguyên, odds của Attack được nhân với $OR_j=e^{\beta_j}$. $OR_j>1$ cho thấy liên hệ thuận với khả năng Attack, $OR_j<1$ cho thấy liên hệ nghịch. Với biến giả của một mức danh mục, $OR_j$ so sánh odds của mức đó với mức tham chiếu. Đây là quan hệ liên kết có điều kiện trong mẫu, không phải quan hệ nhân quả.
+
+Ý nghĩa từng hệ số được kiểm định bằng kiểm định Wald với $H_0:\beta_j=0$ và $H_1:\beta_j\neq0$:
+\begin{equation}
+z_j=\frac{\hat\beta_j}{\widehat{SE}(\hat\beta_j)}\;\overset{H_0}{\approx}\;N(0,1),
+\qquad
+\text{CI}_{95\%}(OR_j)=\exp\!\Big(\hat\beta_j\pm z_{0{,}975}\,\widehat{SE}(\hat\beta_j)\Big),
+\label{eq:t4:wald}
+\end{equation}
+với $z_{0{,}975}\approx1{,}96$ và mức ý nghĩa $\alpha=0{,}05$. Ý nghĩa chung của mô hình được kiểm định bằng tỷ số hợp lý (LR) so với mô hình chỉ có hệ số chặn: $G=2(\ell_{\text{mô hình}}-\ell_0)\overset{H_0}{\sim}\chi^2_{k}$, trong đó $k$ là số hệ số không kể hệ số chặn. Mức độ phù hợp được tóm tắt bằng pseudo-$R^2$ McFadden $R^2_{\text{McF}}=1-\ell_{\text{mô hình}}/\ell_0$ \cite{task4_mcfadden1974} cùng các tiêu chí AIC và BIC.
+
+Do cỡ mẫu Train rất lớn, các hệ số khác 0 dù rất nhỏ vẫn dễ cho $p$-value gần 0. Vì vậy phần kết quả ưu tiên diễn giải độ lớn OR và khoảng tin cậy, không chỉ dựa vào $p$-value. Đa cộng tuyến được kiểm tra bằng hệ số phóng đại phương sai $\mathrm{VIF}_j=1/(1-R_j^2)$, với $R_j^2$ là hệ số xác định khi hồi quy $x_j$ theo các biến còn lại; nghiên cứu dùng ngưỡng $\mathrm{VIF}<10$.
+
+\subsection{Chuẩn bị biến và quy trình chống rò rỉ dữ liệu}
+Tập đầu vào gồm 40 trong 41 đặc trưng: \texttt{num\_outbound\_cmds} bị loại vì là biến hằng ở cả hai tập (Mục~2). Các cột \texttt{attack\_name}, \texttt{attack\_category}, \texttt{label\_binary} và \texttt{difficulty} không bao giờ được đưa vào mô hình; ba cột \texttt{attack\_name}, \texttt{attack\_category}, \texttt{difficulty} chỉ được dùng \emph{sau khi dự đoán} để phân tích lỗi. Bảng~\ref{tab:t4:prep} tóm tắt các phép biến đổi.
+
+\begin{table}[H]
+\centering
+\caption{Các bước chuẩn bị biến cho hồi quy Logistic}
+\label{tab:t4:prep}
+\small
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{p{4.2cm}p{5.6cm}p{5.0cm}}
+\toprule
+Nhóm biến (số biến) & Phép biến đổi & Tham số học từ \\
+\midrule
+Danh mục: \texttt{protocol\_type}, \texttt{service}, \texttt{flag} (3) & One-hot; mức không có trong Train được mã hóa toàn 0 & Danh sách mức của Train \\
+Đếm, byte, thời lượng (16) & $\log(1+x)$, sau đó chuẩn hóa $z$ & $\log(1+x)$: không học; trung bình, độ lệch chuẩn: Train \\
+Tỷ lệ trong $[0,1]$ (15) & Chuẩn hóa $z$ & Train \\
+Chỉ báo 0/1 (6) & Chuẩn hóa $z$ (mô hình dự đoán) & Train \\
+\bottomrule
+\end{tabular}%
+}
+\par\smallskip\footnotesize Mô hình dự đoán có 121 cột đầu vào sau mã hóa (81 biến giả và 40 cột số). KDDTest+ không có mức danh mục nào nằm ngoài Train.
+\end{table}
+
+Phép $\log(1+x)$ được dùng vì các biến đếm và byte lệch phải rất mạnh (Mục~2), ví dụ \texttt{src\_bytes} đạt cực đại 1.379.963.888 byte. Phép biến đổi này cố định, không học từ dữ liệu, nên không gây rò rỉ. Mọi phép có tham số (danh sách mức one-hot, trung bình và độ lệch chuẩn khi chuẩn hóa, lựa chọn $C$) được đặt trong một \emph{pipeline} chỉ fit trên Train. Trong kiểm định chéo, pipeline được fit lại trên từng phần huấn luyện để phần kiểm tra của mỗi fold không ảnh hưởng tới tham số tiền xử lý.
+
+\subsection{Hai mô hình với hai mục đích}
+Mục tiêu dự đoán tốt và mục tiêu diễn giải hệ số mâu thuẫn một phần: đưa đủ 40 đặc trưng giúp mô hình tận dụng nhiều thông tin, nhưng Train có 9 cặp biến tỷ lệ lỗi với $|r|>0{,}95$ (nhóm \texttt{serror} và \texttt{rerror}, thống nhất với Mục Pearson) và nhiều mức \texttt{service} hiếm, làm hệ số riêng lẻ không ổn định. Vì vậy nghiên cứu xây dựng hai mô hình:
+\begin{itemize}[leftmargin=1.2cm,itemsep=2pt]
+\item \textbf{Mô hình A -- diễn giải:} hồi quy Logistic MLE không hiệu chỉnh (thư viện \texttt{statsmodels} \cite{task4_statsmodels2010}) trên 9 biến số và \texttt{protocol\_type} (tham chiếu \texttt{tcp}). Các biến được chọn theo ý nghĩa nghiên cứu: lượng byte hai chiều, mật độ kết nối trong cửa sổ hai giây, tỷ lệ lỗi SYN/REJ và các tỷ lệ cùng hoặc khác dịch vụ. Mỗi nhóm tương quan rất cao chỉ giữ một đại diện. Biến \texttt{logged\_in} đã được thử nhưng bị loại do làm VIF vượt 12; sau khi loại, VIF lớn nhất là 9,38.
+\item \textbf{Mô hình B -- dự đoán:} hồi quy Logistic hiệu chỉnh L2 (thư viện \texttt{scikit-learn} \cite{task4_sklearn2011}) trên toàn bộ 121 cột đầu vào. Giá trị $C\in\{0{,}001;\,0{,}01;\,0{,}1;\,1;\,10;\,100\}$ được chọn bằng kiểm định chéo phân tầng 5 phần trên Train, tiêu chí F1. Do F1 gần như không đổi khi $C\geq10$, nghiên cứu dùng quy tắc một sai số chuẩn \cite{task4_hastie2009}: chọn $C$ nhỏ nhất có F1 trung bình không thấp hơn F1 tốt nhất trừ một sai số chuẩn.
+\end{itemize}
+Cả hai mô hình dùng ngưỡng cố định $\hat\pi\geq0{,}5$ để gán Attack. Ngưỡng không được điều chỉnh theo kết quả Test.
+
+\subsection{Độ đo đánh giá}
+Lớp dương là Attack. Từ ma trận nhầm lẫn gồm TP (Attack dự đoán đúng), TN (Normal dự đoán đúng), FP (Normal bị báo nhầm là Attack) và FN (Attack bị bỏ sót), các độ đo được tính như sau:
+\begin{equation}
+\text{Accuracy}=\frac{TP+TN}{n},\quad
+\text{Precision}=\frac{TP}{TP+FP},\quad
+\text{Recall}=\frac{TP}{TP+FN},\quad
+F_1=\frac{2\,\text{Precision}\cdot\text{Recall}}{\text{Precision}+\text{Recall}}.
+\label{eq:t4:metrics}
+\end{equation}
+Bổ sung thêm Specificity $=TN/(TN+FP)$ (tỷ lệ Normal được nhận đúng) và diện tích dưới đường ROC (AUC), không phụ thuộc ngưỡng. Vì Accuracy, Precision, Recall và Specificity đều là tỷ lệ $k/m$, khoảng tin cậy 95\% của chúng được tính bằng phương pháp Wilson \cite{task4_wilson1927}, cùng công thức với Mục ước lượng khoảng tin cậy. Khoảng này phản ánh sai số lấy mẫu trên KDDTest+, không phản ánh hiệu năng trên lưu lượng mạng thực.
+
+Trong bài toán phát hiện xâm nhập, FN thường nghiêm trọng hơn FP: một tấn công bị bỏ sót có thể gây thiệt hại, còn báo động nhầm chỉ tốn công kiểm tra. Do đó Recall được theo dõi cùng với Accuracy, và phần phân tích lỗi tách Recall theo từng nhóm tấn công.
+\FloatBarrier

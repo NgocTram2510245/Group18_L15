@@ -1,0 +1,84 @@
+\section{Khảo sát chất lượng dữ liệu ban đầu}
+Để đánh giá mức độ tin cậy của các kết quả mô tả, dữ liệu được kiểm tra về cấu trúc, kiểu biến, tính đầy đủ, tính duy nhất và miền giá trị trước khi tổng hợp. Cấu trúc và thang đo đã được xác định ở các mục trước. Việc kiểm tra được thực hiện riêng cho từng tập theo các miền giá trị dự kiến; quá trình tuyển chọn khi xây dựng NSL-KDD không được xem là căn cứ để mặc định dữ liệu đã sạch.
+
+Bảng~\ref{tab:t2:quality} tổng hợp kết quả kiểm tra. Giá trị thiếu được đếm theo ô; chuỗi rỗng được kiểm tra sau khi bỏ khoảng trắng; giá trị vô hạn và lỗi chuyển kiểu số được kiểm tra ở các trường số. Việc kiểm tra trùng được thực hiện riêng trên toàn bộ 43 trường và trên 41 đặc trưng mạng.
+\begin{table}[H]
+\centering
+\caption{Kiểm tra cấu trúc và chất lượng của hai tập dữ liệu gốc}
+\label{tab:t2:quality}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{10.1cm}rr}
+\toprule
+Tiêu chí / đơn vị & Train & Test \\
+\midrule
+Quy mô (dòng) & 125.973 & 22.544 \\
+Số trường trong TXT & 43 & 43 \\
+Giá trị thiếu (ô) & 0 & 0 \\
+Chuỗi rỗng / chỉ khoảng trắng (ô) & 0 & 0 \\
+Giá trị vô hạn ở trường số (ô) & 0 & 0 \\
+Lỗi chuyển kiểu số (ô) & 0 & 0 \\
+Dòng lặp dư theo 43 trường & 0 & 0 \\
+Dòng lặp dư theo 41 đặc trưng & 16 & 57 \\
+Nhóm trùng 41 đặc trưng & 15 & 57 \\
+Dòng thuộc nhóm trùng đặc trưng & 31 & 114 \\
+Nhóm đặc trưng có nhãn gốc khác nhau & 15 & 57 \\
+Dòng thuộc nhóm xung đột nhãn & 31 & 114 \\
+Nhóm đặc trưng có cả Normal và Attack & 7 & 54 \\
+Dòng thuộc nhóm xung đột nhị phân & 14 & 108 \\
+Giá trị âm ở 38 đặc trưng số (ô) & 0 & 0 \\
+Tỷ lệ ngoài $[0,1]$ (ô) & 0 & 0 \\
+Sai miền ở năm biến nhị phân (ô) & 0 & 0 \\
+\texttt{su\_attempted}=2 (dòng) & 59 & 2 \\
+Đặc trưng hằng (biến) & 1 & 1 \\
+Gần hằng, không hằng; tần suất mốt $\geq99\%$ (biến) & 12 & 10 \\
+\bottomrule
+\end{tabular}
+\par\smallskip\footnotesize Dòng lặp dư: số dòng còn lại sau khi giữ một dòng trong mỗi tổ hợp trùng. Nhóm trùng và dòng liên quan được đếm riêng; không cộng các dòng tiêu chí với nhau.
+\end{table}
+Hai tập không có dòng trùng hoàn toàn trên cả 43 trường, nhưng Train có 15 tổ hợp đặc trưng trùng, liên quan 31 quan sát và 16 dòng lặp dư; Test có 57 tổ hợp, liên quan 114 quan sát và 57 dòng lặp dư. Tất cả các tổ hợp trùng này có ít nhất hai nhãn gốc khác nhau. Khi gộp thành Normal/Attack, còn 7 nhóm xung đột ở Train (14 dòng) và 54 nhóm ở Test (108 dòng); các xung đột giữa hai tên tấn công cùng thuộc Attack không còn là xung đột nhị phân. Vì không có căn cứ xác định quan sát nào bị gán sai, các quan sát này được giữ nguyên. Sự khác nhau về nhãn cho thấy cùng một tổ hợp đặc trưng có thể tương ứng với nhiều nhãn trong dữ liệu. Xóa trùng chỉ theo đặc trưng sẽ tùy tiện giữ lại một nhãn, đồng thời làm thay đổi tần số mẫu.
+
+Các đặc trưng số đều không âm; 15 biến tỷ lệ nằm trong $[0,1]$. Năm chỉ báo được kiểm tra chỉ nhận 0 hoặc 1: \texttt{land}, \texttt{logged\_in}, \texttt{root\_shell}, \texttt{is\_host\_login} và \texttt{is\_guest\_login}. Riêng \texttt{su\_attempted} có 59 quan sát Train và hai quan sát Test nhận giá trị 2, không phù hợp mô tả nhị phân của lệnh \texttt{su root} trong tài liệu gốc \cite{task2_kdd1999}. Giá trị này được giữ nguyên và được ghi nhận là điểm chưa thống nhất giữa dữ liệu và mô tả ý nghĩa của biến; nghiên cứu không tự đổi giá trị đó thành 0 hoặc 1.
+
+Biến \texttt{num\_outbound\_cmds} luôn bằng 0 ở cả hai tập. Nếu định nghĩa gần hằng là tần suất của giá trị phổ biến nhất đạt ít nhất 99\%, không tính biến hằng, Train có 12 biến và Test có 10 biến thuộc diện này. Một biến có giá trị giống nhau hoặc ít thay đổi giữa các quan sát không đồng nghĩa các quan sát tương ứng bị lỗi.
+
+Nghiên cứu sử dụng ngưỡng thăm dò ngoại lai là $[Q_1-1{,}5\,IQR,\ Q_3+1{,}5\,IQR]$, với $IQR=Q_3-Q_1$. Tuy nhiên, ở \texttt{duration}, $Q_1=Q_3=0$ và 92,05\% quan sát bằng 0; ngưỡng IQR khi đó đánh dấu mọi thời lượng dương và không còn hữu ích để phân biệt các giá trị bị ghi nhận sai. Giá trị cực đại của \texttt{src\_bytes} đạt 1.379.963.888 byte. Giá trị cực đại lớn này cho thấy cần thận trọng khi diễn giải trung bình, nhưng chưa đủ làm căn cứ loại dữ liệu vì lưu lượng cực đoan có thể liên quan đến hành vi tấn công. Vì vậy, nghiên cứu không áp dụng cắt ngọn hay tự động loại bỏ các quan sát ngoại lai.
+
+\section{Các bước làm sạch và chuẩn hóa nhãn}
+Do không phát hiện thiếu dữ liệu, lỗi kiểu số hoặc giá trị âm, nghiên cứu không áp dụng điền khuyết hay loại dòng. Những vấn đề quan sát được gồm xung đột nhãn tại cùng đặc trưng và giá trị 2 của \texttt{su\_attempted} được bảo toàn để tránh áp đặt giả định không kiểm chứng. Các trường danh mục được giữ nguyên cách viết của schema, không chuyển thành mã số rồi coi đó là đại lượng có thể lấy trung bình.
+
+Tên tấn công trong TXT được giữ ở \texttt{attack\_name}; từ đó tạo \texttt{attack\_category} theo thứ tự Normal, DoS, Probe, R2L, U2R và \texttt{label\_binary}, với Normal bằng 0 và Attack bằng 1. Việc ánh xạ áp dụng hệ thống nhãn và nguồn phân loại đã nêu ở mục trước; tên gốc được bảo toàn để truy vết, còn tần số nhóm được tính từ các bản ghi thực tế. Toàn bộ 40 giá trị tên nhãn quan sát được trong hợp hai tập (kể cả Normal) đều được ánh xạ; tên ngoài danh sách sẽ làm dừng xử lý trước khi xuất dữ liệu.
+
+Bảng~\ref{tab:t2:beforeafter} cho thấy số dòng và 41 đặc trưng không thay đổi; hai nhãn dẫn xuất làm tổng số trường tăng từ 43 lên 45. Sau xử lý, không còn nhãn chưa ánh xạ; tổng tần số của năm nhóm và tổng Normal/Attack đều bằng đúng số quan sát của từng tập.
+\begin{table}[H]
+\centering
+\caption{Đối chiếu dữ liệu trước và sau chuẩn hóa nhãn}
+\label{tab:t2:beforeafter}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{7.5cm}rrrr}
+\toprule
+Chỉ tiêu & \multicolumn{2}{c}{Train} & \multicolumn{2}{c}{Test} \\ & Trước & Sau & Trước & Sau \\
+\midrule
+Số dòng & 125.973 & 125.973 & 22.544 & 22.544 \\
+Tổng số trường & 43 & 45 & 43 & 45 \\
+Đặc trưng mạng & 41 & 41 & 41 & 41 \\
+Nhãn dẫn xuất bổ sung & 0 & 2 & 0 & 2 \\
+Giá trị thiếu (ô) & 0 & 0 & 0 & 0 \\
+Dòng bị loại & --- & 0 & --- & 0 \\
+Tổng nhãn năm nhóm & --- & 125.973 & --- & 22.544 \\
+Tổng Normal/Attack & --- & 125.973 & --- & 22.544 \\
+\bottomrule
+\end{tabular}
+\par\smallskip\footnotesize Giữ nguyên 41 đặc trưng, \texttt{attack\_name} và \texttt{difficulty}; bổ sung nhãn nhóm và nhãn nhị phân.
+\end{table}
+Trường \texttt{difficulty} vẫn được lưu để truy vết nhưng không dùng làm biến dự đoán: nó phản ánh mức độ các bộ phân loại dùng khi xây dựng dữ liệu dự đoán đúng quan sát, thay vì một thuộc tính của lưu lượng có sẵn khi phát hiện xâm nhập \cite{task2_unb2009}. Các bảng mô tả dùng thang đo gốc; nghiên cứu không áp dụng Z-score, MinMax hay one-hot cho mọi phân tích. Nếu cần các phép biến đổi này cho hồi quy Logistic, tham số chỉ được học từ Train rồi áp dụng nguyên trạng lên Test.
+
+\section{Quy ước bộ dữ liệu dùng cho từng phân tích}
+Theo quy ước nghiên cứu được lựa chọn cho bài này, KDDTrain+ là mẫu chính để mô tả phân bố đặc trưng, tần số nhãn và thực hiện các phân tích thống kê. KDDTest+ được giữ riêng cho đánh giá dự đoán. Việc khảo sát chất lượng Test ở trên chỉ nhằm xác nhận dữ liệu có thể đọc và nhãn có thể đối chiếu, không dùng để chọn biến hoặc điều chỉnh tham số. Các tỷ lệ trong Chương 4 được tính riêng trên Train, không cộng hai tập.
+
+Đối với biến định lượng, các đại lượng trung tâm và phân tán được tính theo đơn vị gốc; biến định tính như dịch vụ ở đích (\texttt{service}) và trạng thái kết nối (\texttt{flag}) được tổng hợp bằng tần số hoặc bảng chéo. Nhãn năm nhóm phục vụ mô tả cơ cấu các dạng lưu lượng, còn nhãn nhị phân phục vụ so sánh Normal/Attack. Các nhãn và \texttt{difficulty} bị loại khỏi tập biến dự đoán; tên tấn công gốc được giữ để đối chiếu. Mọi bước mã hóa, chuẩn hóa và lựa chọn đặc trưng có học tham số chỉ sử dụng Train.
+
+Các kết quả sau đây mô tả mẫu NSL-KDD đã được tuyển chọn, không ước lượng tỷ lệ tấn công trên Internet. Nguồn dữ liệu cũng lưu ý hạn chế đại diện cho mạng thực \cite{task2_unb2009}. Quy ước này bảo đảm các kết quả mô tả ở Chương 4 có cùng mẫu nền và giữ ranh giới với đánh giá dự đoán.
+\FloatBarrier
+
