@@ -1,0 +1,63 @@
+\section{Nguồn gốc và cách hình thành NSL-KDD}
+Hệ thống phát hiện xâm nhập (Intrusion Detection System, IDS) phân tích dấu hiệu hoạt động để nhận biết các hành vi có khả năng xâm phạm hệ thống. Trong bài toán dữ liệu mạng, bản ghi kết nối là đơn vị quan sát: nó tóm tắt một kết nối cùng các thống kê liên quan, không phải một gói tin riêng lẻ. Các đặc trưng này cho phép mô tả phân bố và so sánh hành vi theo nhãn \cite{task2_kdd1999}.
+
+NSL-KDD có nguồn gốc từ một chuỗi xử lý dữ liệu lịch sử. Chương trình DARPA 1998 do MIT Lincoln Laboratory tổ chức sử dụng lưu lượng và nhật ký thu trong mạng mô phỏng để đánh giá IDS \cite{chuong2_mit1998}. KDD Cup 1999 sử dụng dữ liệu phát triển từ chương trình này, chuyển lưu lượng thô thành các bản ghi kết nối có đặc trưng và nhãn \cite{task2_kdd1999}. Năm 2009, Tavallaee và cộng sự đề xuất NSL-KDD bằng cách tuyển chọn các bản ghi của KDD'99; đây không phải một đợt thu lưu lượng mạng mới \cite{task1_tavallaee2009}.
+
+Hai vấn đề được xử lý khi xây dựng NSL-KDD là sự lặp lại nhiều bản ghi và việc mẫu quá dễ làm giảm khả năng phân biệt giữa các phương pháp. Sau bước loại lặp, tác giả dùng bảy thuật toán, mỗi thuật toán học trên ba mẫu, tạo 21 bộ phân loại. Số bộ dự đoán đúng một bản ghi được dùng để phân tầng mức độ dễ/khó; việc chọn mẫu giảm ưu thế của tầng dễ vốn chiếm tỷ trọng lớn \cite{task1_tavallaee2009}. Vì vậy, trường độ khó không đo mức nghiêm trọng của một cuộc tấn công. Tính duy nhất của các bản ghi được kiểm tra theo từng định nghĩa cụ thể tại mục khảo sát chất lượng dữ liệu.
+
+Nguồn gốc mô phỏng và thời điểm lịch sử giới hạn khả năng khái quát. UNB lưu ý NSL-KDD chưa đại diện hoàn hảo cho mạng thực \cite{task2_unb2009}. Do đó, bộ dữ liệu phù hợp cho minh họa phương pháp thống kê và so sánh mô hình trong một chuẩn thử nghiệm xác định; các tỷ lệ và kết quả trong bài không được xem là tình hình tấn công Internet hiện tại hay hiệu quả IDS khi triển khai. Các tập sử dụng được mô tả tiếp theo.
+
+\section{Quy mô, cấu trúc và vai trò các tập dữ liệu}
+Hai tệp TXT đầy đủ, \texttt{KDDTrain+.txt} và \texttt{KDDTest+.txt}, là nguồn bản ghi chính. Chúng có định dạng phân cách bằng dấu phẩy, không có dòng tiêu đề. Bảng~\ref{tab:chuong2:inventory} ghi kết quả kiểm kê trực tiếp; các bản 20\% của Train và Test loại mức khó 21 có trong gói dữ liệu nhưng không được dùng thay thế cho hai tập đầy đủ.
+\begin{table}[H]\centering
+\caption{Quy mô và vai trò các tệp NSL-KDD được sử dụng}
+\label{tab:chuong2:inventory}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{l>{\raggedright\arraybackslash}p{3.6cm}rr>{\raggedright\arraybackslash}p{5cm}}\toprule
+Tập & Tệp / định dạng & Dòng & Trường & Vai trò\\\midrule
+train & \texttt{KDDTrain+.txt} & 125.973 & 43 & Dữ liệu chính cho mô tả và phát triển mô hình\\
+train & \texttt{KDDTrain+.arff} & 125.973 & 42 & Đối chiếu schema và nhãn nhị phân\\
+test & \texttt{KDDTest+.txt} & 22.544 & 43 & Đánh giá dự đoán độc lập\\
+test & \texttt{KDDTest+.arff} & 22.544 & 42 & Đối chiếu schema và nhãn nhị phân\\
+\bottomrule\end{tabular}\end{table}
+Mỗi dòng TXT gồm 41 đặc trưng mạng theo thứ tự schema, một tên nhãn gốc (\texttt{attack\_name}) và một trường độ khó (\texttt{difficulty}), tổng cộng 43 trường. Độ khó là số bộ phân loại dự đoán đúng trong quá trình xây dựng dữ liệu, có thang 0--21; giá trị cao biểu thị dễ hơn đối với các bộ phân loại đó \cite{task2_unb2009}. Cả tên nhãn lẫn độ khó đều nằm ngoài 41 đặc trưng đầu vào.
+
+Các tệp ARFF kèm theo có 42 trường: 41 đặc trưng và lớp \texttt{normal}/\texttt{anomaly}, không có tên tấn công chi tiết hay độ khó. Đối chiếu từng dòng xác nhận 41 giá trị đặc trưng và nhãn nhị phân của mỗi ARFF khớp TXT tương ứng; sự khớp này không cho phép dùng ARFF để phục hồi tên tấn công. Sự phân biệt giữa hai định dạng cũng phù hợp với mô tả của UNB \cite{task2_unb2009}. Train dùng cho phân tích thống kê và phát triển mô hình; Test giữ riêng cho đánh giá dự đoán.
+
+\section{Các đặc trưng mạng, loại biến và ý nghĩa}
+Đặc trưng (feature) là một thuộc tính mô tả quan sát, khác với nhãn (label) mô tả lớp hành vi. Đối chiếu bảng định nghĩa KDD với schema 41 tên trường cho phép tổ chức chúng thành bốn nhóm trong Bảng~\ref{tab:chuong2:features}: 9 biến cơ bản, 13 biến nội dung, 9 biến lưu lượng theo thời gian và 10 biến lịch sử theo máy đích \cite{task2_kdd1999,chuong2_schema1999}. Cách chia này mô tả nguồn thông tin của đặc trưng.
+\begin{table}[H]\centering
+\caption{Các nhóm đặc trưng theo nội dung đo lường}
+\label{tab:chuong2:features}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{>{\raggedright\arraybackslash}p{3cm}r>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{5.2cm}}\toprule
+Nhóm & Số biến & Phạm vi & Ví dụ / đơn vị\\\midrule
+Cơ bản & 9 & Thuộc tính của bản ghi kết nối & \texttt{duration} (giây), \texttt{src\_bytes} (byte), giao thức\\
+Nội dung & 13 & Dấu hiệu truy cập và thao tác trong kết nối & \texttt{logged\_in} (chỉ báo), \texttt{num\_failed\_logins} (lần)\\
+Lưu lượng theo thời gian & 9 & Tổng hợp trong cửa sổ hai giây & \texttt{count} (kết nối), \texttt{serror\_rate} (tỷ lệ)\\
+Lưu lượng theo máy đích & 10 & Tổng hợp theo lịch sử kết nối thay cho cửa sổ thời gian & \texttt{dst\_host\_count} (kết nối), các tỷ lệ theo máy đích\\
+\bottomrule\end{tabular}\end{table}
+Ba biến danh nghĩa là \texttt{protocol\_type} (giao thức, chẳng hạn TCP hoặc UDP), \texttt{service} (dịch vụ ở đích) và \texttt{flag} (trạng thái kết nối). Các mã danh mục không có khoảng cách số học để lấy trung bình. Trong 38 biến lưu dạng số, \texttt{duration} đo thời lượng theo giây; \texttt{src\_bytes} và \texttt{dst\_bytes} đo số byte theo hai chiều nguồn--đích. Chúng được ghi dưới dạng số nguyên; cách lưu số không đồng nghĩa mọi biến đều liên tục \cite{task2_kdd1999,chuong2_schema1999}.
+
+\texttt{count} đếm kết nối tới cùng máy đích trong hai giây trước; \texttt{srv\_count} đếm kết nối cùng dịch vụ trong cửa sổ đó. Hai điều kiện đếm khác nhau, nên nghiên cứu không mặc định một tập là tập con của tập kia. \texttt{serror\_rate} là tỷ lệ kết nối có lỗi SYN\footnote{SYN là cờ điều khiển được dùng khi thiết lập kết nối TCP. Thuật ngữ lỗi SYN ở đây được sử dụng theo cách ghi nhận của bộ dữ liệu.} trong tập cùng máy đích; miền dự kiến là $[0,1]$, không phải thang phần trăm. Các chỉ báo như \texttt{logged\_in} biểu thị đăng nhập thành công, còn \texttt{su\_attempted} được tài liệu mô tả là thử lệnh \texttt{su root}\footnote{Lệnh này yêu cầu chuyển sang tài khoản root, tài khoản có quyền quản trị hệ thống. Việc thử lệnh không đồng nghĩa đã chuyển quyền thành công.}. \texttt{num\_outbound\_cmds} đếm lệnh outbound trong phiên FTP\footnote{FTP là giao thức truyền tệp giữa các máy qua mạng.} \cite{task2_kdd1999}.
+
+Miền giá trị dự kiến được đối chiếu với dữ liệu thực ở mục khảo sát chất lượng. Đặc trưng thứ 21 được ghi là \texttt{is\_host\_login} trong schema, nhưng mang tên \texttt{is\_hot\_login} trong bảng mô tả KDD, với ý nghĩa chỉ báo đăng nhập thuộc danh sách ``hot''. Al Tobi và Duncan cũng xác nhận sự không thống nhất tên gọi này đối với cùng đặc trưng \cite{task2_kdd1999,chuong2_schema1999,task2_altobi2018}. Báo cáo thống nhất dùng \texttt{is\_host\_login} theo schema của dữ liệu nghiên cứu. Với nhóm lịch sử theo máy đích, tài liệu mô tả nguyên lý cửa sổ kết nối, nhưng chưa đủ để xác nhận mọi chi tiết triển khai trong bản NSL-KDD đang dùng. Các điểm chưa rõ được bảo lưu; kết quả kiểm toán miền được trình bày sau.
+
+\section{Hệ thống nhãn và các nhóm hành vi tấn công}
+Tên nhãn gốc mô tả hành vi cụ thể, chẳng hạn \texttt{normal}, \texttt{neptune} hoặc \texttt{portsweep}. Để mô tả cơ cấu, chúng được quy về Normal và bốn nhóm tấn công trong Bảng~\ref{tab:chuong2:taxonomy}; định nghĩa nhóm dựa trên mô tả KDD, còn các ví dụ được đối chiếu danh sách ánh xạ UCI \cite{task2_kdd1999,task2_uci1999}. Đây là năm nhóm lưu lượng, không phải năm loại tấn công.
+\begin{table}[H]\centering
+\caption{Một nhóm bình thường và bốn nhóm tấn công}
+\label{tab:chuong2:taxonomy}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{l>{\raggedright\arraybackslash}p{7.3cm}>{\raggedright\arraybackslash}p{5.5cm}}\toprule
+Nhóm & Ý nghĩa hành vi & Ví dụ nhãn gốc\\\midrule
+Normal & Kết nối được gán nhãn hoạt động bình thường & \texttt{normal}\\
+DoS & Từ chối dịch vụ, làm cản trở khả năng cung cấp dịch vụ & \texttt{neptune}, \texttt{smurf}\\
+Probe & Thăm dò máy hoặc dịch vụ để thu thập thông tin & \texttt{portsweep}, \texttt{ipsweep}\\
+R2L & Truy cập trái phép từ máy ở xa vào tài khoản cục bộ & \texttt{guess\_passwd}, \texttt{ftp\_write}\\
+U2R & Từ quyền người dùng lên quyền quản trị trái phép & \texttt{buffer\_overflow}, \texttt{rootkit}\\
+\bottomrule\end{tabular}\end{table}
+Nhãn năm nhóm giữ khác biệt về dạng hành vi; nhãn nhị phân gộp bốn nhóm tấn công thành Attack (1) và giữ Normal (0), thích hợp cho so sánh bình thường/bất thường và bài toán dự đoán nhị phân. Kiểm kê tên gốc cho thấy Train có 23 giá trị, Test có 38 giá trị, đều tính cả \texttt{normal}; hợp hai tập có 40 giá trị, trong đó 17 tên chỉ xuất hiện ở Test. Số loại tấn công của KDD'99 không được dùng thay cho kết quả kiểm kê NSL-KDD này.
+
+Với các nhãn mở rộng ở Test, nghiên cứu chọn hệ thống trong Bảng 3 của Imrana và cộng sự: \texttt{worm} thuộc DoS và \texttt{httptunnel} thuộc R2L \cite{task2_imrana2022}. Hệ thống phân loại này được lựa chọn theo nguồn đã nêu, không được suy luận từ tên nhãn. Cách xếp các nhãn này không thống nhất giữa mọi tài liệu; đổi nhóm sẽ thay đổi tần số năm nhóm ở Test nhưng không thay đổi nhãn nhị phân, vì cả hai vẫn là Attack. Mọi tần số được tính từ nhãn gốc theo cùng một ánh xạ, không chép số tổng từ bài báo. Kết quả kiểm tra tính đầy đủ và sự nhất quán của các bản ghi được trình bày ở mục khảo sát chất lượng dữ liệu; kết quả đối chiếu sau chuẩn hóa nhãn xác nhận không còn nhãn chưa ánh xạ và tổng tần số khớp số quan sát của từng tập.
+\FloatBarrier
