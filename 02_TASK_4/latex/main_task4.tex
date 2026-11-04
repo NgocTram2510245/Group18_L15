@@ -1,0 +1,51 @@
+% !TeX program = xelatex
+% !TeX root = main_task4.tex
+\documentclass[12pt,a4paper,oneside]{report}
+\input{config/preamble}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{1.5cm}
+{\Large\bfseries TRƯỜNG ĐẠI HỌC BÁCH KHOA -- ĐHQG-HCM\par}
+{\large\bfseries KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH\par}
+\vspace{2cm}
+{\LARGE\bfseries BÀI TẬP LỚN XÁC SUẤT VÀ THỐNG KÊ (MT2013)\par}
+\vspace{1cm}
+{\Large\bfseries BÁO CÁO KẾT QUẢ THỰC HIỆN NHIỆM VỤ TASK 4\par}
+\vspace{0.5cm}
+{\large\itshape Mô hình hồi quy Logistic và Dự đoán tấn công mạng trên bộ dữ liệu NSL-KDD\par}
+\vspace{2.5cm}
+
+\begin{flushleft}
+\large
+\hspace{3cm}\textbf{Lớp:} L15\\
+\hspace{3cm}\textbf{Nhóm:} 18\\
+\hspace{3cm}\textbf{Sinh viên phụ trách:} Ngọc Dư\\
+\hspace{3cm}\textbf{Nhiệm vụ:} Task 4 (Hồi quy Logistic, Đánh giá \& Phân tích lỗi)
+\end{flushleft}
+
+\vfill
+{\large TP. HỒ CHÍ MINH, HỌC KỲ 1 -- NĂM HỌC 2026--2027\par}
+\vspace*{1cm}
+\end{titlepage}
+
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
+\pagenumbering{arabic}
+
+\chapter{Phương pháp Xác suất và Thống kê (Task 4.1)}
+\input{parts/03_task4_logistic}
+
+\chapter{Kết quả Thực nghiệm và Phân tích Lỗi (Task 4.2)}
+\input{parts/04_task4_logistic}
+
+\input{references}
+
+\end{document}

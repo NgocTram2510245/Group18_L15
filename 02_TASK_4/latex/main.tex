@@ -1,0 +1,50 @@
+% !TeX program = xelatex
+% !TeX root = main.tex
+\documentclass[12pt,a4paper,oneside]{report}
+\input{config/preamble}
+
+\begin{document}
+\input{frontmatter/titlepage}
+
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
+\pagenumbering{arabic}
+
+\chapter{Đặt vấn đề}
+\input{parts/01_task1_dat_van_de}
+
+\chapter{Dữ liệu và tiền xử lý}
+\input{parts/02_task1_gioi_thieu_du_lieu}
+\input{parts/02_task2_tien_xu_ly}
+
+\chapter{Phương pháp Xác suất và Thống kê}
+\input{parts/03_task1_phuong_phap_chung}
+\input{parts/03_task31_pearson}
+\input{parts/03_task32_wilson}
+\input{parts/03_task33_anova}
+\input{parts/03_task34_chi_square}
+\input{parts/03_task4_logistic}
+
+\chapter{Kết quả và thảo luận}
+\input{parts/04_task2_thong_ke_mo_ta}
+\input{parts/04_task31_pearson}
+\input{parts/04_task32_wilson}
+\input{parts/04_task33_anova}
+\input{parts/04_task34_chi_square}
+\input{parts/04_task4_logistic}
+\input{parts/04_task5_thao_luan_chung}
+
+\chapter{Kết luận và kiến nghị}
+\input{parts/05_task5_ket_luan}
+
+\input{references}
+
+\appendix
+\chapter{Phân công và đóng góp của các thành viên}
+\input{frontmatter/contributions}
+\end{document}
