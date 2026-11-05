@@ -1,0 +1,196 @@
+﻿{
+  "n_train": 125973,
+  "n_test": 22544,
+  "train_attack": 58630,
+  "train_normal": 67343,
+  "test_attack": 12833,
+  "test_normal": 9711,
+  "n_features_raw": 40,
+  "test_unseen_attack_names": [
+    "apache2",
+    "httptunnel",
+    "mailbomb",
+    "mscan",
+    "named",
+    "processtable",
+    "ps",
+    "saint",
+    "sendmail",
+    "snmpgetattack",
+    "snmpguess",
+    "sqlattack",
+    "udpstorm",
+    "worm",
+    "xlock",
+    "xsnoop",
+    "xterm"
+  ],
+  "test_unseen_attack_rows": 3750,
+  "seed": 18,
+  "threshold": 0.5,
+  "alpha": 0.05,
+  "n_high_corr_pairs": 9,
+  "modelB_best_C": 10.0,
+  "modelB_n_inputs": 121,
+  "modelB_cv_f1_selected": 0.9843713846630999,
+  "modelB_cv_f1_max": 0.9844224374041216,
+  "modelB_cv_C_argmax": 100.0,
+  "modelB_intercept": 0.9555683832480796,
+  "modelA_max_vif": 9.378941771772482,
+  "modelA_converged": true,
+  "modelA_n_params": 12,
+  "modelA_llf": -19539.06640885832,
+  "modelA_llnull": -87016.26906967381,
+  "modelA_LR_stat": 134954.405321631,
+  "modelA_LR_df": 11,
+  "modelA_LR_pvalue": 0.0,
+  "modelA_pseudo_R2_McFadden": 0.7754550198743477,
+  "modelA_AIC": 39102.13281771664,
+  "modelA_BIC": 39219.05869224373,
+  "fn_total_test": 4944,
+  "fn_from_unseen": 2726,
+  "fn_prob_median": 0.0006443717530105674,
+  "fn_prob_share_below_0_1": 0.8699433656957929
+}
+
+CV:
+  param_clf__C  mean_test_f1  std_test_f1  mean_test_accuracy  std_test_accuracy  mean_test_roc_auc  std_test_roc_auc
+        0.001        0.9663       0.0010              0.9688             0.0009             0.9957            0.0004
+        0.010        0.9791       0.0013              0.9806             0.0013             0.9971            0.0004
+        0.100        0.9819       0.0010              0.9832             0.0009             0.9976            0.0003
+        1.000        0.9835       0.0011              0.9847             0.0010             0.9978            0.0003
+       10.000        0.9844       0.0012              0.9855             0.0011             0.9979            0.0002
+      100.000        0.9844       0.0010              0.9855             0.0010             0.9979            0.0003
+
+Metrics:
+          model   set      n    TP    TN   FP   FN  accuracy  accuracy_ci_low  accuracy_ci_high  precision  precision_ci_low  precision_ci_high  recall  recall_ci_low  recall_ci_high  specificity  specificity_ci_low  specificity_ci_high     f1  roc_auc    fpr
+     B_full_L2 train 125973 57640 66532  811  990    0.9857           0.9850            0.9863     0.9861            0.9851             0.9870  0.9831         0.9820          0.9841       0.9880              0.9871               0.9888 0.9846   0.9980 0.0120
+     B_full_L2  test  22544  7889  8970  741 4944    0.7478           0.7421            0.7535     0.9141            0.9080             0.9199  0.6147         0.6063          0.6231       0.9237              0.9182               0.9288 0.7351   0.7878 0.0763
+A_interpretive train 125973 54995 64838 2505 3635    0.9513           0.9501            0.9524     0.9564            0.9547             0.9581  0.9380         0.9360          0.9399       0.9628              0.9613               0.9642 0.9471   0.9775 0.0372
+A_interpretive  test  22544  7487  9318  393 5346    0.7454           0.7397            0.7511     0.9501            0.9451             0.9547  0.5834         0.5749          0.5919       0.9595              0.9554               0.9633 0.7229   0.8249 0.0405
+
+Model A:
+                    variable    beta     se        z  p_value  ci_low_beta  ci_high_beta  odds_ratio  or_ci_low  or_ci_high
+                      const -0.0336 0.0249  -1.3465   0.1781      -0.0824        0.0153      0.9670     0.9209      1.0154
+                  src_bytes -0.1961 0.0220  -8.9121   0.0000      -0.2392       -0.1530      0.8219     0.7872      0.8581
+                  dst_bytes -0.5079 0.0206 -24.6171   0.0000      -0.5483       -0.4675      0.6018     0.5779      0.6266
+                      count  1.1815 0.0229  51.6045   0.0000       1.1366        1.2264      3.2592     3.1162      3.4088
+         dst_host_srv_count -1.0452 0.0175 -59.6593   0.0000      -1.0795       -1.0108      0.3516     0.3398      0.3639
+                serror_rate  1.8013 0.0320  56.3739   0.0000       1.7386        1.8639      6.0573     5.6896      6.4487
+                rerror_rate  0.6178 0.0191  32.2760   0.0000       0.5803        0.6553      1.8548     1.7865      1.9258
+              same_srv_rate -0.5348 0.0338 -15.8175   0.0000      -0.6011       -0.4685      0.5858     0.5482      0.6259
+              diff_srv_rate -0.3988 0.0139 -28.6545   0.0000      -0.4260       -0.3715      0.6711     0.6531      0.6897
+dst_host_same_src_port_rate  0.6454 0.0132  48.8375   0.0000       0.6195        0.6713      1.9067     1.8580      1.9568
+         protocol_type_icmp  2.7221 0.0522  52.1461   0.0000       2.6198        2.8244     15.2126    13.7331     16.8514
+          protocol_type_udp -0.6463 0.0466 -13.8778   0.0000      -0.7376       -0.5550      0.5240     0.4783      0.5741
+
+VIF:
+                    variable  VIF
+                  src_bytes 5.09
+                  dst_bytes 3.88
+                      count 3.11
+         dst_host_srv_count 2.92
+                serror_rate 9.38
+                rerror_rate 4.49
+              same_srv_rate 8.31
+              diff_srv_rate 1.48
+dst_host_same_src_port_rate 2.11
+         protocol_type_icmp 2.27
+          protocol_type_udp 1.95
+
+Recall by category:
+   set category     n  correct  missed      metric   rate  ci_low  ci_high
+train   Normal 67343    66532     811 specificity 0.9880  0.9871   0.9888
+train      DoS 45927    45848      79      recall 0.9983  0.9979   0.9986
+train    Probe 11656    11369     287      recall 0.9754  0.9724   0.9780
+train      R2L   995      391     604      recall 0.3930  0.3631   0.4237
+train      U2R    52       32      20      recall 0.6154  0.4796   0.7353
+ test   Normal  9711     8970     741 specificity 0.9237  0.9182   0.9288
+ test      DoS  7460     5930    1530      recall 0.7949  0.7856   0.8039
+ test    Probe  2421     1854     567      recall 0.7658  0.7485   0.7822
+ test      R2L  2885       78    2807      recall 0.0270  0.0217   0.0336
+ test      U2R    67       27      40      recall 0.4030  0.2939   0.5226
+
+Seen vs unseen:
+             group    n  detected  missed  recall  ci_low  ci_high
+Đã có trong Train 9083      6865    2218  0.7558  0.7469   0.7645
+Chỉ có trong Test 3750      1024    2726  0.2731  0.2590   0.2876
+
+Top missed names:
+   attack_name attack_category    n  detected  missed  recall  seen_in_train
+ guess_passwd             R2L 1231         0    1231  0.0000           True
+  warezmaster             R2L  944        69     875  0.0731           True
+ processtable             DoS  685         0     685  0.0000          False
+        mscan           Probe  996       455     541  0.4568          False
+      apache2             DoS  737       246     491  0.3338          False
+    snmpguess             R2L  331         3     328  0.0091          False
+     mailbomb             DoS  293         0     293  0.0000          False
+snmpgetattack             R2L  178         1     177  0.0056          False
+   httptunnel             R2L  133         2     131  0.0150          False
+      neptune             DoS 4657      4622      35  0.9925           True
+     multihop             R2L   18         1      17  0.0556           True
+        named             R2L   17         2      15  0.1176          False
+         back             DoS  359       345      14  0.9610           True
+        saint           Probe  319       305      14  0.9561          False
+     sendmail             R2L   14         0      14  0.0000          False
+
+FP by service:
+            fp  n_normal  fp_rate
+service                         
+private   646       852   0.7582
+other      42        65   0.6462
+ecr_i      35        48   0.7292
+ftp_data    4       320   0.0125
+ftp         4        48   0.0833
+eco_i       2        26   0.0769
+telnet      2        44   0.0455
+http        2      6673   0.0003
+tftp_u      1         1   1.0000
+link        1         1   1.0000
+
+FP by flag:
+          fp  n_normal  fp_rate
+flag                          
+SF      701      9607   0.0730
+RSTR     35        44   0.7955
+REJ       2        34   0.0588
+S1        1        11   0.0909
+RSTOS0    1         1   1.0000
+S2        1         8   0.1250
+
+Acc by difficulty:
+ difficulty     n  n_attack  correct  accuracy  ci_low  ci_high
+      0-10  1423      1171      123    0.0864  0.0729   0.1022
+     11-15  3378      3215      955    0.2827  0.2678   0.2981
+     16-20  7049      5312     5101    0.7236  0.7131   0.7340
+        21 10694      3135    10680    0.9987  0.9978   0.9992
+
+Top |beta| model B:
+          feature  beta_std  odds_ratio
+     service_IRC  -12.5168      0.0000
+     flag_RSTOS0    7.9676   2886.0476
+         flag_S1   -7.3900      0.0006
+       flag_RSTR    5.6207    276.0711
+service_domain_u   -5.5045      0.0041
+   service_pop_3   -5.2988      0.0050
+  service_telnet   -5.0851      0.0062
+    service_http   -4.4725      0.0114
+         flag_S2   -4.3809      0.0125
+   service_urp_i   -4.2943      0.0136
+  service_gopher    3.9257     50.6890
+   service_other   -3.8309      0.0217
+        flag_REJ   -3.6132      0.0270
+ service_private    3.5052     33.2891
+    service_auth   -3.3887      0.0338
+
+High corr pairs:
+                 var1                     var2      r
+         serror_rate          srv_serror_rate 0.9933
+         serror_rate     dst_host_serror_rate 0.9794
+         serror_rate dst_host_srv_serror_rate 0.9811
+     srv_serror_rate     dst_host_serror_rate 0.9776
+     srv_serror_rate dst_host_srv_serror_rate 0.9863
+         rerror_rate          srv_rerror_rate 0.9890
+         rerror_rate dst_host_srv_rerror_rate 0.9644
+     srv_rerror_rate dst_host_srv_rerror_rate 0.9702
+dst_host_serror_rate dst_host_srv_serror_rate 0.9851
