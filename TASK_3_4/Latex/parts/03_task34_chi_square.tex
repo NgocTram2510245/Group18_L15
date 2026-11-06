@@ -1,0 +1,73 @@
+% !TeX root = ../main.tex
+% CHU SO HUU: Minh Khoa và Ngọc Đô | KHONG THEO PREAMBLE, KHONG BEGIN DOCUMENT TRONG THAN PHAN NAY.
+\section{Kiểm định độc lập Chi-square và Cramér’s V}
+\label{subsec:chi2-theory}
+
+Mỗi bản ghi của tập dữ liệu NSL-KDD mô tả một kết nối mạng bằng các đặc trưng lưu lượng cơ bản, đặc trưng nội dung và đặc trưng thống kê theo thời gian~\cite{task2_kdd1999}. Hai đặc trưng trong số đó là hai biến danh nghĩa: giao thức tầng giao vận \texttt{protocol\_type} (TCP, UDP, ICMP) và họ tấn công \texttt{attack\_category} (Normal, DoS, Probe, R2L, U2R), được gộp từ nhãn tấn công chi tiết. Biến danh nghĩa không có thứ tự và không có khoảng cách, nên hệ số tương quan Pearson và kiểm định trung bình không áp dụng được. Kiểm định Chi-square độc lập phù hợp với cặp biến này vì nó so sánh trực tiếp tần số quan sát trong bảng chéo với tần số kỳ vọng khi hai biến không liên quan. Imrana và cộng sự dùng thống kê Chi-square để đánh giá đặc trưng trong bài toán phát hiện xâm nhập mạng (IDS)~\cite{task2_imrana2022}, và báo cáo này áp dụng cùng cách tiếp cận cho \texttt{protocol\_type}. Kết quả quyết định việc giữ hay loại biến này khỏi tập thuộc tính của các mô hình phân loại tấn công.
+
+Gọi $X$ là \texttt{protocol\_type} nhận $r = 3$ giá trị (TCP, UDP, ICMP) và $Y$ là \texttt{attack\_\allowbreak{}category} nhận $c = 5$ giá trị (Normal, DoS, Probe, R2L, U2R). Hai giả thuyết được phát biểu như sau:
+\begin{itemize}
+  \item $H_0$: \texttt{protocol\_type} và \texttt{attack\_category} độc lập trong tổng thể. Biết giao thức không làm thay đổi phân phối của họ tấn công:
+    \begin{equation}
+      \label{eq:t34:independence}
+      P(X = i,\, Y = j) = P(X = i)\,P(Y = j), \qquad (1\le i \le r, 1\le j \le c).
+    \end{equation}
+  \item $H_1$: hai biến phụ thuộc nhau, tức tồn tại ít nhất một cặp $(i, j)$ sao cho $P(X = i,\, Y = j) \neq P(X = i)\,P(Y = j)$.
+\end{itemize}
+Kiểm định dùng mức ý nghĩa $\alpha = 0{,}05$. Ta bác bỏ $H_0$ khi $p$-value nhỏ hơn $\alpha$.
+
+Gọi $O_{ij}$ là số bản ghi thuộc giao thức $i$ và họ tấn công $j$, $R_i = \sum\limits_{j} O_{ij}$ là tổng hàng, $C_j = \sum\limits_{i} O_{ij}$ là tổng cột và $n = \sum\limits_{i,j} O_{ij}$ là cỡ mẫu. Khi $H_0$ đúng, tần số kỳ vọng của ô $(i, j)$ là
+\begin{equation}
+  \label{eq:t34:expected-frequency}
+  E_{ij} = n \cdot \frac{R_i}{n} \cdot \frac{C_j}{n} = \frac{R_i \times C_j}{n}.
+\end{equation}
+Phân phối của thống kê kiểm định chỉ xấp xỉ phân phối Chi-square khi các $E_{ij}$ đủ lớn. Quy tắc Cochran đặt tiêu chuẩn cho điều kiện này~\cite{task34_cochran1954}: tối thiểu $80\%$ số ô có $E_{ij} \geq 5$ và không ô nào có $E_{ij} = 0$.\footnote{Quy tắc Cochran do William G. Cochran đề xuất năm 1954. Bản gốc yêu cầu mọi ô có $E_{ij} \geq 1$ và không quá $20\%$ số ô có $E_{ij} < 5$. Điều kiện ``không ô nào bằng $0$'' trong báo cáo là mức tối thiểu cần thiết để công thức $\chi^2$ xác định được.} Kiểm định cũng giả định các bản ghi độc lập với nhau và mỗi bản ghi thuộc đúng một ô của bảng chéo.
+
+Thống kê Pearson cộng độ lệch bình phương chuẩn hóa của mọi ô:
+\begin{equation}
+  \label{eq:t34:chi-square-statistic}
+  \chi^2 = \sum_{i=1}^{r} \sum_{j=1}^{c} \frac{(O_{ij} - E_{ij})^2}{E_{ij}}.
+\end{equation}
+Bảng chéo có $rc$ ô và $rc - 1$ tham số tự do khi chỉ có ràng buộc tổng bằng $n$. Dữ liệu ước lượng thêm $(r - 1)$ xác suất biên của $X$ và $(c - 1)$ xác suất biên của $Y$. Bậc tự do là phần còn lại:
+\begin{equation}
+  \label{eq:t34:degrees-of-freedom}
+  df = (rc - 1) - (r - 1) - (c - 1) = (r - 1)(c - 1).
+\end{equation}
+Khi $H_0$ đúng và điều kiện Cochran thỏa mãn, $\chi^2$ xấp xỉ phân phối Chi-square với $df$ bậc tự do. Từ phân phối này ta tính $p$-value, tức xác suất thu được một giá trị $\chi^2$ lớn bằng hoặc lớn hơn giá trị tính từ mẫu, với giả định $H_0$ đúng:
+\begin{equation}
+  \label{eq:t34:p-value}
+  p\text{-value} = P\bigl(\chi^2 \geq \chi^2_{\text{mẫu}} \mid H_0\bigr).
+\end{equation}
+Giá trị $\chi^2$ tính từ mẫu càng lớn thì dữ liệu càng lệch khỏi mô hình độc lập và $p$-value càng nhỏ. Khi $p\text{-value} < \alpha$, kết quả mẫu khó xảy ra nếu hai biến độc lập, nên ta bác bỏ $H_0$. Khi $p\text{-value} \geq \alpha$, ta không đủ cơ sở để bác bỏ $H_0$.
+
+Biểu diễn $\chi^2$ qua tần suất mẫu $\hat{p}_{ij} = \dfrac{O_{ij}}{n}$ cho kết quả
+\begin{equation}
+  \label{eq:t34:chi-square-proportions}
+  \chi^2 = n \sum_{i=1}^{r} \sum_{j=1}^{c} \frac{\bigl(\hat{p}_{ij} - \hat{p}_{i\cdot}\,\hat{p}_{\cdot j}\bigr)^2}{\hat{p}_{i\cdot}\,\hat{p}_{\cdot j}},
+\end{equation}
+với $\hat{p}_{i\cdot} = R_i/n$ và $\hat{p}_{\cdot j} = C_j/n$. Tổng bên phải phụ thuộc vào cấu trúc của bảng chéo, còn $\chi^2$ tăng tuyến tính theo $n$. Với cỡ mẫu $n = 125\,973$, một độ lệch rất nhỏ so với mô hình độc lập cũng đưa $\chi^2$ lên mức lớn và $p$-value xuống gần $0$. Vì vậy $p$-value chỉ cho biết liên hệ có tồn tại, chưa cho biết liên hệ mạnh hay yếu.
+
+Hệ số Cramér's V chuẩn hóa $\chi^2$ theo cỡ mẫu và kích thước bảng~\cite{task34_cramer1946}:\footnote{Harald Cramér đề xuất hệ số này năm 1946 trong chuyên khảo \textit{Mathematical Methods of Statistics}. Khi $r = c = 2$, $V$ trùng với giá trị tuyệt đối của hệ số phi $\phi$.}
+\begin{equation}
+  \label{eq:t34:cramers-v}
+  V = \sqrt{\frac{\chi^2}{n \times \min(r - 1,\, c - 1)}}, \qquad 0 \leq V \leq 1.
+\end{equation}
+Giá trị $V = 0$ ứng với hai biến độc lập hoàn toàn, và $V = 1$ ứng với phụ thuộc hàm giữa hai biến. Để diễn giải các giá trị ở giữa, ta dùng quy ước của Cohen~\cite{task34_cohen1988}. Cohen đặt ba mốc cho chỉ số $w = \sqrt{\chi^2/n}$: $0{,}10$ (nhỏ), $0{,}30$ (trung bình) và $0{,}50$ (lớn). Gọi $k = \min(r - 1,\, c - 1)$, ta có $V = w/\sqrt{k}$, nên mốc của $V$ bằng mốc của $w$ chia cho $\sqrt{k}$. Khi $k = 1$, $V$ trùng với $w$ và các mốc giữ nguyên. Khi $k$ tăng, các mốc giảm theo. Bảng~\ref{tab:t34:cramer-scale} liệt kê các mốc này theo $k$, và Kim~\cite{task34_kim2017} trình bày cùng bảng.
+
+\begin{table}[H]
+  \centering
+  \caption{Thang đánh giá độ mạnh của liên hệ theo Cramér's V\cite{task34_kim2017}}
+  \label{tab:t34:cramer-scale}
+  \begin{tabular}{cccc}
+    \toprule
+    $k = \min(r-1,\, c-1)$ & Yếu (nhỏ) & Trung bình & Mạnh (lớn) \\
+    \midrule
+    $1$ & $0{,}10$ & $0{,}30$ & $0{,}50$ \\
+    $2$ & $0{,}07$ & $0{,}21$ & $0{,}35$ \\
+    $3$ & $0{,}06$ & $0{,}17$ & $0{,}29$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+\noindent Trong trường hợp kiểm định \texttt{protocol\_type} và \texttt{attack\_category}, giá trị $k = \min(3-1, 5-1) = 2$. Do đó, các mốc tương ứng để đánh giá hệ số Cramér's V sẽ là $0{,}07$ (yếu), $0{,}21$ (trung bình) và $0{,}35$ (mạnh).
+
+Mỗi cột ghi mốc tối thiểu của mức tương ứng. Hệ số $V$ chỉ đo độ mạnh của liên hệ và không chỉ ra cặp giao thức, họ tấn công nào gây ra sự phụ thuộc. Để định vị cặp đó, ta tính phần dư chuẩn hóa $Z_{ij} = (O_{ij} - E_{ij})/\sqrt{E_{ij}}$ và đọc kết quả trên biểu đồ nhiệt ở phần kết quả.
