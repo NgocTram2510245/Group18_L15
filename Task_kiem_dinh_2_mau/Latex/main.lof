@@ -1,0 +1,7 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Q--Q plot của \texttt {srv\_serror\_rate}. Các dải ngang tại 0 và 1 phản ánh khối lượng xác suất tại hai biên; mỗi panel dùng tối đa 1.000 quan sát.\relax }}{6}{figure.caption.5}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Q--Q plot của \texttt {srv\_rerror\_rate}. Các bậc và dải ngang xuất hiện do biến tỷ lệ rời rạc, tập trung tại 0 và 1.\relax }}{7}{figure.caption.6}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Q--Q plot của \texttt {count}. Normal có đuôi phải dài; Attack có dạng bậc và trần tại 511, thể hiện tính rời rạc và bị chặn của biến đếm.\relax }}{7}{figure.caption.7}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Chênh lệch trung bình Normal $-$ Attack và KTC 95\% theo Welch. Ba panel dùng trục riêng vì đặc trưng có đơn vị khác nhau; đường đứt đoạn tại 0 là mốc không chênh lệch.\relax }}{10}{figure.caption.13}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Hedges $g$ và KTC 95\% xấp xỉ cho ba RQ. Trị tuyệt đối lớn không được diễn giải là năng lực dự đoán ngoài mẫu.\relax }}{11}{figure.caption.14}%

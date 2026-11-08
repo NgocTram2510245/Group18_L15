@@ -1,0 +1,16 @@
+\contentsline {chapter}{\numberline {3}Phương pháp Xác suất và Thống kê}{1}{chapter.3}%
+\contentsline {section}{\numberline {3.6}Kiểm định giả thuyết hai mẫu độc lập}{1}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Mục tiêu và câu hỏi nghiên cứu}{1}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {3.6.2}Cơ sở lý thuyết của kiểm định hai mẫu độc lập}{2}{subsection.3.6.2}%
+\contentsline {subsection}{\numberline {3.6.3}Xây dựng giả thuyết thống kê}{3}{subsection.3.6.3}%
+\contentsline {subsection}{\numberline {3.6.4}Giả định và chẩn đoán}{3}{subsection.3.6.4}%
+\contentsline {subsection}{\numberline {3.6.5}Quy trình thực hiện}{3}{subsection.3.6.5}%
+\contentsline {subsection}{\numberline {3.6.6}Công cụ triển khai}{4}{subsection.3.6.6}%
+\contentsline {chapter}{\numberline {4}Kết quả và thảo luận}{5}{chapter.4}%
+\contentsline {section}{\numberline {4.6}Kết quả kiểm định hai mẫu độc lập}{5}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Thống kê mô tả}{5}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.2}Phân tích phân phối và Q--Q plot}{6}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}Kết quả kiểm định tỷ lệ lỗi SYN}{8}{subsection.4.6.3}%
+\contentsline {subsection}{\numberline {4.6.4}Kết quả kiểm định tỷ lệ lỗi REJ}{8}{subsection.4.6.4}%
+\contentsline {subsection}{\numberline {4.6.5}Kết quả kiểm định số lượng kết nối gần đây}{9}{subsection.4.6.5}%
+\contentsline {subsection}{\numberline {4.6.6}So sánh tổng hợp ba kiểm định}{10}{subsection.4.6.6}%

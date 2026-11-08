@@ -1,0 +1,18 @@
+﻿check,value,status
+source_rows,125973,PASS
+duplicate_on_analysis_columns_not_removed,122515,INFO
+attack_category_domain,"DoS, Normal, Probe, R2L, U2R",PASS
+label_binary_domain,"0, 1",PASS
+normal_attack_mapping,True,PASS
+srv_serror_rate_missing,0,PASS
+srv_serror_rate_nonfinite,0,PASS
+srv_rerror_rate_missing,0,PASS
+srv_rerror_rate_nonfinite,0,PASS
+count_missing,0,PASS
+count_nonfinite,0,PASS
+srv_serror_rate_range_0_1,True,PASS
+srv_rerror_rate_range_0_1,True,PASS
+count_nonnegative,True,PASS
+rows_removed_invalid,0,PASS
+n_Normal,67343,PASS
+n_Attack,58630,PASS
