@@ -22,7 +22,7 @@ Mục tiêu: Xây dựng mô hình hồi quy Logistic nhị phân phân loại l
 │   ├── missed_by_attack_name.csv # Top các cuộc tấn công bị mô hình bỏ sót nhiều nhất
 │   ├── accuracy_by_difficulty.csv # Độ chính xác phân theo thang độ khó (difficulty 0-21)
 │   └── run_log.txt             # Nhật ký chạy chi tiết
-├── figures/                    # Biểu đồ chất lượng cao (PDF xuất vào LaTeX + PNG xem nhanh)
+├── figures/                    # Biểu đồ (PDF xuất vào LaTeX + PNG xem nhanh)
 │   ├── task4_confusion_test.pdf # Ma trận nhầm lẫn trên KDDTest+
 │   ├── task4_roc.pdf           # Đường cong ROC Train vs Test và so sánh hai mô hình
 │   ├── task4_or_modelA.pdf     # Biểu đồ Forest plot tỷ số Odds Ratio (thang log)
@@ -35,7 +35,7 @@ Mục tiêu: Xây dựng mô hình hồi quy Logistic nhị phân phân loại l
 │   └── parts/
 │       ├── 03_task4_logistic.tex # Phần Phương pháp (Chương 3)
 │       └── 04_task4_logistic.tex # Phần Kết quả & Thảo luận (Chương 4)
-└── LATEX_TASK4_HOAN_CHINH.zip  # File zip hoàn chỉnh sẵn sàng tải lên Overleaf / Prism
+└── latex.zip  # File zip hoàn chỉnh sẵn sàng tải lên Overleaf / Prism
 ```
 
 ---
