@@ -1,0 +1,70 @@
+% !TeX program = xelatex
+% Báo cáo độc lập; khi tích hợp báo cáo tổng chỉ cần \input hai tệp trong chapters/.
+\documentclass[12pt,a4paper,oneside]{report}
+\input{../../Latex/LATEX_TASK2_(2.1-2.7+4.1-4.2)/config/preamble}
+
+\usepackage{listings}
+\lstdefinestyle{pythonreport}{
+  language=Python,
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{mtdark}\bfseries,
+  commentstyle=\color{gray},
+  stringstyle=\color{teal!70!black},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=7pt,
+  frame=single,
+  rulecolor=\color{gray!50},
+  breaklines=true,
+  breakatwhitespace=false,
+  showstringspaces=false,
+  columns=fullflexible,
+  keepspaces=true,
+  xleftmargin=1.2em,
+  framexleftmargin=1em
+}
+\lstset{style=pythonreport}
+\renewcommand{\lstlistingname}{Đoạn mã}
+\renewcommand{\lstlistlistingname}{Danh mục đoạn mã}
+\setlength{\emergencystretch}{2em}
+\graphicspath{{../figures/}}
+
+\begin{document}
+\begin{titlepage}
+  \centering
+  {\large ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH\par}
+  {\large TRƯỜNG ĐẠI HỌC BÁCH KHOA\par}
+  \vspace{2.4cm}
+  {\Large\bfseries BÁO CÁO BÀI TẬP LỚN\par}
+  \vspace{0.4cm}
+  {\Large\bfseries XÁC SUẤT VÀ THỐNG KÊ (MT2013)\par}
+  \vspace{1.5cm}
+  {\LARGE\bfseries KIỂM ĐỊNH GIẢ THUYẾT HAI MẪU ĐỘC LẬP TRÊN BỘ DỮ LIỆU NSL-KDD\par}
+  \vfill
+  {\large Phần bổ sung cho Chương 3 và Chương 4\par}
+  \vspace{1cm}
+  {\large Thành phố Hồ Chí Minh, năm 2026\par}
+\end{titlepage}
+
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
+\pagenumbering{arabic}
+
+\setcounter{chapter}{2}
+\chapter{Phương pháp Xác suất và Thống kê}
+\setcounter{section}{5}
+\input{chapters/chapter3_two_sample}
+
+\setcounter{chapter}{3}
+\chapter{Kết quả và thảo luận}
+\setcounter{section}{5}
+\input{chapters/chapter4_two_sample}
+
+\end{document}
+

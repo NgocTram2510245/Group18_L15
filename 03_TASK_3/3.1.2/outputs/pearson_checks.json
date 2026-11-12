@@ -1,0 +1,17 @@
+{
+  "data_source": "KDDTrain+.txt (archive.zip)",
+  "n": 125973,
+  "input_cols": 43,
+  "numerical_nonconstant_features": 37,
+  "constant_features_removed": [
+    "num_outbound_cmds"
+  ],
+  "unique_numerical_pairs": 666,
+  "pairs_with_abs_r_gt_0_95": 10,
+  "num_missing": 0,
+  "num_duplicate_rows": 0,
+  "number_tests_selected": 9,
+  "significant_at_0_05": 8,
+  "holm_significant_at_0_05": 8,
+  "note": "P-value numerically zero is display-only '<1e-300'; not exact p=0. Holm applies to 9 selected tests only."
+}

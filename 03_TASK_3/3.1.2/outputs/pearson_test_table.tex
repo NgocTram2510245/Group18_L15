@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering
+\caption{Kiểm định $H_0:\rho=0$ trên 9 cặp đặc trưng ($\alpha=0.05$)}
+\label{tab:pearson-tests}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.10}
+\begin{tabular}{@{}cp{6.3cm}rcl@{}}
+\toprule
+Mã & Cặp đặc trưng $(X,Y)$ & $r$ & $p$ hai phía & Quyết định\\
+\midrule
+P1 & \shortstack[l]{\texttt{num\_compromised}\\ \texttt{num\_root}} & +0.998833 & $<10^{-300}$ & Bác bỏ $H_0$ \\
+P2 & \shortstack[l]{\texttt{serror\_rate}\\ \texttt{srv\_serror\_rate}} & +0.993289 & $<10^{-300}$ & Bác bỏ $H_0$ \\
+P3 & \shortstack[l]{\texttt{rerror\_rate}\\ \texttt{srv\_rerror\_rate}} & +0.989008 & $<10^{-300}$ & Bác bỏ $H_0$ \\
+P4 & \shortstack[l]{\texttt{serror\_rate}\\ \texttt{dst\_host\_serror\_rate}} & +0.979373 & $<10^{-300}$ & Bác bỏ $H_0$ \\
+P5 & \shortstack[l]{\texttt{same\_srv\_rate}\\ \texttt{dst\_host\_same\_srv\_rate}} & +0.788978 & $<10^{-300}$ & Bác bỏ $H_0$ \\
+P6 & \shortstack[l]{\texttt{count}\\ \texttt{srv\_count}} & +0.471079 & $<10^{-300}$ & Bác bỏ $H_0$ \\
+P7 & \shortstack[l]{\texttt{serror\_rate}\\ \texttt{rerror\_rate}} & -0.227536 & $<10^{-300}$ & Bác bỏ $H_0$ \\
+P8 & \shortstack[l]{\texttt{duration}\\ \texttt{src\_bytes}} & +0.070737 & $1.929\times10^{-139}$ & Bác bỏ $H_0$ \\
+P9 & \shortstack[l]{\texttt{src\_bytes}\\ \texttt{dst\_bytes}} & +0.000204 & $0.9423$ & Chưa bác bỏ $H_0$ \\
+\bottomrule
+\end{tabular}
+\end{table}

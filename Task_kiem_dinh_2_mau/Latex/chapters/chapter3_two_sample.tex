@@ -1,0 +1,158 @@
+% Tệp thành phần: không chứa preamble hoặc môi trường document.
+\section{Kiểm định giả thuyết hai mẫu độc lập}
+\label{sec:two-sample-method}
+
+Nhãn nhị phân của nghiên cứu gộp DoS, Probe, R2L và U2R thành nhóm Attack, trong
+khi giữ Normal là nhóm đối chứng. Vì vậy, kiểm định hai mẫu được dùng để đánh giá
+liệu trung bình của một đặc trưng lưu lượng có khác nhau giữa hai nhãn này hay không.
+Phép kiểm định bổ sung cho ANOVA năm nhóm: ANOVA bảo toàn sự không đồng nhất giữa
+bốn họ tấn công, còn kiểm định hai mẫu trả lời tương phản trực tiếp Normal--Attack.
+Nó cũng khác Pearson, vì Pearson đo liên hệ tuyến tính giữa hai biến định lượng chứ
+không trực tiếp kiểm định chênh lệch trung bình theo nhãn. Thống kê mô tả cho biết vị
+trí và độ phân tán quan sát được, nhưng chưa định lượng độ bất định của chênh lệch.
+
+Mục tiêu của phân tích là cung cấp bằng chứng suy diễn và kích thước khác biệt cho
+những đặc trưng có ý nghĩa hành vi mạng. Kết quả không được xem là thước đo trực tiếp
+của năng lực dự đoán và không chứng minh nhãn tấn công gây ra giá trị đặc trưng.
+
+\subsection{Mục tiêu và câu hỏi nghiên cứu}
+\label{subsec:two-sample-rq}
+
+Ba câu hỏi được xác định trước khi xem kết quả kiểm định:
+\begin{enumerate}[label=\textbf{RQ\arabic*:},leftmargin=1.7cm]
+  \item Tỷ lệ lỗi SYN trung bình của các kết nối đến cùng dịch vụ
+  (\path{srv_serror_rate}) có khác nhau giữa Normal và Attack hay không?
+  \item Tỷ lệ lỗi REJ trung bình của các kết nối đến cùng dịch vụ
+  (\path{srv_rerror_rate}) có khác nhau giữa hai nhóm hay không?
+  \item Số kết nối gần đây trung bình (\texttt{count}) có khác nhau giữa hai nhóm
+  hay không?
+\end{enumerate}
+
+Hai biến đầu là tỷ lệ trong miền $[0,1]$, lần lượt phản ánh lỗi SYN và lỗi REJ trong
+tập kết nối đến cùng dịch vụ. \texttt{count} đếm số kết nối đến cùng máy đích trong
+cửa sổ hai giây, nên là biến đếm rời rạc. Ba biến được chọn vì đại diện cho lỗi thiết
+lập kết nối, lỗi từ chối và cường độ kết nối; chúng không phải một bước sàng lọc toàn
+bộ 41 đặc trưng của NSL-KDD.
+
+\subsection{Cơ sở lý thuyết của kiểm định hai mẫu độc lập}
+\label{subsec:two-sample-theory}
+
+Gọi $g\in\{N,A\}$ lần lượt là Normal và Attack; $n_g$, $\bar{x}_g$, $s_g^2$ và
+$\mu_g$ là cỡ mẫu, trung bình mẫu, phương sai mẫu và trung bình tổng thể. Các thống
+kê trong từng nhóm được xác định bởi
+\begin{equation}
+  \bar{x}_g=\frac{1}{n_g}\sum_{i=1}^{n_g}x_{gi},
+  \label{eq:two-sample-mean}
+\end{equation}
+\begin{equation}
+  s_g^2=\frac{1}{n_g-1}\sum_{i=1}^{n_g}(x_{gi}-\bar{x}_g)^2.
+  \label{eq:two-sample-variance}
+\end{equation}
+Ước lượng điểm của chênh lệch trung bình là
+\begin{equation}
+  \widehat{\Delta}=\bar{x}_N-\bar{x}_A,
+  \label{eq:two-sample-difference}
+\end{equation}
+trong đó dấu âm nghĩa là trung bình Attack lớn hơn trung bình Normal. Do phương sai
+hai nhóm không được giả định bằng nhau, sai số chuẩn Welch là
+\begin{equation}
+  SE(\widehat{\Delta})=
+  \sqrt{\frac{s_N^2}{n_N}+\frac{s_A^2}{n_A}}.
+  \label{eq:welch-se}
+\end{equation}
+Thống kê kiểm định và bậc tự do Welch--Satterthwaite lần lượt là
+\begin{equation}
+  t=\frac{\bar{x}_N-\bar{x}_A}
+  {\sqrt{\frac{s_N^2}{n_N}+\frac{s_A^2}{n_A}}},
+  \label{eq:welch-t}
+\end{equation}
+\begin{equation}
+  \nu=
+  \frac{\left(\frac{s_N^2}{n_N}+\frac{s_A^2}{n_A}\right)^2}
+  {\frac{\left(\frac{s_N^2}{n_N}\right)^2}{n_N-1}
+  +\frac{\left(\frac{s_A^2}{n_A}\right)^2}{n_A-1}}.
+  \label{eq:welch-df}
+\end{equation}
+Khoảng tin cậy hai phía cho chênh lệch trung bình được tính nhất quán với kiểm định:
+\begin{equation}
+  CI_{95\%}(\mu_N-\mu_A)=
+  \widehat{\Delta}\pm t_{0.975,\nu}SE(\widehat{\Delta}).
+  \label{eq:welch-ci}
+\end{equation}
+Các khoảng ở Công thức~\eqref{eq:welch-ci} là khoảng riêng lẻ cho từng RQ, không tự
+động bảo đảm độ bao phủ đồng thời 95\% cho cả ba câu hỏi.
+
+Ngoài chênh lệch trên đơn vị gốc, nghiên cứu báo cáo Cohen $d$ và Hedges $g$ theo quy
+ước độ lệch chuẩn gộp. Với $s_p$ là độ lệch chuẩn gộp,
+\begin{equation}
+  d=\frac{\bar{x}_N-\bar{x}_A}{s_p},\qquad
+  g=\left(1-\frac{3}{4(n_N+n_A)-9}\right)d.
+  \label{eq:hedges-g}
+\end{equation}
+Do phương sai thực tế khác nhau, $g$ được dùng như chỉ số chuẩn hóa mô tả; chênh lệch
+và khoảng tin cậy trên thang gốc vẫn là kết quả ưu tiên để diễn giải.
+
+\subsection{Xây dựng giả thuyết thống kê}
+\label{subsec:two-sample-hypotheses}
+
+Với từng RQ, giả thuyết hai phía là
+\begin{equation}
+  H_0:\mu_N=\mu_A,
+  \qquad
+  H_1:\mu_N\ne\mu_A.
+  \label{eq:two-sample-hypotheses}
+\end{equation}
+Kiểm định hai phía được chọn vì nghiên cứu không áp đặt trước chiều khác biệt. Ở mức
+$\alpha=0{,}05$, $H_0$ bị bác bỏ khi p-value đã hiệu chỉnh nhỏ hơn $\alpha$. Không
+bác bỏ $H_0$ chỉ có nghĩa dữ liệu chưa cung cấp đủ bằng chứng cho khác biệt, không phải
+chứng minh hai trung bình bằng nhau. Vì có ba kiểm định chính, phương pháp Holm được
+dùng để kiểm soát sai lầm loại I theo họ giả thuyết; p-value thô và p-value Holm được
+báo cáo riêng.
+
+\subsection{Giả định và chẩn đoán}
+\label{subsec:two-sample-assumptions}
+
+Thứ nhất, hai mẫu phải độc lập giữa và trong nhóm. Nhãn Normal và Attack không giao
+nhau, nhưng NSL-KDD không cung cấp định danh phiên hoặc máy nguồn đủ để kiểm tra các
+kết nối có thuộc cùng một hoạt động hay không. Welch không khắc phục được phụ thuộc
+tiềm ẩn này, vì vậy suy luận được xem là khám phá có điều kiện trên cấu trúc dữ liệu.
+
+Thứ hai, phân phối trung bình mẫu cần được xấp xỉ hợp lý. Histogram/ECDF mô tả toàn bộ
+phân bố; boxplot cho thấy trung vị, IQR và ngoại lệ; Q--Q plot đối chiếu các phân vị
+quan sát với phân vị chuẩn. Shapiro--Wilk trên tối đa 5.000 quan sát mỗi nhóm chỉ là
+chẩn đoán bổ sung, không phải quy tắc lựa chọn duy nhất. Cỡ mẫu lớn làm trung bình mẫu
+ổn định hơn, nhưng không biến các quan sát gốc thành phân phối chuẩn.
+
+Thứ ba, Brown--Forsythe (Levene với tâm là trung vị) được dùng để đánh giá chênh lệch
+phương sai. Welch không yêu cầu phương sai bằng nhau, song vẫn nhạy với phụ thuộc và
+các phân bố quá dị biệt. Hai biến tỷ lệ bị chặn và có khối lượng tại 0 hoặc 1;
+\texttt{count} là biến đếm lệch phải và có ngoại lệ. Do đó, Mann--Whitney U và
+Yuen--Welch với trung bình cắt ngọn 20\% được dùng như phân tích độ nhạy. Chúng không
+kiểm định đúng cùng tham số với trung bình gốc nên không thay thế kết quả chính.
+
+\subsection{Quy trình thực hiện}
+\label{subsec:two-sample-procedure}
+
+Dữ liệu đầu vào là KDDTrain+ đã làm sạch, còn KDDTest+ được giữ riêng cho đánh giá mô
+hình. Nhóm kiểm tra miền giá trị, kiểu dữ liệu, thiếu, NaN và vô hạn; sau đó xác nhận
+\texttt{label\_binary}=0 tương ứng Normal và mọi nhãn DoS, Probe, R2L, U2R tương ứng
+Attack. Không sử dụng SMOTE, StandardScaler hoặc bản ghi tổng hợp và không loại ngoại
+lệ để làm thay đổi p-value.
+
+Trên mỗi đặc trưng, quy trình lần lượt: (i) tính thống kê mô tả và CI trung bình từng
+nhóm; (ii) khảo sát boxplot, ECDF, Q--Q plot, skewness, khối lượng tại biên và tỷ số
+phương sai; (iii) chạy Welch hai phía trên toàn bộ quan sát hợp lệ; (iv) tính CI của
+chênh lệch và Hedges $g$; (v) hiệu chỉnh Holm ba p-value chính; (vi) đối chiếu
+Mann--Whitney U và Yuen--Welch; (vii) diễn giải theo hướng dữ liệu, không theo quan hệ
+nhân quả. Chỉ ECDF và Q--Q plot được lấy mẫu cố định lần lượt tối đa 5.000 và 1.000
+quan sát/nhóm với \texttt{random\_state}=18015; kiểm định dùng toàn bộ dữ liệu.
+
+\subsection{Công cụ triển khai}
+\label{subsec:two-sample-tools}
+
+Pandas và NumPy được dùng để đọc, kiểm tra và tổng hợp dữ liệu; SciPy thực hiện các
+phân phối, Brown--Forsythe, Mann--Whitney và Yuen--Welch; Statsmodels hiệu chỉnh Holm.
+Matplotlib và Seaborn tạo hình PNG 300 DPI và SVG. Mã nguồn, kiểm thử và bảng kết quả
+được lưu trong thư mục \texttt{two\_sample\_testing}; phần kết quả được trình bày tại
+Mục~\ref{sec:two-sample-results}.
+

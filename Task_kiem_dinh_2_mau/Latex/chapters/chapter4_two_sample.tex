@@ -1,0 +1,322 @@
+% Tệp thành phần: số liệu đối chiếu với CSV trong two_sample_testing/results.
+\section{Kết quả kiểm định hai mẫu độc lập}
+\label{sec:two-sample-results}
+
+Phân tích sử dụng toàn bộ 125.973 bản ghi KDDTrain+ hợp lệ, gồm 67.343 Normal và
+58.630 Attack. Ba đặc trưng được kiểm định trên thang gốc bằng Welch hai phía tại
+$\alpha=0{,}05$; ba p-value chính được hiệu chỉnh Holm. Không có bản ghi nào bị loại
+do thiếu, NaN, vô hạn hoặc sai miền. Các p-value bị underflow số học được trình bày
+là $p<10^{-300}$, không viết $p=0$.
+
+\subsection{Thống kê mô tả}
+\label{subsec:two-sample-descriptive}
+
+Bảng~\ref{tab:two-sample-descriptive} cho thấy hai nhóm chỉ mất cân bằng nhẹ về cỡ
+mẫu (tỷ số 1,149), nhưng vị trí và độ phân tán khác nhau rõ. Đặc biệt, phương sai của
+Attack lớn hơn Normal ở cả ba biến.
+
+\begin{table}[H]
+\centering
+\caption{Thống kê mô tả ba đặc trưng theo nhãn trên KDDTrain+}
+\label{tab:two-sample-descriptive}
+\scriptsize
+\setlength{\tabcolsep}{2.7pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrrrrrrr}
+\toprule
+Đặc trưng & Nhóm & $n$ & TB & Trung vị & ĐLC & Phương sai & Min & Q1 & Q3 & Max & Tỷ lệ 0 \\
+\midrule
+\texttt{srv\_serror\_rate} & Normal & 67.343 & 0,01208 & 0 & 0,08643 & 0,00747 & 0 & 0 & 0 & 1 & 96,546\% \\
+ & Attack & 58.630 & 0,59307 & 1 & 0,49023 & 0,24033 & 0 & 0 & 1 & 1 & 40,486\% \\
+\texttt{srv\_rerror\_rate} & Normal & 67.343 & 0,04463 & 0 & 0,20226 & 0,04091 & 0 & 0 & 0 & 1 & 94,687\% \\
+ & Attack & 58.630 & 0,20911 & 0 & 0,40449 & 0,16361 & 0 & 0 & 0 & 1 & 78,462\% \\
+\texttt{count} & Normal & 67.343 & 22,518 & 4 & 54,026 & 2.918,818 & 0 & 1 & 14 & 511 & 0,0148\% \\
+ & Attack & 58.630 & 154,850 & 138 & 124,334 & 15.459,064 & 0 & 40 & 241 & 511 & 0,0051\% \\
+\bottomrule
+\end{tabular}}
+\par\smallskip
+\footnotesize TB: trung bình; ĐLC: độ lệch chuẩn mẫu. Hai biến tỷ lệ có miền 0--1;
+\texttt{count} có đơn vị kết nối. Không loại ngoại lệ khi tính bảng.
+\end{table}
+
+Ở \texttt{srv\_serror\_rate}, trung vị chuyển từ 0 ở Normal sang 1 ở Attack và tỷ lệ
+giá trị bằng 1 của Attack đạt 58,920\% (Normal: 0,489\%). Với
+\texttt{srv\_rerror\_rate}, cả hai trung vị đều bằng 0, nhưng Attack có tỷ lệ bằng 1
+là 20,607\%, cao hơn Normal (4,076\%). Vì vậy, chênh lệch trung bình của RQ2 không
+đồng nghĩa mọi quan sát Attack đều có lỗi REJ. Đối với \texttt{count}, khoảng tứ phân
+vị Attack (40--241) dịch lên rõ so với Normal (1--14), nhưng hai nhóm vẫn cùng miền
+0--511.
+
+Đoạn mã thực tế dùng để xác nhận miền và tạo nhãn nhị phân được rút gọn tại
+Đoạn mã~\ref{lst:binary-label}; các biểu thức và logic giữ nguyên từ
+\texttt{two\_sample\_utils.py}. Không có nhãn tấn công nào bị loại khỏi Attack.
+\begin{lstlisting}[
+  caption={Kiểm tra miền và tạo nhóm Normal--Attack (đoạn rút gọn từ mã thực tế).},
+  label={lst:binary-label}]
+for feature in ("srv_serror_rate", "srv_rerror_rate"):
+    in_range = df[feature].dropna().between(0, 1).all()
+
+count_valid = (df["count"].dropna() >= 0).all()
+df["group"] = np.where(
+    df["label_binary"].eq(0), "Normal", "Attack"
+)
+valid = (
+    np.isfinite(df[feature_names]).all(axis=1)
+    & df["group"].isin(GROUP_ORDER)
+)
+df = df.loc[valid].copy()
+\end{lstlisting}
+
+\subsection{Phân tích phân phối và Q--Q plot}
+\label{subsec:two-sample-qq}
+
+Các Q--Q plot dùng mẫu cố định tối đa 1.000 quan sát/nhóm để tránh chồng hàng chục
+nghìn điểm; đây chỉ là bước vẽ, không thay thế dữ liệu kiểm định. Mã tạo hình được
+trích tại Đoạn mã~\ref{lst:qq-code}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.97\linewidth]{srv_serror_rate/04_qq_plot.png}
+\caption{Q--Q plot của \texttt{srv\_serror\_rate}. Các dải ngang tại 0 và 1 phản ánh
+khối lượng xác suất tại hai biên; mỗi panel dùng tối đa 1.000 quan sát.}
+\label{fig:two-sample-qq-serror}
+\end{figure}
+
+Hình~\ref{fig:two-sample-qq-serror} không tạo thành đám mây gần đường thẳng. Ở Normal,
+phần lớn điểm nằm trên dải $y=0$, sau đó tăng đột ngột ở đuôi phải; skewness đạt 9,169.
+Ở Attack, hai dải dày tại 0 và 1 tạo dạng gần nhị điểm, phù hợp với tỷ lệ bằng 0 là
+40,486\% và bằng 1 là 58,920\%. Hai hình dạng khác nhau rõ và đều không phù hợp với
+phân phối chuẩn của quan sát gốc.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.97\linewidth]{srv_rerror_rate/04_qq_plot.png}
+\caption{Q--Q plot của \texttt{srv\_rerror\_rate}. Các bậc và dải ngang xuất hiện do
+biến tỷ lệ rời rạc, tập trung tại 0 và 1.}
+\label{fig:two-sample-qq-rerror}
+\end{figure}
+
+Với \texttt{srv\_rerror\_rate}, Hình~\ref{fig:two-sample-qq-rerror} cũng có dải dài
+tại 0, nhưng phần giá trị dương của Normal cong mạnh và nhảy lên dải 1 ở đuôi phải
+(skewness 4,426). Attack có nhiều bậc trung gian hơn trước khi đạt 1 và vẫn lệch phải
+(skewness 1,434). Đây không phải bản sao hình dạng RQ1: ở RQ2, trung vị và Q3 đều bằng
+0 trong cả hai nhóm, cho thấy khối tại 0 chi phối mạnh hơn phần trung tâm.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.97\linewidth]{count/04_qq_plot.png}
+\caption{Q--Q plot của \texttt{count}. Normal có đuôi phải dài; Attack có dạng bậc
+và trần tại 511, thể hiện tính rời rạc và bị chặn của biến đếm.}
+\label{fig:two-sample-qq-count}
+\end{figure}
+
+Hình~\ref{fig:two-sample-qq-count} cho thấy Normal cong lên rất mạnh ở nửa phải và có
+đuôi tới trên 400 trong mẫu vẽ, phù hợp skewness 3,878. Attack gần tuyến tính hơn ở
+phần giữa nhưng lệch khỏi đường tham chiếu ở cả hai đuôi, có các bậc và dải ngang tại
+511; skewness vẫn là 0,747. Q--Q plot vì vậy bác bỏ mô tả chuẩn đơn giản cho dữ liệu
+gốc, đồng thời cho thấy dạng sai lệch của hai nhóm không giống nhau.
+
+Q--Q plot chỉ là chẩn đoán trực quan. Cỡ mẫu lớn hỗ trợ xấp xỉ của trung bình mẫu,
+nhưng không xóa khối biên, tính rời rạc hay phụ thuộc tiềm ẩn. Bảng
+\ref{tab:two-sample-assumptions} bổ sung Brown--Forsythe và tỷ số phương sai; tất cả
+đều cho thấy Student t-test phương sai gộp không thích hợp.
+
+\begin{table}[H]
+\centering
+\caption{Chẩn đoán phương sai và hình dạng phân phối}
+\label{tab:two-sample-assumptions}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{lrrrX}
+\toprule
+Đặc trưng & Brown--Forsythe & p-value & Tỷ số phương sai & Chẩn đoán trọng tâm \\
+\midrule
+\texttt{srv\_serror\_rate} & 42.179,95 & $<10^{-300}$ & 32,175 & Bị chặn; dồn mạnh tại 0 và 1. \\
+\texttt{srv\_rerror\_rate} & 8.651,41 & $<10^{-300}$ & 3,999 & Q1=Q3=0; lệch phải và nhiều giá trị trùng. \\
+\texttt{count} & 46.458,65 & $<10^{-300}$ & 5,296 & Biến đếm; Normal đuôi phải dài, hai nhóm cùng trần 511. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{lstlisting}[
+  caption={Lấy mẫu cố định chỉ để vẽ Q--Q plot (rút gọn từ mã thực tế).},
+  label={lst:qq-code}]
+for ax, group in zip(axes, GROUP_ORDER):
+    values = plot_df.loc[
+        plot_df["group"].eq(group), feature
+    ].to_numpy(float)
+    if len(values) > 1000:
+        values = rng.choice(values, 1000, replace=False)
+    stats.probplot(values, dist="norm", plot=ax)
+\end{lstlisting}
+
+\subsection{Kết quả kiểm định tỷ lệ lỗi SYN}
+\label{subsec:two-sample-rq1}
+
+RQ1 xem xét \texttt{srv\_serror\_rate}. Bằng chứng mô tả cho thấy Normal có trung
+bình 0,01208 (KTC trung bình nhóm 95\%: 0,01143--0,01274), còn Attack là 0,59307
+(0,58910--0,59704). Phương sai Attack lớn gấp 32,175 lần Normal và Q--Q plot có khối
+biên rõ, nên Welch được giữ làm kiểm định chính thay vì Student t-test phương sai gộp.
+
+\begin{table}[H]
+\centering
+\caption{Kết quả Welch cho RQ1 -- \texttt{srv\_serror\_rate}}
+\label{tab:two-sample-rq1}
+\small
+\begin{tabular}{rrrrrrr}
+\toprule
+$\widehat\Delta$ & SE & $t$ & $\nu$ & p Holm & KTC 95\% của $\Delta$ & Hedges $g$ \\
+\midrule
+$-0{,}58099$ & 0,002052 & $-283{,}157$ & 61.805,40 & $<10^{-300}$ & $[-0{,}58501;-0{,}57697]$ & $-1{,}7070$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Khoảng tin cậy hoàn toàn âm và p-value Holm nhỏ hơn $10^{-300}$, do đó bác bỏ
+$H_0$. Theo chiều định nghĩa Normal trừ Attack, kết quả tương ứng Attack cao hơn khoảng
+0,581 đơn vị tỷ lệ. Hedges $g=-1{,}7070$ (KTC xấp xỉ
+$[-1{,}7199;-1{,}6940]$) cho thấy chênh lệch chuẩn hóa đáng kể trong mẫu. Mann--Whitney
+và Yuen--Welch 20\% đều cho $p<10^{-300}$, củng cố độ bền của kết luận về khác biệt,
+nhưng không biến Welch thành mô hình hoàn chỉnh cho biến tỷ lệ dồn biên. Đặc trưng phản
+ánh lỗi bắt tay TCP theo dịch vụ, không chứng minh lỗi SYN là nguyên nhân của tấn công.
+
+\subsection{Kết quả kiểm định tỷ lệ lỗi REJ}
+\label{subsec:two-sample-rq2}
+
+RQ2 phân tích \texttt{srv\_rerror\_rate}. Normal có trung bình 0,04463, Attack là
+0,20911; dù vậy, trung vị và Q3 của cả hai nhóm đều bằng 0. Sự kết hợp giữa khối tại 0
+và phương sai Attack gấp 3,999 lần Normal là lý do không diễn giải chênh lệch trung
+bình như khác biệt đồng đều ở mọi kết nối.
+
+\begin{table}[H]
+\centering
+\caption{Kết quả Welch cho RQ2 -- \texttt{srv\_rerror\_rate}}
+\label{tab:two-sample-rq2}
+\small
+\begin{tabular}{rrrrrrr}
+\toprule
+$\widehat\Delta$ & SE & $t$ & $\nu$ & p Holm & KTC 95\% của $\Delta$ & Hedges $g$ \\
+\midrule
+$-0{,}16448$ & 0,001843 & $-89{,}230$ & 83.489,74 & $<10^{-300}$ & $[-0{,}16810;-0{,}16087]$ & $-0{,}5254$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Bác bỏ $H_0$ sau hiệu chỉnh Holm. Attack cao hơn Normal khoảng 0,1645 đơn vị tỷ lệ;
+Hedges $g=-0{,}5254$ (KTC xấp xỉ $[-0{,}5366;-0{,}5141]$) nhỏ hơn về trị tuyệt đối
+so với RQ1. Mann--Whitney cho $p<10^{-300}$; Yuen--Welch cho
+$p=4{,}905\times10^{-8}$ với chênh lệch trung bình cắt ngọn chỉ $-0{,}01519$. Sự
+giảm mạnh sau cắt ngọn cho thấy chênh lệch trung bình gốc chịu ảnh hưởng đáng kể của
+khối giá trị lớn, dù bằng chứng về khác biệt vẫn còn. Đây là tín hiệu về lỗi REJ theo
+dịch vụ, không phải bằng chứng rằng một ngưỡng đơn biến đủ nhận diện Attack.
+
+\subsection{Kết quả kiểm định số lượng kết nối gần đây}
+\label{subsec:two-sample-rq3}
+
+RQ3 xét \texttt{count}. Normal có trung bình 22,518 và trung vị 4, trong khi Attack
+có trung bình 154,850 và trung vị 138. Chênh lệch của cả trung bình lẫn trung vị cùng
+hướng, nhưng độ lệch phải, ngoại lệ và trần 511 cho thấy phân bố không chuẩn.
+
+\begin{table}[H]
+\centering
+\caption{Kết quả Welch cho RQ3 -- \texttt{count}}
+\label{tab:two-sample-rq3}
+\small
+\begin{tabular}{rrrrrrr}
+\toprule
+$\widehat\Delta$ & SE & $t$ & $\nu$ & p Holm & KTC 95\% của $\Delta$ & Hedges $g$ \\
+\midrule
+$-132{,}332$ & 0,5541 & $-238{,}828$ & 77.661,21 & $<10^{-300}$ & $[-133{,}418;-131{,}246]$ & $-1{,}4143$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Khoảng tin cậy cho thấy Attack cao hơn Normal khoảng 131,246--133,418 kết nối trung
+bình trong định nghĩa cửa sổ của NSL-KDD. Bác bỏ $H_0$ sau Holm; Hedges
+$g=-1{,}4143$ (KTC xấp xỉ $[-1{,}4266;-1{,}4019]$). Mann--Whitney và Yuen--Welch
+đều có $p<10^{-300}$; chênh lệch trung bình cắt ngọn là $-140{,}988$. Kết quả phù hợp
+với việc nhiều hành vi Attack tạo kết nối tập trung trong thời gian ngắn, nhưng nhóm
+Attack là hỗn hợp bốn họ và hai miền giá trị vẫn chồng lấp; không thể suy ra mọi dạng
+tấn công đều có \texttt{count} cao.
+
+Mã tính Welch, bậc tự do và khoảng tin cậy dùng cùng một sai số chuẩn được rút gọn từ
+module tại Đoạn mã~\ref{lst:welch-code}; công thức và chiều chênh lệch không thay đổi.
+\begin{minipage}{\textwidth}
+\begin{lstlisting}[
+  caption={Hàm Welch và KTC chênh lệch trung bình (rút gọn từ mã thực tế).},
+  label={lst:welch-code}]
+def welch_test(x, y, alpha=ALPHA):
+    n1, n2 = x.size, y.size
+    m1, m2 = np.mean(x), np.mean(y)
+    s1, s2 = np.var(x, ddof=1), np.var(y, ddof=1)
+    v1, v2 = s1 / n1, s2 / n2
+    se = np.sqrt(v1 + v2)
+    diff = m1 - m2
+    df = (v1 + v2) ** 2 / (
+        v1**2 / (n1 - 1) + v2**2 / (n2 - 1)
+    )
+    t_stat = diff / se
+    p_value = 2 * stats.t.sf(abs(t_stat), df)
+    critical = stats.t.ppf(1 - alpha / 2, df)
+    ci95 = (diff - critical * se, diff + critical * se)
+    return diff, se, t_stat, df, p_value, ci95
+\end{lstlisting}
+\end{minipage}
+
+\subsection{So sánh tổng hợp ba kiểm định}
+\label{subsec:two-sample-summary}
+
+\begin{table}[H]
+\centering
+\caption{Tổng hợp ba kiểm định Welch hai mẫu độc lập}
+\label{tab:two-sample-summary}
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrrrrl}
+\toprule
+Biến & TB N & TB A & $\widehat\Delta$ & $t$ & $\nu$ & p thô & p Holm & KTC 95\% & $g$ / Quyết định \\
+\midrule
+\texttt{srv\_serror\_rate} & 0,01208 & 0,59307 & $-0,58099$ & $-283,157$ & 61.805,40 & $<10^{-300}$ & $<10^{-300}$ & $[-0,58501;-0,57697]$ & $-1,7070$ / Bác bỏ $H_0$ \\
+\texttt{srv\_rerror\_rate} & 0,04463 & 0,20911 & $-0,16448$ & $-89,230$ & 83.489,74 & $<10^{-300}$ & $<10^{-300}$ & $[-0,16810;-0,16087]$ & $-0,5254$ / Bác bỏ $H_0$ \\
+\texttt{count} & 22,518 & 154,850 & $-132,332$ & $-238,828$ & 77.661,21 & $<10^{-300}$ & $<10^{-300}$ & $[-133,418;-131,246]$ & $-1,4143$ / Bác bỏ $H_0$ \\
+\bottomrule
+\end{tabular}}
+\par\smallskip
+\footnotesize TB N/A: trung bình Normal/Attack; $\widehat\Delta=$ Normal $-$ Attack.
+Hedges $g$ dùng SD gộp và được xem là effect size mô tả khi phương sai khác nhau.
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{comparison/mean_difference_forest.png}
+\caption{Chênh lệch trung bình Normal $-$ Attack và KTC 95\% theo Welch. Ba panel
+dùng trục riêng vì đặc trưng có đơn vị khác nhau; đường đứt đoạn tại 0 là mốc không
+chênh lệch.}
+\label{fig:two-sample-mean-difference}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.80\linewidth]{comparison/effect_size_forest.png}
+\caption{Hedges $g$ và KTC 95\% xấp xỉ cho ba RQ. Trị tuyệt đối lớn không được diễn
+giải là năng lực dự đoán ngoài mẫu.}
+\label{fig:two-sample-effect-size}
+\end{figure}
+
+Cả ba giả thuyết bị bác bỏ sau Holm, nhưng mức độ và hình dạng khác biệt không giống
+nhau. RQ1 và RQ3 có chênh lệch chuẩn hóa lớn trong mẫu; RQ2 nhỏ hơn và nhạy hơn với
+cắt ngọn. Các biến tỷ lệ gây khó khăn vì khối biên, còn \texttt{count} gây khó khăn
+do tính rời rạc, lệch phải và trần dữ liệu. Do cỡ mẫu rất lớn, p-value cực nhỏ phải
+được đọc cùng khoảng tin cậy, effect size và phân bố chồng lấp.
+
+Kết quả bổ sung cho Pearson: hệ số Pearson hiện có giữa
+\path{srv_serror_rate} và \path{dst_host_srv_serror_rate} là 0,9863; giữa
+\path{srv_rerror_rate} và \path{dst_host_srv_rerror_rate} là 0,9702.
+Các hệ số này cho biết tính dư thừa tuyến tính giữa đặc trưng, còn Welch cho biết
+chênh lệch trung bình theo nhãn. ANOVA năm nhóm đối với \texttt{count} trả lời câu hỏi
+khác: nó giữ riêng DoS, Probe, R2L, U2R, trong khi phân tích này gộp chúng thành Attack.
+Hai phân tích dùng cùng bản ghi nên không độc lập về thông tin.
+
+\FloatBarrier
+
