@@ -1,0 +1,66 @@
+% !TEX root = ../main.tex
+% CHU SO HUU: Minh Khoa | KHONG THEO PREAMBLE, KHONG BEGIN DOCUMENT TRONG THAN PHAN NAY.
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\section{Tổng hợp và đối chiếu các phát hiện}
+\label{sec:t5:synthesis}
+
+Mục này tổng hợp các kết quả của Mục~4.1--4.8 theo bảy câu hỏi nghiên cứu RQ1--RQ7 đã nêu ở Chương~1. Các câu hỏi được đánh số riêng trong phần ANOVA và phần kiểm định hai mẫu được quy về RQ5 và RQ4 của Chương~1. Trừ hồi quy Logistic, mọi phân tích dùng KDDTrain+ ($n=125\,973$); Logistic học trên KDDTrain+ và được đánh giá trên KDDTest+ ($n=22\,544$).
+
+\begin{table}[H]
+\centering
+\caption{Kết quả chính theo câu hỏi nghiên cứu của Chương~1}
+\label{tab:t5:synthesis}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.1cm}>{\raggedright\arraybackslash}p{3.6cm}>{\raggedright\arraybackslash}X}
+\toprule
+RQ & Phương pháp (nguồn) & Kết quả chính \\
+\midrule
+RQ1 & Thống kê mô tả (Bảng~\ref{tab:t2:descriptive}, \ref{tab:t2:labels}) & Normal 53,458\%, Attack 46,542\%; 92,05\% giá trị \texttt{duration} bằng 0; trung bình \texttt{src\_bytes} 45\,566,74 byte so với trung vị 44 byte. \\
+RQ2 & Pearson (Bảng~\ref{tab:t31:highcorr}, \ref{tab:t31:tests}) & 37 biến, 666 cặp; 10 cặp có $|r|>0{,}95$, đều dương (6 cặp lỗi SYN, 3 cặp lỗi REJ, 1 cặp root). Cặp \texttt{src\_bytes}--\texttt{dst\_bytes}: $r=0{,}000204$, $p=0{,}9423$. \\
+RQ3 & KTC Wilson 95\% (Bảng~\ref{tab:t32:wilson}) & Normal 53,458\% [53,183; 53,734]; R2L 0,790\% [0,742; 0,840]; U2R 0,041\% [0,031; 0,054] với 52 quan sát. \\
+RQ4 & Welch hai mẫu, Holm (Bảng~\ref{tab:t35:summary}) & Bác bỏ $H_0$ cho cả ba biến; Hedges $g=-1{,}7070$ (\texttt{srv\_serror\_rate}), $-1{,}4143$ (\texttt{count}), $-0{,}5254$ (\texttt{srv\_rerror\_rate}). \\
+RQ5 & Welch ANOVA, Games--Howell (Bảng~\ref{tab:t33:omnibus}, \ref{tab:t33:posthoc-summary}) & Bác bỏ $H_0$ cho cả bốn biến; $\eta^2$ mô tả 0,6202 (\texttt{serror\_rate}), 0,5639 ($\ln(1+\texttt{src\_bytes})$), 0,4049 (\texttt{count}), 0,0412 ($\ln(1+\texttt{duration})$). \\
+RQ6 & Chi-square, Cramér's $V$ (Bảng~\ref{tab:t34:chi2-observed}) & $\chi^2=25\,578{,}38$, $df=8$, $V=0{,}3186$, nằm giữa mốc trung bình 0,21 và mốc lớn 0,35 khi $k=2$. \\
+RQ7 & Hồi quy Logistic (Bảng~\ref{tab:t4:metrics}) & Mô hình B trên Test: Accuracy 0,7478, Recall 0,6147, Specificity 0,9237, AUC 0,7878 (Accuracy trên Train 0,9857). Mô hình A đạt AUC 0,8249 trên Test. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Tính nhất quán của kết quả giữa các phương pháp}
+Tỷ lệ lỗi SYN là đặc trưng có kết quả nhất quán nhất. Ở mức mô tả, trung bình \texttt{serror\_rate} của Attack là 0,596, của Normal là 0,013 (Bảng~\ref{tab:t2:comparison}). Pearson cho thấy bốn biến lỗi SYN ở các phạm vi tổng hợp khác nhau tương quan với nhau từ 0,977596 đến 0,993289, tức chúng mang thông tin tuyến tính gần trùng nhau. Kiểm định hai mẫu trên \texttt{srv\_serror\_rate} cho hiệu ứng chuẩn hóa lớn nhất trong ba biến ($g=-1{,}7070$). Trong ANOVA, \texttt{serror\_rate} có $\eta^2$ mô tả cao nhất (0,6202) và chênh lệch DoS--Normal là 0,735 với KTC đồng thời 95\% $[0{,}729;0{,}741]$. Mô hình Logistic A, khi giữ các biến khác cố định, ước lượng odds Attack tăng 6,057 lần cho mỗi độ lệch chuẩn tăng thêm của \texttt{serror\_rate} (Bảng~\ref{tab:t4:coefA}). Kết quả ANOVA chỉ ra nguồn của tín hiệu này là DoS, nhóm chiếm 36,458\% mẫu; các nhóm R2L và U2R có trung bình \texttt{serror\_rate} gần Normal và một số cặp so sánh với Normal chưa đủ bằng chứng khác biệt.
+
+Số kết nối gần đây (\texttt{count}) cũng cho ra kết quả tương tự. Trung vị ở Attack là 138, ở Normal là 4; Welch hai mẫu ước lượng Attack cao hơn trung bình 132,332 kết nối; ANOVA xếp DoS cao nhất (178,09), tiếp đến Probe (77,05); hệ số của \texttt{count} trong Mô hình A có $OR=3{,}259$. Cặp R2L--U2R là cặp duy nhất trong 10 cặp hậu kiểm của \texttt{count} chưa có đủ bằng chứng khác biệt, phù hợp với việc hai nhóm này tạo ít kết nối trong cửa sổ hai giây.
+
+Với giao thức, Chi-square và Logistic đi đến cùng một kết quả. Phần dư chuẩn hóa lớn nhất là (ICMP, Probe) với $Z=+121{,}6$, tiếp theo là (UDP, DoS) với $Z=-61{,}9$ và (UDP, Normal) với $Z=+49{,}4$ (Hình~\ref{fig:t34:heatmap}). Trong Mô hình A, so với TCP, ICMP có $OR=15{,}213$ còn UDP có $OR=0{,}524$. Hai phương pháp khác nhau về cách đặt câu hỏi (độc lập trên năm nhóm so với xác suất Attack có điều kiện), nhưng cùng chỉ ra ICMP gắn với Attack và UDP gắn với Normal trong mẫu.
+
+\subsection{Các kết quả không đồng nhất}
+Lượng byte từ nguồn là trường hợp trung bình và trung vị cho hai chiều trái nhau. Trung bình \texttt{src\_bytes} của Attack là 82\,820,14 byte, cao hơn Normal (13\,133,28 byte), nhưng trung vị của Attack bằng 0 và 78,42\% giá trị Attack bằng 0. Hệ số của \texttt{src\_bytes} trong Mô hình A, ước lượng trên thang $\log(1+x)$ đã chuẩn hóa, có $OR=0{,}822$, tức cùng chiều với trung vị. Kết luận ANOVA cho biến này cũng chỉ áp dụng cho trung bình trên thang $\ln(1+x)$. Vì vậy, nhận định ``Attack truyền nhiều byte hơn'' không được các kết quả ủng hộ.
+
+Ở RQ4, kiểm định trên \texttt{srv\_rerror\_rate} vẫn có ý nghĩa nhưng chênh lệch trung bình cắt ngọn 20\% chỉ còn $-0{,}01519$, so với $-0{,}16448$ trên trung bình gốc. Phần lớn chênh lệch đến từ khối giá trị bằng 1 (20,607\% ở Attack so với 4,076\% ở Normal). Hiện tượng tương tự xuất hiện với cặp Pearson \texttt{num\_compromised}--\texttt{num\_root}: $r$ giảm từ 0,998833 xuống 0,095623 khi tạm loại 86 dòng có số đếm lớn.
+
+Các nhóm hiếm cho kết quả kém ổn định ở mọi phương pháp. U2R chỉ có 52 quan sát trong Train, nên khoảng Wilson rộng theo tỷ lệ tương đối, nhiều cặp hậu kiểm liên quan U2R chưa đủ bằng chứng khác biệt, và Recall trên Test của U2R là 40,30\%. R2L có 995 quan sát trong Train nhưng Recall trên Test chỉ 2,70\%, và R2L chiếm 56,8\% trong 4\,944 trường hợp âm tính giả (Bảng~\ref{tab:t4:cat}).
+
+Khoảng cách giữa ý nghĩa thống kê và khả năng dự đoán thể hiện rõ ở RQ7. Các hiệu ứng lớn ở RQ4--RQ6 được đo trên Train, và Mô hình B đạt Accuracy 0,9857 trên chính tập này, nhưng trên Test Recall giảm còn 0,6147. Với 17 nhãn tấn công chỉ có ở Test, Recall là 27,31\%, so với 75,58\% cho các nhãn đã có trong Train; 2\,726 trong 4\,944 ca bỏ sót (55,1\%) thuộc nhóm nhãn mới (Bảng~\ref{tab:t4:seen}). Accuracy tăng từ 8,64\% ở mức độ khó 0--10 lên 99,87\% ở mức 21 (Bảng~\ref{tab:t4:diff}). Trung vị xác suất dự đoán của các ca bỏ sót là 0,00064 và 87,0\% ca có $\hat\pi<0{,}1$, nên các ca này không nằm gần ngưỡng 0,5.
+
+Có hai điểm không khớp hoàn toàn giữa câu hỏi và cách thực hiện. RQ6 ở Chương~1 hỏi về liên hệ giữa biến phân loại và nhãn Normal/Attack, trong khi kiểm định Chi-square ở Mục~\ref{sec:t34:method} và Bảng~\ref{tab:t34:chi2-observed} dùng năm nhóm \texttt{attack\_category} và chỉ xét \texttt{protocol\_type}. RQ3 hỏi về tỷ lệ Normal/Attack, còn Mục~\ref{sec:t32:result} ước lượng tỷ lệ cho năm nhóm; tỷ lệ Attack 46,542\% chỉ có ước lượng điểm, chưa có khoảng Wilson riêng. Ngoài ra, với cỡ mẫu trên 125 nghìn, gần như mọi kiểm định đều cho $p$ rất nhỏ, kể cả cặp \texttt{duration}--\texttt{src\_bytes} có $r=0{,}070737$ và $p=1{,}929\cdot10^{-139}$. So sánh giữa các phát hiện trong mục này vì thế dựa trên $r$, $g$, $\eta^2$, $V$ và các chỉ số phân loại thay vì $p$-value.
+
+\section{Hạn chế dữ liệu, phương pháp và khả năng khái quát}
+\label{sec:t5:limits}
+
+\subsection{Hạn chế về dữ liệu}
+NSL-KDD được tuyển chọn từ KDD'99, vốn dựa trên lưu lượng mô phỏng của chương trình DARPA 1998, và UNB lưu ý bộ dữ liệu chưa đại diện hoàn hảo cho mạng thực \cite{task2_unb2009}. Tỷ lệ các nhóm trong mẫu do người xây dựng dữ liệu quyết định, nên các khoảng Wilson ở Mục~\ref{sec:t32:result} mô tả thành phần của KDDTrain+ chứ không ước lượng tần suất tấn công trên Internet. Mất cân bằng nhóm rất lớn: tỷ số cỡ mẫu lớn nhất/nhỏ nhất giữa năm nhóm là 1\,295,1, khiến mọi suy luận liên quan U2R có độ bất định cao.
+
+Một số bất thường có thể được nhận thấy trong dữ liệu phân tích. Train có 15 tổ hợp 41 đặc trưng trùng nhau với nhãn gốc khác nhau (31 dòng), Test có 57 tổ hợp (114 dòng); \texttt{su\_attempted} nhận giá trị 2 ở 59 dòng Train và 2 dòng Test, không khớp mô tả nhị phân. Việc xếp \texttt{worm} vào DoS và \texttt{httptunnel} vào R2L theo một nguồn duy nhất ảnh hưởng tới tần số năm nhóm trên Test. NSL-KDD không có định danh phiên hay máy nguồn, nên giả định các bản ghi độc lập, dùng trong mọi kiểm định của Chương~4, không kiểm chứng được.
+
+\subsection{Hạn chế về phương pháp}
+Phần lớn biến có phân bố dồn tại 0 hoặc 1, đuôi phải dài hoặc bị chặn trên (ví dụ trần 511 của \texttt{count}), và Brown--Forsythe bác bỏ đồng nhất phương sai ở cả bốn biến ANOVA lẫn ba biến hai mẫu. Welch và phép $\ln(1+x)$ giảm ảnh hưởng của các vi phạm này nhưng không làm dữ liệu trở thành chuẩn; kết luận cho \texttt{src\_bytes} và \texttt{duration} chỉ đúng trên thang log. Các chỉ số $\eta^2$, $\omega^2$ và Hedges $g$ tính từ tổng bình phương hoặc độ lệch chuẩn gộp, nên chỉ có ý nghĩa mô tả khi phương sai các nhóm khác nhau.
+
+Pearson chỉ đo liên hệ tuyến tính và nhạy với cực trị, như cặp root ở Mục~\ref{sec:t31:ket-qua} cho thấy; chín cặp được kiểm định lại được chọn sau khi xem ma trận tương quan. Hiệu chỉnh Holm được áp dụng riêng trong từng họ kiểm định (chín cặp Pearson, bốn kiểm định ANOVA tổng thể, ba kiểm định hai mẫu), không trên toàn bộ các kiểm định của báo cáo. Kiểm định Chi-square có một ô với tần số kỳ vọng 3,42 (ICMP, U2R) và chỉ xét một biến phân loại. Hồi quy Logistic giả định logit tuyến tính theo đặc trưng, dùng ngưỡng cố định 0,5 và không gán trọng số cho lớp hiếm; cả hai mô hình được đánh giá trên KDDTest+ đúng một lần.
+
+\subsection{Khả năng khái quát}
+Chênh lệch giữa Train và Test là giới hạn lớn nhất về khả năng khái quát. Accuracy của Mô hình B giảm từ 0,9857 xuống 0,7478, phần lớn do 17 nhãn tấn công chỉ xuất hiện ở Test (3\,750 dòng) và các tấn công R2L ở tầng ứng dụng như \texttt{guess\_passwd}, \texttt{warezmaster}. Các khác biệt có ý nghĩa thống kê ở Chương~4 được xác lập trên Train và mô tả các dạng tấn công đã có trong Train; chúng không bảo đảm rằng các dạng tấn công mới có cùng giá trị đặc trưng. Hiệu năng của mô hình cũng phụ thuộc mạnh vào trường \texttt{difficulty}, một đại lượng sinh ra khi xây dựng NSL-KDD. Mọi tỷ lệ, hiệu ứng và chỉ số phân loại trong báo cáo vì vậy chỉ áp dụng cho benchmark NSL-KDD và không được hiểu là tỷ lệ tấn công hay hiệu năng phát hiện trên một mạng đang vận hành.
+
+\end{document}

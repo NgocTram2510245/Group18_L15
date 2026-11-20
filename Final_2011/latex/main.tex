@@ -1,0 +1,52 @@
+% Biên dịch: latexmk -xelatex -interaction=nonstopmode main.tex
+\documentclass[13pt,a4paper,oneside]{extreport}
+\input{config/preamble}
+\begin{document}
+\input{frontmatter/titlepage}
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
+\pagenumbering{arabic}
+
+\chapter{Đặt vấn đề}
+\subfile{parts/01_task1_dat_van_de}
+
+\chapter{Dữ liệu và tiền xử lý}
+\subfile{parts/02_task1_gioi_thieu_du_lieu}
+\subfile{parts/02_task2_tien_xu_ly}
+
+\chapter{Phương pháp Xác suất và Thống kê}
+\subfile{parts/03_task1_phuong_phap_chung}
+\subfile{parts/03_task31_pearson}
+\subfile{parts/03_task32_wilson}
+\subfile{parts/03_task33_anova}
+\subfile{parts/03_task35_hai_mau}
+\subfile{parts/03_task34_chi_square}
+\subfile{parts/03_task4_logistic}
+
+\chapter{Kết quả và thảo luận}
+\subfile{parts/04_task2_thong_ke_mo_ta}
+\subfile{parts/04_task31_pearson}
+\subfile{parts/04_task32_wilson}
+\subfile{parts/04_task33_anova}
+\subfile{parts/04_task35_hai_mau}
+\subfile{parts/04_task34_chi_square}
+\subfile{parts/04_task4_logistic}
+\subfile{parts/04_task5_thao_luan_chung}
+
+\chapter{Kết luận và kiến nghị}
+\subfile{parts/05_task5_ket_luan}
+
+\printbibliography[heading=bibintoc,title={Tài liệu tham khảo}]
+\appendix
+\chapter{Phân công và đóng góp của các thành viên}
+\input{frontmatter/contributions}
+\chapter{Các bảng số liệu}
+\subfile{parts/98_phu_luc_bang_so_lieu}
+\chapter{Tệp kèm theo và cách sử dụng}
+\subfile{parts/97_phu_luc_tep_kem_theo}
+\end{document}

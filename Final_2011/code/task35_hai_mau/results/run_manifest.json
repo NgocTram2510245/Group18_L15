@@ -1,0 +1,18 @@
+{
+  "data_path": "00_DU_LIEU_CHUNG_CHO_TEAM\\00_DU_LIEU_CHUNG\\data\\processed\\train_clean.csv",
+  "rows_analyzed": 125973,
+  "alpha": 0.05,
+  "random_state": 18015,
+  "main_test": "Welch independent two-sample t-test, two-sided",
+  "multiple_testing": "Holm correction across 3 primary RQs",
+  "plot_sampling_only": {
+    "ecdf_per_group_max": 5000,
+    "qq_per_group_max": 1000
+  },
+  "python": "3.12.14",
+  "pandas": "3.1.1",
+  "numpy": "2.2.6",
+  "scipy": "1.15.3",
+  "matplotlib": "3.10.7",
+  "seaborn": "0.13.2"
+}

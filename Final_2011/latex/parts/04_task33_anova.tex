@@ -1,0 +1,160 @@
+% !TEX root = ../main.tex
+% CHU SO HUU: Ngọc Trâm | KHONG THEO PREAMBLE, KHONG BEGIN DOCUMENT TRONG THAN PHAN NAY.
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\section{Kết quả ANOVA, kiểm tra giả định và hậu kiểm}
+\label{sec:t33:result}
+
+Phần này áp dụng quy trình tại Mục~\ref{sec:t33:method} cho bốn câu hỏi nghiên
+cứu. Kết quả chính dùng Welch ANOVA; hậu kiểm dùng Games--Howell và bốn p-value tổng thể
+được hiệu chỉnh Holm. Các bảng mô tả vẫn giữ đơn vị gốc để hỗ trợ diễn giải thực tế.
+
+\subsection{Thống kê mô tả và kiểm tra giả định}
+
+Bảng~\ref{tab:t33:descriptive} cho thấy trung bình và trung vị khác nhau đáng kể ở
+nhiều nhóm. Đặc biệt, trung bình \texttt{src\_bytes} của Probe đạt 385\,679,84 byte nhưng
+trung vị chỉ là 1 byte; \texttt{duration} của Probe có trung bình 2\,074,86 giây nhưng
+trung vị bằng 0. Đây là dấu hiệu đuôi phải dài và khối lượng lớn tại 0, không phải bằng
+chứng để tùy tiện loại ngoại lệ.
+
+Brown--Forsythe bác bỏ đồng nhất phương sai ở cả bốn đặc trưng
+(Bảng~\ref{tab:t33:assumptions}); tỷ số cỡ mẫu lớn nhất/nhỏ nhất đạt 1\,295,1. ECDF ở
+Hình~\ref{fig:t33:ecdf} và Q--Q plot ở Hình~\ref{fig:t33:qq} đồng thời cho thấy dữ
+liệu bị chặn, nhiều số 0 hoặc có đuôi dài. Các dấu hiệu này, thay vì chỉ một p-value
+Shapiro--Wilk, là cơ sở chọn Welch và thang $\ln(1+x)$ cho hai biến lệch mạnh.
+
+\begin{table}[H]
+\centering
+\caption{Kiểm tra giả định trên thang dùng cho kiểm định chính}
+\label{tab:t33:assumptions}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{l l r l X}
+\toprule
+Đặc trưng & Thang phân tích & Brown--Forsythe & p-value & Chẩn đoán trọng tâm \\
+\midrule
+\texttt{count} & Gốc & 5\,817,05 & $<10^{-300}$ & Biến đếm; $|\mathrm{skew}|$ tối đa 5,56; U2R nhỏ. \\
+\texttt{serror\_rate} & Gốc & 5\,279,29 & $<10^{-300}$ & Bị chặn 0--1, dồn tại hai biên; $|\mathrm{skew}|$ tối đa 8,85. \\
+\texttt{src\_bytes} & $\ln(1+x)$ & 364,36 & $1{,}59\times10^{-312}$ & Thang gốc có cực trị lớn; sau log vẫn chưa chuẩn hoàn toàn. \\
+\texttt{duration} & $\ln(1+x)$ & 1\,318,15 & $<10^{-300}$ & Nhiều số 0; $|\mathrm{skew}|$ tối đa 38,03 do nhóm DoS. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/task33_anova_ecdf_four_features.pdf}
+\caption{ECDF theo năm nhóm. \texttt{src\_bytes} và \texttt{duration} dùng
+$\ln(1+x)$; lấy mẫu cố định tối đa 5\,000 quan sát/nhóm chỉ để vẽ theo quy trình ở
+Mục~\ref{sec:t33:method}. Mọi kiểm định sử dụng toàn bộ dữ liệu.}
+\label{fig:t33:ecdf}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/task33_qq_log_features.pdf}
+\caption{Q--Q plot của $\log(1+\texttt{src\_bytes})$ và
+$\log(1+\texttt{duration})$, dùng tối đa 1\,000 quan sát/nhóm. Các điểm lệch đường tham
+chiếu cho thấy phép log giảm nhưng không loại bỏ hoàn toàn sai lệch chuẩn.}
+\label{fig:t33:qq}
+\end{figure}
+
+\subsection{Kết quả kiểm định tổng thể và kích thước ảnh hưởng}
+
+Bảng~\ref{tab:t33:omnibus} bác bỏ $H_0$ cho cả bốn câu hỏi, kể cả sau hiệu chỉnh Holm.
+Các p-value dưới giới hạn hiển thị được báo cáo là $p<10^{-300}$, không viết $p=0$.
+Kết quả của \texttt{src\_bytes} và \texttt{duration} áp dụng cho trung bình trên thang
+$\ln(1+x)$, không phải chênh lệch byte hoặc giây trung bình trên thang gốc.
+
+Effect size cho thấy p-value rất nhỏ không đồng nghĩa mức phân tách thực tiễn giống nhau:
+$\eta^2$ mô tả của \texttt{serror\_rate} là 0,6202, trong khi \texttt{duration} chỉ là
+0,0412 trên thang phân tích.
+
+\subsection{Hậu kiểm Games--Howell và trả lời câu hỏi nghiên cứu}
+
+Games--Howell kiểm soát so sánh nhiều cặp trong từng RQ và không giả định phương sai hay
+cỡ mẫu bằng nhau. Bảng~\ref{tab:t33:posthoc-summary} tóm tắt toàn bộ 10 cặp/RQ;
+Hình~\ref{fig:t33:posthoc} trình bày p-value hiệu chỉnh bằng cả số và ký hiệu, nên
+không cần suy luận chỉ dựa trên màu.
+
+\begin{table}[H]
+\centering
+\caption{Tóm tắt hậu kiểm Games--Howell trong từng câu hỏi}
+\label{tab:t33:posthoc-summary}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{l c X}
+\toprule
+RQ & Cặp có ý nghĩa & Các cặp chưa đủ bằng chứng khác biệt ở mức 5\% \\
+\midrule
+RQ1 - \texttt{count} & 9/10 & R2L--U2R: chênh lệch $-4{,}51$, KTC 95\% $[-13{,}71;4{,}69]$, $p_{adj}=0{,}639$. \\
+RQ2 - \texttt{serror\_rate} & 6/10 & Normal--R2L; Normal--U2R; Probe--U2R; R2L--U2R. \\
+RQ3 - $\ln(1+\texttt{src\_bytes})$ & 9/10 & Normal--U2R: chênh lệch 0,455, KTC 95\% $[-0{,}733;1{,}643]$, $p_{adj}=0{,}815$. \\
+RQ4 - $\ln(1+\texttt{duration})$ & 10/10 & Không có; cả 10 khoảng tin cậy đồng thời không chứa 0. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\linewidth]{figures/task33_games_howell_heatmaps.pdf}
+\caption{P-value Games--Howell đã hiệu chỉnh trong 10 so sánh cặp của từng RQ.
+Dấu * biểu thị $p_{adj}<0{,}05$; đường viền trắng phân tách từng ô. Thanh màu bên phải
+biểu diễn p-value đã hiệu chỉnh trong miền 0--0,05; giá trị từ 0,05 trở lên được hiển thị
+tại cận trên. Ô không có dấu * không được diễn giải là hai trung bình bằng nhau, mà chỉ
+là chưa đủ bằng chứng khác biệt với dữ liệu hiện có.}
+\label{fig:t33:posthoc}
+\end{figure}
+
+\paragraph{RQ1 - số lượng kết nối gần đây.}
+Trung bình \texttt{count} khác nhau giữa ít nhất hai nhóm. DoS cao nhất (178,09), tiếp
+đến Probe (77,05) và Normal (22,52); R2L và U2R lần lượt là 1,30 và 5,81. Games--Howell
+cho thấy 9/10 cặp khác biệt, ngoại trừ R2L--U2R. Kết quả ủng hộ nhận định hành vi tạo kết
+nối trong cửa sổ hai giây khác nhau rõ giữa DoS, Probe và Normal, nhưng không chứng minh
+mọi dạng tấn công đều có \texttt{count} cao.
+
+\paragraph{RQ2 - tỷ lệ lỗi SYN.}
+DoS có trung bình \texttt{serror\_rate}=0,748 và trung vị 1, vượt xa Normal
+(trung bình 0,013; trung vị 0). Chênh lệch DoS--Normal là 0,735 với KTC đồng thời 95\%
+$[0{,}729;0{,}741]$, $p_{adj}<10^{-300}$. Tuy vậy, chỉ 6/10 cặp có ý nghĩa và phân bố
+dồn mạnh ở 0 hoặc 1. ANOVA vì thế cung cấp xấp xỉ hữu ích về trung bình tỷ lệ trong mẫu,
+không phải một mô hình đầy đủ cho biến tỷ lệ bị dồn biên.
+
+\paragraph{RQ3 - lượng byte gửi từ nguồn.}
+Trên thang gốc, Probe và R2L có trung bình rất cao (385\,679,84 và 307\,727,30 byte) nhưng
+trung vị chỉ là 1 và 334 byte, cho thấy trung bình bị chi phối bởi đuôi phải. Welch ANOVA
+trên $\ln(1+\texttt{src\_bytes})$ bác bỏ $H_0$; 9/10 cặp có ý nghĩa, riêng Normal--U2R
+chưa đủ bằng chứng. Phát hiện này trả lời câu hỏi về trung bình sau biến đổi log, không
+được chuyển thành phát biểu rằng một nhóm chênh một số byte trung bình tương ứng.
+
+\paragraph{RQ4 - thời gian kết nối.}
+Welch ANOVA trên $\ln(1+\texttt{duration})$ bác bỏ $H_0$ và cả 10 cặp Games--Howell có
+ý nghĩa. Tuy nhiên, trung vị bằng 0 ở bốn nhóm và tỷ lệ bằng 0 thay đổi từ 28,85\% đến
+99,91\% (Hình~\ref{fig:t33:duration-zero}), nên kết quả chỉ được xem là bằng chứng
+tổng hợp trên thang log, không phải một mô hình hoàn chỉnh cho dữ liệu zero-inflated.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\linewidth]{figures/task33_duration_zero_wilson.pdf}
+\caption{Tỷ lệ \texttt{duration}=0 và khoảng tin cậy Wilson 95\% theo nhóm. Đây là
+phần nhị phân của phân tích hai phần, không phải khoảng tin cậy của thời lượng trung bình.}
+\label{fig:t33:duration-zero}
+\end{figure}
+
+Trong 10\,018 kết nối có \texttt{duration}$>0$, phân tích bổ sung bằng Welch trên
+$\ln(1+\texttt{duration})$ vẫn có ý nghĩa,
+$F(4;158{,}324)=315{,}82$, $p=2{,}48\times10^{-74}$. Đây là kết quả có điều kiện và
+không thay thế kết quả trên toàn bộ mẫu.
+
+\noindent\textbf{Ý nghĩa khoa học.}
+ANOVA cho thấy bốn khía cạnh hành vi mạng có phân bố trung bình khác nhau theo nhóm,
+nhưng mức chồng lấp, thang đo và độ ổn định của U2R khác nhau đáng kể. Kết quả hỗ trợ
+diễn giải những tín hiệu mà mô hình học máy có thể khai thác, song p-value nhỏ không đo
+trực tiếp năng lực dự đoán và không chứng minh quan hệ nhân quả. Do NSL-KDD là bộ chuẩn
+lịch sử và không có định danh phiên đủ để kiểm chứng độc lập, suy luận chỉ áp dụng cho
+mẫu đang phân tích; Welch xử lý phương sai không bằng nhau nhưng không khắc phục được
+phụ thuộc tiềm ẩn giữa các kết nối.
+
+\FloatBarrier
+
+\end{document}

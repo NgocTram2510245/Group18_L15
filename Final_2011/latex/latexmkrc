@@ -1,0 +1,3 @@
+# Luon tao main.synctex.gz de double-click PDF nhay ve file .tex
+$pdf_mode = 5;
+$xelatex = 'xelatex -synctex=1 -interaction=nonstopmode %O %S';

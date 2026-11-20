@@ -1,0 +1,79 @@
+% !TEX root = ../main.tex
+% CHU SO HUU: Quyên | KHONG THEO PREAMBLE, KHONG BEGIN DOCUMENT TRONG THAN PHAN NAY.
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\section{Bối cảnh và lý do lựa chọn đề tài}
+
+Trong bối cảnh chuyển đổi số diễn ra mạnh mẽ, các hệ thống thông tin, dịch vụ trực tuyến và hạ tầng mạng ngày càng trở thành thành phần thiết yếu của hoạt động kinh tế, giáo dục, doanh nghiệp và đời sống xã hội. Cùng với sự phát triển đó, nguy cơ mất an toàn thông tin cũng gia tăng cả về số lượng lẫn mức độ phức tạp. Các cuộc tấn công mạng có thể khai thác lỗ hổng của hệ thống, làm gián đoạn dịch vụ, đánh cắp dữ liệu hoặc tạo ra những thiệt hại đáng kể cho tổ chức và người sử dụng. Vì vậy, việc phát hiện sớm các hành vi bất thường và các dấu hiệu xâm nhập trong lưu lượng mạng là một yêu cầu quan trọng trong bảo đảm an ninh mạng.
+
+Một trong những hướng tiếp cận phổ biến đối với bài toán này là hệ thống phát hiện xâm nhập (Intrusion Detection System - IDS). Mục tiêu của IDS là theo dõi hoạt động của hệ thống hoặc lưu lượng mạng nhằm nhận biết các hành vi có khả năng gây mất an toàn. Tuy nhiên, dữ liệu mạng thường có số lượng quan sát lớn, nhiều đặc trưng và chứa các dạng hành vi khác nhau. Do đó, việc phân tích dữ liệu không chỉ cần các thuật toán dự đoán mà còn cần các phương pháp xác suất và thống kê để mô tả đặc điểm dữ liệu, xác định mối liên hệ giữa các biến, kiểm định các khác biệt và đánh giá mức độ không chắc chắn của các kết quả thu được.
+
+Đề tài lựa chọn bộ dữ liệu NSL-KDD làm đối tượng nghiên cứu. Đây là bộ dữ liệu được sử dụng trong nghiên cứu về phát hiện xâm nhập và cung cấp nhiều đặc trưng mô tả kết nối mạng cùng các nhãn phản ánh trạng thái bình thường hoặc hành vi tấn công. Với cấu trúc dữ liệu bao gồm cả biến định lượng và biến định tính, NSL-KDD phù hợp để triển khai nhiều nội dung trong học phần Xác suất và Thống kê như thống kê mô tả, trực quan hóa dữ liệu, phân tích tương quan, ước lượng khoảng tin cậy, phân tích phương sai, kiểm định Chi-square và xây dựng mô hình hồi quy Logistic.
+
+Việc lựa chọn đề tài phát hiện xâm nhập mạng vì vậy có ý nghĩa ở cả hai khía cạnh. Về mặt ứng dụng, đề tài gắn với một vấn đề thực tế quan trọng của lĩnh vực an ninh mạng. Về mặt học thuật, bộ dữ liệu cho phép nhóm vận dụng một cách có hệ thống các công cụ xác suất và thống kê để khám phá dữ liệu và trả lời các câu hỏi nghiên cứu. Thay vì chỉ tập trung vào việc xây dựng một mô hình machine learning nhằm tối đa hóa độ chính xác, nghiên cứu hướng đến việc hiểu rõ hơn đặc điểm thống kê của dữ liệu và ý nghĩa của các bằng chứng định lượng thu được.
+
+\section{Vấn đề nghiên cứu và ý nghĩa thực tiễn}
+
+Vấn đề nghiên cứu trung tâm của đề tài là phân tích dữ liệu NSL-KDD dưới góc độ xác suất và thống kê nhằm tìm hiểu sự khác biệt và các mối quan hệ giữa những đặc trưng của lưu lượng mạng với trạng thái Normal/Attack. Cụ thể, nghiên cứu không chỉ đặt câu hỏi liệu một quan sát có thể được phân loại là bình thường hay tấn công, mà còn xem xét các câu hỏi nền tảng hơn: dữ liệu có đặc điểm phân bố như thế nào, các đặc trưng có liên hệ tuyến tính với nhau hay không, tỷ lệ các nhóm có thể được ước lượng với mức độ tin cậy nào, một số chỉ tiêu có khác biệt đáng kể giữa các nhóm hay không, và các biến nào có liên quan đến nhãn phân loại.
+
+Để giải quyết các vấn đề trên, đề tài sử dụng một chuỗi phương pháp thống kê có tính bổ sung cho nhau. Thống kê mô tả và trực quan hóa được sử dụng để cung cấp cái nhìn tổng quan về dữ liệu và sự phân bố của các biến. Phân tích tương quan Pearson giúp khảo sát mức độ liên hệ tuyến tính giữa các biến định lượng. Khoảng tin cậy Wilson 95\% được sử dụng để ước lượng tỷ lệ với một mức độ tin cậy xác định. Kiểm định hai mẫu được sử dụng để xem xét sự khác biệt về một số đặc trưng giữa hai nhóm Normal và Attack. ANOVA và Welch ANOVA được sử dụng để xem xét sự khác biệt về trung bình giữa các nhóm trong những điều kiện phù hợp. Kiểm định Chi-square kết hợp với Cramér's V hỗ trợ đánh giá mối liên hệ giữa các biến phân loại. Cuối cùng, hồi quy Logistic được sử dụng để phân tích khả năng dự đoán nhãn nhị phân Normal/Attack từ các đặc trưng được lựa chọn.
+
+Ý nghĩa của cách tiếp cận này là giúp chuyển trọng tâm từ việc chỉ báo cáo một kết quả phân loại sang việc đưa ra các bằng chứng thống kê về dữ liệu. Một mô hình có thể đạt một mức độ dự đoán nhất định, nhưng nếu không phân tích dữ liệu một cách đầy đủ thì khó giải thích được đặc điểm nào thực sự khác biệt giữa các nhóm hoặc mức độ chắc chắn của các kết luận. Các phương pháp xác suất và thống kê giúp nghiên cứu định lượng những vấn đề này, đồng thời hỗ trợ việc diễn giải kết quả một cách có cơ sở hơn.
+
+Về mặt thực tiễn, nghiên cứu có thể cung cấp một quy trình tham khảo cho việc phân tích dữ liệu an ninh mạng trước khi xây dựng các hệ thống dự đoán phức tạp hơn. Việc hiểu được cấu trúc dữ liệu, sự phân bố giữa các nhóm, các mối quan hệ giữa đặc trưng và nhãn cũng như những khác biệt có ý nghĩa thống kê có thể hỗ trợ quá trình lựa chọn biến và đánh giá mô hình. Tuy nhiên, các kết quả của nghiên cứu cần được hiểu trong phạm vi của bộ dữ liệu NSL-KDD và không nên suy rộng trực tiếp cho mọi môi trường mạng thực tế.
+
+\section{Mục tiêu và câu hỏi nghiên cứu}
+
+\subsection{Mục tiêu nghiên cứu}
+
+Mục tiêu tổng quát của đề tài là vận dụng các phương pháp xác suất và thống kê để phân tích bộ dữ liệu NSL-KDD, từ đó mô tả các đặc điểm chính của dữ liệu, đánh giá các mối quan hệ giữa các biến và phân tích các yếu tố có liên quan đến khả năng xuất hiện hành vi tấn công trong môi trường mạng.
+
+Các mục tiêu cụ thể gồm:
+\begin{enumerate}
+    \item khảo sát cấu trúc, chất lượng và đặc điểm phân bố của dữ liệu;
+    \item mô tả và trực quan hóa các đặc trưng quan trọng;
+    \item phân tích tương quan giữa các biến định lượng;
+    \item ước lượng một số tỷ lệ bằng khoảng tin cậy 95\%;
+    \item kiểm định sự khác biệt giữa hai nhóm bằng kiểm định hai mẫu phù hợp;
+    \item kiểm tra sự khác biệt giữa nhiều nhóm bằng ANOVA hoặc Welch ANOVA khi phù hợp;
+    \item đánh giá mối liên hệ giữa các biến phân loại bằng kiểm định Chi-square và Cramér's V;
+    \item xây dựng, đánh giá mô hình hồi quy Logistic cho bài toán phân loại nhị phân Normal/Attack.
+\end{enumerate}
+
+\subsection{Câu hỏi nghiên cứu}
+
+\textbf{RQ1 - Đặc điểm thống kê cơ bản của bộ dữ liệu NSL-KDD là gì?} Câu hỏi này được trả lời thông qua thống kê mô tả, kiểm tra dữ liệu và trực quan hóa các biến quan trọng.
+
+\textbf{RQ2 - Các biến định lượng trong dữ liệu có mối tương quan tuyến tính đáng chú ý với nhau hay không?} Câu hỏi này được khảo sát bằng hệ số tương quan Pearson và các biểu diễn trực quan phù hợp.
+
+\textbf{RQ3 - Tỷ lệ các quan sát thuộc nhóm Attack hoặc Normal có thể được ước lượng với mức độ tin cậy 95\% như thế nào?} Câu hỏi này được tiếp cận bằng khoảng tin cậy Wilson.
+
+\textbf{RQ4 - Có sự khác biệt có ý nghĩa thống kê về một số đặc trưng định lượng giữa hai nhóm Normal và Attack hay không?} Câu hỏi này được khảo sát bằng kiểm định hai mẫu phù hợp, nhằm đánh giá liệu sự khác biệt quan sát được giữa hai nhóm có thể được xem là có ý nghĩa thống kê hay không.
+
+\textbf{RQ5 - Giá trị trung bình của một số đặc trưng định lượng có khác biệt có ý nghĩa thống kê giữa các nhóm được xét hay không?} Câu hỏi này được kiểm tra bằng ANOVA hoặc Welch ANOVA, tùy thuộc vào đặc điểm và các giả định của dữ liệu.
+
+\textbf{RQ6 - Các biến phân loại được lựa chọn có mối liên hệ có ý nghĩa với nhãn Normal/Attack hay không và mức độ liên hệ mạnh đến đâu?} Câu hỏi này được trả lời thông qua kiểm định Chi-square kết hợp với hệ số Cramér's V.
+
+\textbf{RQ7 - Các đặc trưng được lựa chọn có thể hỗ trợ dự đoán xác suất một quan sát thuộc nhóm Attack hay không?} Hiệu quả của mô hình hồi quy Logistic được đánh giá thông qua các chỉ số phù hợp cho bài toán phân loại và được diễn giải trong phạm vi nghiên cứu.
+
+Các câu hỏi trên tạo thành một mạch nghiên cứu xuyên suốt: từ việc hiểu dữ liệu, khảo sát các mối quan hệ thống kê, thực hiện các kiểm định và ước lượng, đến việc xây dựng mô hình Logistic. Nhờ đó, các kết quả ở các chương sau không được trình bày như những output rời rạc từ Python mà được liên kết trực tiếp với các câu hỏi nghiên cứu đã xác định.
+
+\section{Phạm vi nghiên cứu và bố cục báo cáo}
+
+\subsection{Phạm vi nghiên cứu}
+
+Nghiên cứu sử dụng bộ dữ liệu NSL-KDD làm nguồn dữ liệu chính cho các phân tích. Theo quy ước dữ liệu chung của nhóm, tập KDDTrain+ được sử dụng làm tập phân tích chính cho các phân tích mô tả và các phương pháp thống kê; KDDTest+ được sử dụng riêng cho việc đánh giá mô hình khi phù hợp. Phạm vi nghiên cứu tập trung vào các đặc trưng có trong bộ dữ liệu và hệ thống nhãn phục vụ cho việc phân biệt trạng thái bình thường với hành vi tấn công. Trong các phân tích và mô hình hóa liên quan đến nhãn mục tiêu, bài toán được quy về phân loại nhị phân gồm hai nhóm: Normal và Attack.
+
+Đề tài tập trung vào việc vận dụng các phương pháp xác suất và thống kê đã được lựa chọn trong kế hoạch nghiên cứu, bao gồm thống kê mô tả, tương quan Pearson, khoảng tin cậy Wilson 95\%, kiểm định hai mẫu, ANOVA/Welch ANOVA, kiểm định Chi-square và Cramér's V, cùng với hồi quy Logistic. Nghiên cứu không đặt mục tiêu xây dựng một hệ thống IDS hoàn chỉnh để triển khai trong môi trường thực tế và cũng không hướng đến việc so sánh toàn diện tất cả các thuật toán machine learning hiện có.
+
+Các kết luận được rút ra dựa trên dữ liệu và quy trình phân tích được sử dụng trong nghiên cứu. Do NSL-KDD là bộ dữ liệu benchmark, kết quả thu được phản ánh đặc điểm của bộ dữ liệu này trong phạm vi nghiên cứu. Những thay đổi về môi trường mạng, loại hình tấn công, cách thu thập dữ liệu hoặc sự xuất hiện của các kỹ thuật tấn công mới có thể làm cho đặc điểm dữ liệu thực tế khác với kết quả quan sát được. Vì vậy, việc suy rộng các kết luận cần được thực hiện thận trọng.
+
+\subsection{Bố cục báo cáo}
+
+Báo cáo được tổ chức thành năm chương. Chương 1 trình bày bối cảnh nghiên cứu, lý do lựa chọn đề tài, vấn đề nghiên cứu, mục tiêu, câu hỏi nghiên cứu và phạm vi nghiên cứu. Chương 2 giới thiệu bộ dữ liệu NSL-KDD và trình bày các bước tiền xử lý, làm sạch dữ liệu, chuẩn hóa nhãn và quy ước sử dụng dữ liệu cho từng phân tích.
+
+Chương 3 trình bày cơ sở phương pháp luận của các kỹ thuật xác suất và thống kê được áp dụng trong nghiên cứu. Các phương pháp được trình bày nhằm làm rõ cơ sở lý thuyết, mục đích và cách thức áp dụng đối với bộ dữ liệu nghiên cứu. Mỗi phương pháp được giải thích theo một khuôn chung, bao gồm mục đích, giả thuyết hoặc tham số, công thức, giả định, điều kiện áp dụng và cách sử dụng trong bộ dữ liệu. Qua đó, chương này tập trung làm rõ lý do lựa chọn và cách thức triển khai các phương pháp, thay vì chỉ trình bày các kết quả tính toán.
+
+Chương 4 trình bày kết quả và thảo luận, bao gồm các kết quả thống kê mô tả, phân bố nhãn, phân tích Pearson, khoảng tin cậy Wilson, kiểm định hai mẫu độc lập, ANOVA và hậu kiểm, kiểm định Chi-square cũng như hồi quy Logistic. Các bảng, hình và kết quả định lượng được sử dụng để trả lời trực tiếp các câu hỏi nghiên cứu đã đặt ra. Chương 5 tổng kết các phát hiện chính, nêu kiến nghị và đề xuất các hướng phát triển tiếp theo. Phần cuối báo cáo bao gồm tài liệu tham khảo và phụ lục chứa các thông tin, kết quả hoặc mã nguồn cần thiết.
+
+\end{document}

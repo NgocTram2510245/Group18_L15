@@ -1,0 +1,7 @@
+﻿rq,feature,method,statistic,df,p_value,effect_or_difference,estimand_note,p_value_display,p_value_underflow
+RQ1,srv_serror_rate,"Mann-Whitney U (two-sided, asymptotic)",832734406.0,,0.0,-0.5781829299457836,Khác biệt phân phối/probability of superiority; không phải kiểm định trung bình.,<1e-300,True
+RQ1,srv_serror_rate,"Yuen-Welch t-test, 20% trimmed means",-194.14501840502106,35177.0,0.0,-0.6551196770708966,Chênh lệch trung bình cắt ngọn 20%; không đồng nhất với trung bình gốc.,<1e-300,True
+RQ2,srv_rerror_rate,"Mann-Whitney U (two-sided, asymptotic)",1649528082.5,,0.0,-0.16444054944896835,Khác biệt phân phối/probability of superiority; không phải kiểm định trung bình.,<1e-300,True
+RQ2,srv_rerror_rate,"Yuen-Welch t-test, 20% trimmed means",-5.455912791951862,35177.0,4.9049976532092285e-08,-0.015190175677980556,Chênh lệch trung bình cắt ngọn 20%; không đồng nhất với trung bình gốc.,4.905e-08,False
+RQ3,count,"Mann-Whitney U (two-sided, asymptotic)",707519273.5,,0.0,-0.6416099721540054,Khác biệt phân phối/probability of superiority; không phải kiểm định trung bình.,<1e-300,True
+RQ3,count,"Yuen-Welch t-test, 20% trimmed means",-220.365745725437,35466.12569576213,0.0,-140.98811660474576,Chênh lệch trung bình cắt ngọn 20%; không đồng nhất với trung bình gốc.,<1e-300,True

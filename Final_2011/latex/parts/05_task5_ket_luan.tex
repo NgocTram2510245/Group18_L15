@@ -1,0 +1,44 @@
+% !TEX root = ../main.tex
+% CHU SO HUU: Minh Khoa | KHONG THEO PREAMBLE, KHONG BEGIN DOCUMENT TRONG THAN PHAN NAY.
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\section{Kết luận theo từng câu hỏi nghiên cứu}
+\label{sec:t5:conclusion}
+
+Tám mục tiêu cụ thể ở Chương~1 đều đã có phân tích tương ứng trên KDDTrain+, và mô hình Logistic được đánh giá thêm trên KDDTest+. Các câu trả lời dưới đây chỉ dựa trên kết quả của Chương~4, với số liệu chính đã tập hợp ở Bảng~\ref{tab:t5:synthesis}. Năm câu hỏi được trả lời đầy đủ; RQ3 và RQ6 chỉ được trả lời một phần vì cách thực hiện khác câu hỏi ban đầu.
+
+Về RQ1, KDDTrain+ không có giá trị thiếu, hai nhóm Normal và Attack có tỷ lệ gần nhau, nhưng cơ cấu năm nhóm rất lệch: R2L có 995 quan sát, U2R chỉ có 52. Phần lớn biến định lượng dồn tại 0 và có đuôi phải dài, khiến trung bình thường cách xa trung vị; với \texttt{src\_bytes}, hai đại lượng này còn cho chiều so sánh Attack--Normal trái ngược nhau. Các đặc điểm đó là lý do các mục sau dùng Welch, phép biến đổi $\ln(1+x)$ và các phép kiểm tra độ nhạy.
+
+Các biến định lượng có tương quan tuyến tính mạnh, nhưng chỉ trong một số nhóm biến có định nghĩa gần nhau (RQ2). Trong 666 cặp của 37 biến, 10 cặp có $|r|>0{,}95$, đều dương, gồm sáu cặp tỷ lệ lỗi SYN, ba cặp tỷ lệ lỗi REJ và cặp \texttt{num\_compromised}--\texttt{num\_root}. Tương quan của cặp cuối do một số ít dòng có số đếm lớn chi phối và trở nên yếu khi tạm loại 86 dòng này. Cặp \texttt{src\_bytes}--\texttt{dst\_bytes} không cho bằng chứng tương quan tuyến tính ($p=0{,}9423$). Năm biến được đánh dấu cần xem xét tiếp ở Mục~\ref{sec:t31:ket-qua} mang thông tin gần trùng với biến khác, song báo cáo chưa kiểm tra việc loại chúng ảnh hưởng thế nào đến mô hình.
+
+Ở RQ3, khoảng Wilson 95\% được tính cho năm nhóm của KDDTrain+, trong đó tỷ lệ Normal là 53,458\% [53,183; 53,734]. Tỷ lệ Attack 46,542\% là phần bù của tỷ lệ Normal, nên khoảng Wilson của nó suy được trực tiếp từ khoảng trên, nhưng chưa được tính và báo cáo riêng ở Mục~\ref{sec:t32:result}.
+
+Với RQ4, kiểm định Welch hai mẫu sau hiệu chỉnh Holm cho thấy Attack có trung bình cao hơn Normal ở cả \texttt{srv\_serror\_rate}, \texttt{count} và \texttt{srv\_rerror\_rate}. Hai biến đầu có chênh lệch chuẩn hóa lớn (Mục~\ref{sec:t35:summary}). Ở \texttt{srv\_rerror\_rate}, chênh lệch chủ yếu đến từ tỷ lệ bản ghi bằng 1 cao hơn ở Attack và còn rất nhỏ khi so sánh trung bình cắt ngọn, tức kết luận về trung bình của biến này phụ thuộc vào cách đo.
+
+Welch ANOVA bác bỏ giả thuyết các trung bình bằng nhau giữa năm nhóm ở cả bốn biến của RQ5. Ba biến \texttt{count}, \texttt{serror\_rate} và $\ln(1+\texttt{src\_bytes})$ có $\eta^2$ mô tả từ 0,4049 trở lên, còn $\ln(1+\texttt{duration})$ chỉ có 0,0412: khác biệt có ý nghĩa thống kê, nhưng nhóm giải thích một phần nhỏ biến thiên. Trong hậu kiểm Games--Howell, mọi cặp chưa đủ bằng chứng khác biệt đều có R2L hoặc U2R. Vị trí của hai nhóm hiếm này so với các nhóm khác vì vậy chưa được xác lập ở một số biến.
+
+Kiểm định Chi-square cho RQ6 chỉ xét \texttt{protocol\_type} và dùng năm nhóm \texttt{attack\_category} thay cho nhãn Normal/Attack. Trong phạm vi đó, giao thức và nhóm lưu lượng không độc lập, với $V=0{,}3186$, nằm giữa mức trung bình và mức lớn; các phần dư lớn nhất cho thấy ICMP gắn với Probe và UDP gắn với Normal. Với nhãn nhị phân, bằng chứng hiện có là gián tiếp qua Mô hình Logistic A: khi giữ các biến khác cố định, odds Attack của ICMP cao hơn và của UDP thấp hơn so với TCP (Bảng~\ref{tab:t4:coefA}). Liên hệ của \texttt{service} và \texttt{flag} với nhãn chưa được kiểm định.
+
+Đối với RQ7, các đặc trưng được chọn có hỗ trợ dự đoán Attack, và mức hỗ trợ phụ thuộc vào việc dạng tấn công đã có trong Train hay chưa. Trên KDDTest+, Mô hình B đạt Specificity 0,9237 và AUC 0,7878 nhưng Recall chỉ 0,6147; phần lớn ca bỏ sót thuộc R2L hoặc các nhãn chỉ có ở Test. Hạ ngưỡng 0,5 khó thu hồi các ca này, vì 87,0\% trong số đó có $\hat\pi<0{,}1$. Mô hình A chỉ có 11 biến nhưng đạt AUC trên Test cao hơn (0,8249), tức việc thêm biến đầu vào chưa cải thiện khả năng khái quát.
+
+\section{Kiến nghị và hướng phát triển}
+\label{sec:t5:recommend}
+
+Các kiến nghị dưới đây đi theo ba nhóm hạn chế đã nêu ở Mục~\ref{sec:t5:limits}.
+
+\subsection{Kiến nghị về dữ liệu và câu hỏi nghiên cứu}
+Hai chỗ lệch ở RQ3 và RQ6 có thể khắc phục trên dữ liệu hiện có: tính khoảng Wilson cho tỷ lệ Attack từ \texttt{label\_binary}, và kiểm định Chi-square kèm Cramér's $V$ cho từng biến \texttt{protocol\_type}, \texttt{service}, \texttt{flag} với nhãn Normal/Attack. Khi bảng chéo có nhiều ô với tần số kỳ vọng nhỏ, như có thể xảy ra với \texttt{service}, cần gộp các mức hiếm có ý nghĩa dịch vụ gần nhau hoặc dùng kiểm định chính xác \cite{task34_cochran1954,task34_kim2017}.
+
+Các bất thường được giữ nguyên ở Chương~2 cần một phép kiểm tra độ nhạy: lặp lại các kiểm định chính sau khi loại 31 dòng thuộc các tổ hợp đặc trưng trùng có nhãn khác nhau và 59 dòng có \texttt{su\_attempted} bằng 2, đồng thời thử cách ánh xạ khác cho \texttt{worm} và \texttt{httptunnel} khi tính Recall theo nhóm trên Test, để biết kết luận có phụ thuộc vào các điểm này hay không. Giả định độc lập giữa các bản ghi không kiểm tra được trên NSL-KDD vì thiếu định danh phiên; với dữ liệu có thời điểm và địa chỉ máy, nên dùng các phương pháp tính đến tương quan giữa những bản ghi cùng phiên hoặc cùng máy.
+
+\subsection{Kiến nghị về phương pháp thống kê}
+Với các biến dồn tại 0 hoặc 1, nên tách phân tích thành hai phần: so sánh tỷ lệ bản ghi bằng 0 (hoặc bằng 1) giữa các nhóm bằng kiểm định tỷ lệ hoặc Chi-square, rồi so sánh riêng phần giá trị còn lại. Chương~4 mới làm theo hướng này cho \texttt{duration} (10\,018 kết nối có \texttt{duration}~$>0$) và phần nào cho \texttt{srv\_rerror\_rate}; áp dụng nhất quán cho \texttt{src\_bytes}, \texttt{dst\_bytes} và các tỷ lệ lỗi sẽ tránh để một khối giá trị 0 chi phối trung bình. Khi phương sai các nhóm khác nhau, nên báo cáo thêm chỉ số hiệu ứng dựa trên thứ hạng bên cạnh $\eta^2$ và Hedges $g$.
+
+Ở phân tích tương quan, có thể bổ sung hệ số Spearman cho quan hệ đơn điệu không tuyến tính, và cố định các cặp cần kiểm định trước khi xem ma trận, hoặc chọn cặp trên một nửa KDDTrain+ rồi kiểm định trên nửa còn lại. Nếu muốn kiểm soát sai lầm loại I cho mọi kết luận cùng lúc, họ kiểm định dùng trong hiệu chỉnh Holm cần được xác định ở cấp toàn báo cáo thay vì theo từng mục.
+
+\subsection{Hướng phát triển mô hình và phạm vi áp dụng}
+Để hạn chế việc bỏ sót, hai hướng có thể thử trên NSL-KDD là gán trọng số lớp hoặc lấy mẫu lại cho các nhãn hiếm (\texttt{guess\_passwd} và \texttt{warezmaster} chỉ có 53 và 20 dòng trong Train), và dùng mô hình phi tuyến hoặc có số hạng tương tác \cite{task4_hastie2009}. Trọng số lớp chỉ tác động đến các dạng tấn công có trong Train và không giải quyết trực tiếp 17 nhãn mới. Siêu tham số của các mô hình này cần được chọn bằng kiểm định chéo trên Train, KDDTest+ chỉ dùng cho đánh giá cuối, và kết quả cần báo cáo theo nhóm tấn công, theo nhãn cũ hay mới và theo \texttt{difficulty} như ở Mục~\ref{sec:t4:result}.
+
+Do NSL-KDD dựa trên lưu lượng mô phỏng năm 1998, trước khi đánh giá các đặc trưng này cho mạng hiện nay, cần lặp lại cùng quy trình trên một bộ dữ liệu thu thập gần đây để kiểm tra chúng còn tách được các nhóm hay không. Muốn dùng mô hình cho một mạng cụ thể, cần dữ liệu có nhãn từ chính mạng đó, ước lượng lại mô hình và đánh giá trên dữ liệu thu ở giai đoạn sau giai đoạn huấn luyện, vì chênh lệch giữa Train và Test là giới hạn lớn nhất mà báo cáo quan sát được.
+
+\end{document}

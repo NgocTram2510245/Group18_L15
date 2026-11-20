@@ -1,0 +1,347 @@
+% !TEX root = ../main.tex
+% CHU SO HUU: Quyên | KHONG THEO PREAMBLE, KHONG BEGIN DOCUMENT TRONG THAN PHAN NAY.
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\section{Thiết kế phân tích và quy ước thống kê chung}
+
+\subsection{Mục tiêu và thiết kế phân tích}
+
+Nghiên cứu được thiết kế theo hướng phân tích định lượng, sử dụng các phương pháp xác suất và thống kê để khảo sát đặc điểm của dữ liệu kết nối mạng và phân tích mối liên hệ giữa các đặc trưng quan sát được với trạng thái an toàn hoặc tấn công. Bộ dữ liệu NSL-KDD được sử dụng làm nguồn dữ liệu thực nghiệm, trong đó mỗi quan sát đại diện cho một phiên kết nối mạng và được mô tả bởi các đặc trưng liên quan đến lưu lượng, giao thức, dịch vụ và hành vi của kết nối.
+
+Quy trình phân tích được tổ chức theo hướng từ mô tả đến suy luận và mô hình hóa. Trước hết, thống kê mô tả và trực quan hóa được sử dụng để khảo sát cấu trúc, xu hướng trung tâm, mức độ phân tán và phân bố của các biến. Tiếp theo, phân tích tương quan Pearson được áp dụng nhằm xem xét mức độ liên hệ tuyến tính giữa các đặc trưng định lượng. Các phương pháp suy luận thống kê như khoảng tin cậy Wilson, kiểm định hai mẫu độc lập, ANOVA hoặc Welch ANOVA và kiểm định Chi-square được sử dụng để đánh giá những khác biệt hoặc mối liên hệ có ý nghĩa thống kê. Cuối cùng, hồi quy Logistic được sử dụng để mô hình hóa xác suất một quan sát thuộc nhóm tấn công dựa trên các đặc trưng được lựa chọn.
+
+Thiết kế này cho phép nghiên cứu tiếp cận bộ dữ liệu dưới nhiều góc độ bổ sung cho nhau. Thống kê mô tả giúp nhận diện đặc điểm tổng quát của dữ liệu; các kiểm định suy luận hỗ trợ đánh giá mức độ đáng tin cậy của những khác biệt và mối liên hệ quan sát được; trong khi hồi quy Logistic cung cấp một khuôn khổ mô hình hóa để phân tích mối quan hệ giữa biến giải thích và khả năng xảy ra của trạng thái tấn công. Do đó, trọng tâm của nghiên cứu không chỉ nằm ở việc xây dựng một mô hình phân loại, mà còn ở việc sử dụng các công cụ xác suất và thống kê để diễn giải dữ liệu một cách có hệ thống.
+
+\subsection{Đơn vị phân tích và quy ước dữ liệu}
+
+Đơn vị phân tích trong nghiên cứu là một quan sát tương ứng với một bản ghi kết nối mạng trong bộ dữ liệu NSL-KDD. Mỗi bản ghi được mô tả bởi tập các đặc trưng về hành vi và thuộc tính của kết nối, bao gồm các biến định lượng như thời lượng kết nối, số byte truyền từ nguồn và đến đích, số lượng kết nối liên quan trong một khoảng thời gian nhất định; đồng thời bao gồm các biến định tính như loại giao thức, dịch vụ và trạng thái kết nối.
+
+Để phục vụ cho các phân tích thống kê và mô hình hóa, các biến được phân biệt theo bản chất đo lường. Các biến định lượng được sử dụng trong những phương pháp yêu cầu dữ liệu số, chẳng hạn như thống kê mô tả, phân tích tương quan Pearson, phân tích phương sai và hồi quy Logistic sau khi thực hiện các bước xử lý phù hợp. Các biến định tính được sử dụng trong việc khảo sát tần suất, tỷ lệ, kiểm định Chi-square và các phân tích liên quan đến mối quan hệ giữa các biến phân loại.
+
+Về biến kết quả, nghiên cứu sử dụng quy ước phân loại nhị phân gồm hai nhóm: \textit{Normal} và \textit{Attack}. Các bản ghi mang nhãn \textit{normal} được xếp vào nhóm \textit{Normal}, trong khi các bản ghi thuộc các nhóm hành vi tấn công khác nhau được gộp vào nhóm \textit{Attack}. Quy ước này được sử dụng nhằm tạo ra một biến kết quả thống nhất cho các phân tích liên quan đến tỷ lệ, kiểm định và mô hình hồi quy Logistic. Tuy nhiên, việc gộp các loại tấn công thành một nhóm chung cũng đồng nghĩa với việc các kết luận trong nghiên cứu chủ yếu phản ánh sự khác biệt giữa trạng thái bình thường và trạng thái bị tấn công, thay vì phân biệt chi tiết giữa từng loại tấn công riêng lẻ.
+
+Các tập dữ liệu cụ thể được lựa chọn tùy theo mục tiêu của từng phương pháp phân tích. Các kết quả và kết luận luôn được diễn giải trong phạm vi dữ liệu NSL-KDD và theo quy trình tiền xử lý được trình bày ở Chương 2. Việc phân biệt rõ nguồn dữ liệu và tập dữ liệu sử dụng cho từng phân tích là cần thiết để bảo đảm tính nhất quán và khả năng tái lập của nghiên cứu.
+
+\subsection{Quy ước thống kê chung}
+
+Để thống nhất cách thực hiện và diễn giải các phương pháp trong nghiên cứu, một số quy ước thống kê chung được áp dụng. Trước hết, các phân tích kiểm định giả thuyết sử dụng mức ý nghĩa thống kê $\alpha = 0{,}05$. Khi giá trị \textit{p-value} nhỏ hơn $\alpha$, bằng chứng từ mẫu được xem là đủ để bác bỏ giả thuyết không ở mức ý nghĩa $5\%$. Ngược lại, khi \textit{p-value} lớn hơn hoặc bằng $\alpha$, nghiên cứu không bác bỏ giả thuyết không. Cách diễn giải này cần được hiểu là đánh giá mức độ bằng chứng thống kê, không đồng nghĩa với việc chứng minh giả thuyết không là đúng.
+
+Đối với các khoảng ước lượng, nghiên cứu sử dụng mức tin cậy $95\%$ khi áp dụng phương pháp khoảng tin cậy Wilson. Khoảng tin cậy được diễn giải như một khoảng giá trị được xây dựng từ dữ liệu mẫu theo một thủ tục có mức độ bao phủ dài hạn $95\%$, thay vì khẳng định rằng xác suất tham số cố định nằm trong một khoảng cụ thể là $95\%$.
+
+Trong quá trình báo cáo kết quả, các chỉ số thống kê được trình bày cùng với bối cảnh dữ liệu và ý nghĩa thực tiễn. Giá trị \textit{p-value} không được sử dụng như tiêu chí duy nhất để kết luận về tầm quan trọng của một phát hiện. Khi phù hợp, kết quả kiểm định được xem xét đồng thời với kích thước hiệu ứng hoặc các thước đo mức độ liên hệ, chẳng hạn như Cramér's V đối với kiểm định Chi-square. Tương tự, sự khác biệt có ý nghĩa thống kê không tự động đồng nghĩa với sự khác biệt có ý nghĩa thực tiễn, đặc biệt khi kích thước mẫu lớn.
+
+Các phương pháp được áp dụng cần thỏa mãn hoặc được đánh giá theo các giả định và điều kiện riêng của từng kỹ thuật. Chẳng hạn, Pearson tập trung vào mối liên hệ tuyến tính giữa các biến định lượng; kiểm định hai mẫu độc lập dùng phương án Welch nên không đòi hỏi phương sai hai nhóm bằng nhau, nhưng vẫn cần xem xét tính độc lập và phân phối của trung bình mẫu; ANOVA yêu cầu xem xét các giả định liên quan đến độc lập, phân phối và phương sai; trong khi Welch ANOVA được sử dụng trong trường hợp giả định đồng nhất phương sai không phù hợp. Đối với kiểm định Chi-square, cần bảo đảm việc xây dựng bảng chéo và tần số kỳ vọng phù hợp. Các điều kiện này sẽ được trình bày cụ thể trong từng mục phương pháp tương ứng.
+
+\begin{table}[H]
+\centering
+\caption{Các quy ước thống kê chung được áp dụng trong nghiên cứu}
+\label{tab:t1:convention}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.32\textwidth} X}
+\toprule
+\textbf{Nội dung} & \textbf{Quy ước áp dụng} \\
+\midrule
+Đơn vị phân tích & Một bản ghi kết nối mạng trong bộ dữ liệu NSL-KDD \\
+Biến kết quả & \textit{Normal} / \textit{Attack} \\
+Mức ý nghĩa thống kê & $\alpha = 0{,}05$ \\
+Mức tin cậy & $95\%$ \\
+Quy tắc diễn giải kiểm định & Bác bỏ $H_0$ khi \textit{p-value} $< 0{,}05$ \\
+Diễn giải kết quả & Xem xét đồng thời ý nghĩa thống kê, kích thước hiệu ứng và ý nghĩa thực tiễn khi phù hợp \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Liên kết giữa câu hỏi nghiên cứu và các phương pháp phân tích}
+
+Các phương pháp được lựa chọn không được xem là những kỹ thuật độc lập mà được tổ chức nhằm trả lời các câu hỏi nghiên cứu theo từng cấp độ. Ở cấp độ mô tả, thống kê mô tả và trực quan hóa giúp trả lời câu hỏi về đặc điểm tổng quát, phân bố và sự khác biệt ban đầu giữa các nhóm quan sát trong bộ dữ liệu. Phân tích tương quan Pearson tiếp tục khảo sát mức độ và chiều hướng liên hệ tuyến tính giữa các đặc trưng định lượng.
+
+Ở cấp độ suy luận, khoảng tin cậy Wilson được sử dụng để ước lượng tỷ lệ với mức độ không chắc chắn được thể hiện rõ ràng. Kiểm định hai mẫu độc lập so sánh trung bình của một đặc trưng giữa hai nhóm Normal và Attack. ANOVA hoặc Welch ANOVA hỗ trợ đánh giá liệu giá trị trung bình của một biến định lượng có khác biệt đáng kể giữa các nhóm hay không. Kiểm định Chi-square được sử dụng để xem xét sự phụ thuộc hoặc mối liên hệ giữa các biến phân loại, trong khi Cramér's V cung cấp thêm thông tin về cường độ của mối liên hệ đó.
+
+Ở cấp độ mô hình hóa, hồi quy Logistic được sử dụng để phân tích mối quan hệ giữa các biến đầu vào và xác suất một kết nối thuộc nhóm \textit{Attack}. Kết quả của mô hình được đánh giá bằng các thước đo phù hợp nhằm xem xét khả năng phân biệt giữa hai nhóm \textit{Normal} và \textit{Attack}.
+
+\begin{table}[H]
+\centering
+\caption{Liên kết giữa câu hỏi nghiên cứu và các phương pháp phân tích}
+\label{tab:t1:rq-methods}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.31\textwidth} >{\raggedright\arraybackslash}p{0.34\textwidth} X}
+\toprule
+\textbf{Câu hỏi nghiên cứu} & \textbf{Nội dung cần phân tích} & \textbf{Phương pháp} \\
+\midrule
+Dữ liệu NSL-KDD có những đặc điểm phân bố nào? & Xu hướng trung tâm, độ phân tán và hình dạng phân bố & Thống kê mô tả và trực quan hóa \\
+Các đặc trưng định lượng có mối liên hệ như thế nào? & Mức độ và chiều hướng liên hệ tuyến tính & Tương quan Pearson \\
+Tỷ lệ \textit{Normal}/\allowbreak\textit{Attack} được ước lượng với độ tin cậy như thế nào? & Ước lượng tỷ lệ và mức độ không chắc chắn & Khoảng tin cậy Wilson $95\%$ \\
+Giá trị trung bình của đặc trưng có khác nhau giữa hai nhóm \textit{Normal} và \textit{Attack} không? & So sánh trung bình hai nhóm độc lập và kích thước khác biệt & Kiểm định Welch hai mẫu độc lập \\
+Giá trị trung bình của biến định lượng có khác nhau giữa các nhóm không? & So sánh trung bình giữa các nhóm & ANOVA / Welch ANOVA và hậu kiểm \\
+Các biến phân loại có liên hệ với trạng thái \textit{Normal}/\allowbreak\textit{Attack} không? & Kiểm tra tính độc lập và cường độ liên hệ & Chi-square và Cramér's V \\
+Các đặc trưng có liên quan đến xác suất xảy ra \textit{Attack} như thế nào? & Mô hình hóa xác suất phân loại nhị phân & Hồi quy Logistic và đánh giá mô hình \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Thông qua cấu trúc trên, nghiên cứu hình thành một chuỗi phân tích nhất quán: mô tả dữ liệu, khám phá mối liên hệ, thực hiện suy luận thống kê và cuối cùng là mô hình hóa. Các kết quả chi tiết của từng phương pháp được trình bày tại Chương 4, trong khi Chương 3 tập trung giải thích cơ sở phương pháp luận, cách thức áp dụng và các điều kiện cần xem xét trước khi diễn giải kết quả.
+
+\section{Thống kê mô tả và trực quan hóa dữ liệu}
+
+\subsection{Mục đích}
+
+Thống kê mô tả là bước đầu tiên trong quy trình phân tích dữ liệu, nhằm tóm tắt và trình bày những đặc điểm cơ bản của tập dữ liệu bằng các chỉ số số học, bảng biểu và hình thức trực quan. Khác với thống kê suy luận, thống kê mô tả không nhằm suy rộng trực tiếp từ mẫu sang tổng thể hay kiểm định một giả thuyết thống kê. Thay vào đó, phương pháp này giúp người nghiên cứu nhận diện cấu trúc dữ liệu, xu hướng trung tâm, mức độ phân tán, phạm vi biến thiên và hình dạng phân bố của các biến.
+
+Trong nghiên cứu sử dụng bộ dữ liệu NSL-KDD, thống kê mô tả đóng vai trò khảo sát ban đầu trước khi áp dụng các phương pháp phân tích chuyên sâu hơn. Việc mô tả các biến định lượng giúp nhận diện sự chênh lệch về thang đo, mức độ biến thiên và khả năng xuất hiện các giá trị cực trị. Đối với các biến định tính hoặc biến phân loại, tần số và tỷ lệ phần trăm cho phép đánh giá mức độ phổ biến của từng nhóm quan sát.
+
+Bên cạnh các chỉ số số học, trực quan hóa dữ liệu giúp chuyển các đặc điểm của tập dữ liệu thành dạng hình ảnh dễ quan sát. Histogram hỗ trợ đánh giá hình dạng phân bố; boxplot hỗ trợ nhận diện trung vị, các tứ phân vị và các giá trị ngoại lệ; trong khi biểu đồ cột thích hợp để so sánh tần số hoặc tỷ lệ giữa các nhóm. Sự kết hợp giữa bảng thống kê và trực quan hóa giúp hạn chế việc diễn giải dữ liệu chỉ dựa trên một chỉ số riêng lẻ.
+
+Vì vậy, mục tiêu của thống kê mô tả trong nghiên cứu không phải là đưa ra kết luận nhân quả hay kiểm định giả thuyết, mà là xây dựng một bức tranh tổng quan về dữ liệu, hỗ trợ lựa chọn và diễn giải các phương pháp xác suất, thống kê tiếp theo.
+
+\subsection{Các đại lượng thống kê mô tả}
+
+Đối với biến định lượng, các đại lượng thống kê mô tả thường được chia thành ba nhóm chính: các thước đo xu hướng trung tâm, các thước đo mức độ phân tán và các thước đo vị trí. Việc sử dụng kết hợp các đại lượng này giúp mô tả dữ liệu đầy đủ hơn so với việc chỉ sử dụng giá trị trung bình.
+
+Giá trị trung bình phản ánh mức độ trung tâm của dữ liệu nhưng có thể bị ảnh hưởng mạnh bởi các giá trị cực trị. Trung vị biểu thị giá trị nằm ở vị trí giữa sau khi sắp xếp dữ liệu và thường ổn định hơn khi phân bố lệch. Các tứ phân vị cho biết vị trí của dữ liệu theo các mốc $25\%$, $50\%$ và $75\%$, trong đó $Q_2$ chính là trung vị.
+
+Độ lệch chuẩn và phương sai phản ánh mức độ phân tán của các quan sát xung quanh giá trị trung bình. Giá trị nhỏ nhất và lớn nhất cung cấp phạm vi quan sát được của biến, trong khi khoảng biến thiên và khoảng tứ phân vị giúp đánh giá mức độ trải rộng của dữ liệu theo các cách khác nhau.
+
+Đối với biến định tính hoặc biến phân loại, tần số tuyệt đối và tần suất tương đối là các đại lượng quan trọng. Tần số cho biết số lượng quan sát thuộc từng nhóm, còn tỷ lệ phần trăm giúp so sánh cơ cấu giữa các nhóm ngay cả khi tổng số quan sát lớn.
+
+\begin{table}[H]
+    \centering
+    \caption{Các đại lượng thống kê mô tả và ý nghĩa}
+    \label{tab:t1:measures}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabularx}{\textwidth}{|p{0.18\textwidth}|p{0.20\textwidth}|p{0.28\textwidth}|X|}
+        \hline
+        \textbf{Nhóm đại lượng} &
+        \textbf{Đại lượng} &
+        \textbf{Ý nghĩa chính} &
+        \textbf{Khi đặc biệt hữu ích} \\
+        \hline
+
+        Xu hướng trung tâm &
+        Mean (trung bình) &
+        Mô tả giá trị trung tâm dựa trên toàn bộ quan sát &
+        Phân bố tương đối cân đối, ít chịu ảnh hưởng bởi ngoại lệ \\
+        \hline
+
+        Xu hướng trung tâm &
+        Median (trung vị) &
+        Giá trị nằm giữa sau khi sắp xếp dữ liệu &
+        Dữ liệu lệch hoặc có giá trị cực trị \\
+        \hline
+
+        Mức độ phân tán &
+        Variance và Standard deviation &
+        Đo mức độ biến thiên quanh giá trị trung bình &
+        So sánh độ biến động của các quan sát \\
+        \hline
+
+        Vị trí &
+        $Q_1$, $Q_2$, $Q_3$ &
+        Xác định các mốc $25\%$, $50\%$ và $75\%$ của dữ liệu &
+        Khảo sát cấu trúc và độ lệch của phân bố \\
+        \hline
+
+        Mức độ phân tán &
+        IQR &
+        Độ rộng của $50\%$ quan sát trung tâm &
+        Phát hiện ngoại lệ và mô tả dữ liệu lệch \\
+        \hline
+
+        Phạm vi &
+        Min / Max / Range &
+        Cho biết giới hạn quan sát được &
+        Nhận diện phạm vi và giá trị cực trị \\
+        \hline
+
+        Biến phân loại &
+        Frequency / Percentage &
+        Mô tả số lượng và tỷ trọng từng nhóm &
+        So sánh cơ cấu các nhóm quan sát \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\subsection{Các công thức cần thiết}
+
+Giả sử một biến định lượng có $n$ quan sát $x_1, x_2, \ldots, x_n$. Giá trị trung bình mẫu được xác định bằng tổng các quan sát chia cho số lượng quan sát. Đây là một thước đo xu hướng trung tâm được sử dụng phổ biến.
+
+\begin{equation}
+    \bar{x} = \frac{1}{n}\sum_{i=1}^{n}x_i
+\end{equation}
+
+Phương sai mẫu và độ lệch chuẩn mẫu được sử dụng để đo mức độ phân tán của dữ liệu quanh giá trị trung bình. Độ lệch chuẩn có cùng đơn vị với biến gốc nên thường trực quan hơn trong quá trình diễn giải.
+
+\begin{equation}
+    s^2 = \frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar{x})^2
+\end{equation}
+
+\begin{equation}
+    s = \sqrt{s^2}
+\end{equation}
+
+Khoảng tứ phân vị được xác định từ hiệu giữa tứ phân vị thứ ba và tứ phân vị thứ nhất. Đại lượng này phản ánh độ phân tán của $50\%$ quan sát trung tâm và thường được sử dụng cùng boxplot để nhận diện các quan sát có khả năng là ngoại lệ.
+
+\begin{equation}
+    IQR = Q_3-Q_1
+\end{equation}
+
+Đối với biến phân loại, tỷ lệ phần trăm của một nhóm được tính bằng số quan sát thuộc nhóm đó chia cho tổng số quan sát, sau đó nhân với $100\%$. Khi trình bày kết quả, cần phân biệt rõ tần số tuyệt đối và tỷ lệ phần trăm để tránh nhầm lẫn giữa quy mô và cơ cấu dữ liệu.
+
+\begin{equation}
+    p = \frac{f}{n}\times 100\%
+\end{equation}
+
+\begin{table}[H]
+    \centering
+    \caption{Một số công thức thống kê mô tả được sử dụng trong nghiên cứu}
+    \label{tab:t1:formulas}
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{|>{\raggedright\arraybackslash}m{0.24\textwidth}|>{\raggedright\arraybackslash}m{0.34\textwidth}|>{\raggedright\arraybackslash}m{0.30\textwidth}|}
+        \hline
+        \textbf{Đại lượng} &
+        \textbf{Ký hiệu / công thức} &
+        \textbf{Diễn giải} \\
+        \hline
+
+        Trung bình mẫu &
+        $\bar{x} = \dfrac{1}{n}\sum x_i$ &
+        Giá trị trung tâm dựa trên toàn bộ quan sát \\
+        \hline
+
+        Phương sai mẫu &
+        $s^2 = \dfrac{1}{n-1}\sum(x_i-\bar{x})^2$ &
+        Mức độ phân tán bình phương quanh trung bình \\
+        \hline
+
+        Độ lệch chuẩn mẫu &
+        $s = \sqrt{s^2}$ &
+        Mức độ phân tán cùng đơn vị với biến gốc \\
+        \hline
+
+        Khoảng biến thiên &
+        $\mathrm{Range} = \mathrm{Max}-\mathrm{Min}$ &
+        Khoảng cách giữa giá trị lớn nhất và nhỏ nhất \\
+        \hline
+
+        Khoảng tứ phân vị &
+        $\mathrm{IQR} = Q_3-Q_1$ &
+        Độ rộng của $50\%$ quan sát trung tâm \\
+        \hline
+
+        Tỷ lệ phần trăm &
+        $p = \dfrac{f}{n}\times100\%$ &
+        Tỷ trọng của một nhóm trong tổng số quan sát \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Trực quan hóa dữ liệu}
+
+Trực quan hóa dữ liệu là phần bổ sung quan trọng cho các bảng thống kê mô tả. Một bảng số liệu có thể cung cấp giá trị chính xác, nhưng thường khó giúp người đọc nhận diện nhanh hình dạng phân bố, sự mất cân đối giữa các nhóm hoặc sự tồn tại của các giá trị bất thường. Vì vậy, lựa chọn loại biểu đồ cần phù hợp với bản chất của biến và câu hỏi cần quan sát.
+
+Histogram được sử dụng chủ yếu cho biến định lượng nhằm biểu diễn số lượng hoặc mật độ quan sát trong các khoảng giá trị. Thông qua histogram, có thể quan sát sơ bộ tính đối xứng, độ lệch, số đỉnh và phạm vi phân bố của dữ liệu.
+
+Boxplot thể hiện trung vị, các tứ phân vị và mức độ phân tán của dữ liệu. Đây là công cụ hữu ích để so sánh phân bố giữa các nhóm và phát hiện các quan sát nằm xa phần lớn dữ liệu. Trong trường hợp dữ liệu mạng có sự chênh lệch lớn về quy mô, boxplot có thể cho thấy sự tồn tại của các giá trị cực trị mà bảng trung bình đơn thuần không thể hiện rõ.
+
+Biểu đồ cột phù hợp với biến phân loại hoặc các bảng tần số. Loại biểu đồ này giúp so sánh trực quan số lượng hoặc tỷ lệ giữa các nhóm, chẳng hạn như phân bố trạng thái \textit{Normal}/\allowbreak\textit{Attack} hoặc cơ cấu của các giá trị thuộc một biến phân loại.
+
+Ngoài ra, biểu đồ phân tán có thể được sử dụng khi cần quan sát mối quan hệ trực quan giữa hai biến định lượng. Tuy nhiên, biểu đồ này không thay thế cho hệ số tương quan hoặc kiểm định thống kê; nó chỉ hỗ trợ khám phá sơ bộ các xu hướng, cụm quan sát và các điểm bất thường.
+
+\begin{table}[H]
+    \centering
+    \caption{Lựa chọn hình thức trực quan hóa theo loại dữ liệu}
+    \label{tab:t1:visual}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabularx}{\textwidth}{|p{0.17\textwidth}|p{0.24\textwidth}|p{0.27\textwidth}|X|}
+        \hline
+        \textbf{Hình thức} &
+        \textbf{Loại dữ liệu phù hợp} &
+        \textbf{Thông tin trực quan chính} &
+        \textbf{Ví dụ áp dụng trong NSL-KDD} \\
+        \hline
+
+        Histogram &
+        Biến định lượng &
+        Hình dạng, độ lệch và mức độ tập trung của phân bố &
+        \texttt{duration}, \texttt{src\_bytes}, \texttt{dst\_bytes} \\
+        \hline
+
+        Boxplot &
+        Biến định lượng; có thể chia theo nhóm &
+        Median, quartiles, IQR và ngoại lệ &
+        So sánh một đặc trưng giữa \textit{Normal} và \textit{Attack} \\
+        \hline
+
+        Bar chart &
+        Biến phân loại &
+        Tần số hoặc tỷ lệ giữa các nhóm &
+        \texttt{protocol\_type}, \texttt{flag} hoặc nhãn \textit{Normal}/\allowbreak\textit{Attack} \\
+        \hline
+
+        Scatter plot &
+        Hai biến định lượng &
+        Xu hướng và cấu trúc quan hệ trực quan &
+        \texttt{src\_bytes} và \texttt{dst\_bytes} \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\subsection{Cách áp dụng cho NSL-KDD}
+
+Trong bộ dữ liệu NSL-KDD, việc áp dụng thống kê mô tả cần dựa trên bản chất của từng nhóm biến. Các đặc trưng định lượng có thể được tóm tắt bằng các chỉ số như số quan sát, giá trị trung bình, độ lệch chuẩn, giá trị nhỏ nhất, các tứ phân vị và giá trị lớn nhất. Tuy nhiên, các chỉ số này không nên được diễn giải tách rời. Ví dụ, khi giá trị trung bình và trung vị có sự khác biệt đáng kể, điều đó có thể gợi ý rằng phân bố dữ liệu bị lệch hoặc chịu ảnh hưởng của một số giá trị cực trị.
+
+Đối với các đặc trưng định tính như loại giao thức, dịch vụ hoặc trạng thái kết nối, bảng tần số và tỷ lệ phần trăm được sử dụng để mô tả cơ cấu dữ liệu. Những bảng này có thể kết hợp với biểu đồ cột để giúp so sánh trực quan giữa các nhóm.
+
+Trong phạm vi nghiên cứu, nhãn được quy về hai nhóm \textit{Normal} và \textit{Attack} theo quy ước đã trình bày ở Mục 3.1. Vì vậy, thống kê mô tả có thể được thực hiện cho toàn bộ dữ liệu hoặc so sánh theo hai nhóm này, tùy theo mục tiêu của từng phân tích. Việc so sánh ban đầu giữa \textit{Normal} và \textit{Attack} có thể hỗ trợ nhận diện những khác biệt về phân bố trước khi tiến hành các kiểm định suy luận hoặc xây dựng mô hình Logistic.
+
+Một điểm cần lưu ý là dữ liệu kết nối mạng có thể chứa nhiều biến có phân bố lệch mạnh và phạm vi giá trị rất lớn. Do đó, khi cần thiết, nghiên cứu nên xem xét đồng thời mean và median, cũng như kết hợp histogram hoặc boxplot để tránh kết luận chỉ dựa trên một đại lượng trung tâm. Các kết quả thống kê cụ thể được trình bày tại Chương 4; mục này chỉ mô tả nguyên tắc và cách thức áp dụng phương pháp.
+
+\begin{table}[H]
+    \centering
+    \caption{Khung áp dụng thống kê mô tả và trực quan hóa cho dữ liệu NSL-KDD}
+    \label{tab:t1:nslkdd}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabularx}{\textwidth}{|p{0.22\textwidth}|p{0.27\textwidth}|p{0.22\textwidth}|X|}
+        \hline
+        \textbf{Nhóm dữ liệu} &
+        \textbf{Thống kê nên báo cáo} &
+        \textbf{Trực quan hóa phù hợp} &
+        \textbf{Mục tiêu} \\
+        \hline
+
+        Biến định lượng &
+        $n$, mean, median, std, min, $Q_1$, $Q_3$, max, IQR khi cần &
+        Histogram, boxplot &
+        Khảo sát trung tâm, phân tán, hình dạng và ngoại lệ \\
+        \hline
+
+        Biến phân loại &
+        Frequency, percentage &
+        Bar chart &
+        Khảo sát cơ cấu và mức độ phổ biến \\
+        \hline
+
+        Nhãn \textit{Normal}/\allowbreak\textit{Attack} &
+        Số lượng và tỷ lệ mỗi nhóm &
+        Bar chart &
+        Đánh giá phân bố của biến kết quả \\
+        \hline
+
+        So sánh theo nhóm &
+        Các chỉ số mô tả theo từng nhóm &
+        Grouped boxplot hoặc bar chart phù hợp &
+        Khám phá khác biệt ban đầu giữa các nhóm \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\subsection{Giới hạn của phương pháp}
+
+Mặc dù thống kê mô tả và trực quan hóa là những công cụ cần thiết trong giai đoạn khám phá dữ liệu, các phương pháp này có một số giới hạn. Trước hết, các chỉ số mô tả chỉ phản ánh đặc điểm của dữ liệu đang được phân tích và không tự thân cung cấp bằng chứng để kết luận về ý nghĩa thống kê hoặc quan hệ nhân quả.
+
+Thứ hai, các đại lượng như mean và standard deviation có thể bị ảnh hưởng đáng kể bởi các giá trị cực trị. Trong dữ liệu mạng, nơi một số đặc trưng có thể có phân bố lệch mạnh hoặc chứa các giá trị rất lớn, việc chỉ báo cáo trung bình có thể tạo ra một bức tranh chưa đầy đủ. Vì vậy, cần kết hợp median, quartiles, IQR và trực quan hóa để có đánh giá cân bằng hơn.
+
+Thứ ba, hình thức trực quan hóa cũng phụ thuộc vào cách lựa chọn thang đo, khoảng chia dữ liệu và cách nhóm các quan sát. Hai biểu đồ được xây dựng với các thiết lập khác nhau có thể tạo ra ấn tượng khác nhau về cùng một tập dữ liệu. Do đó, biểu đồ cần được diễn giải cùng với các chỉ số số học và bối cảnh của biến.
+
+Cuối cùng, các khác biệt quan sát được thông qua thống kê mô tả không đồng nghĩa với việc những khác biệt đó có ý nghĩa thống kê. Những kết quả mô tả chỉ đóng vai trò gợi ý và định hướng cho các bước phân tích tiếp theo. Các kết luận liên quan đến sự khác biệt, mối liên hệ hoặc khả năng dự đoán cần được đánh giá thêm bằng các phương pháp suy luận và mô hình hóa được trình bày trong các mục tiếp theo của Chương 3.
+
+\end{document}
