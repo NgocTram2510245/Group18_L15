@@ -1,0 +1,18 @@
+﻿rq,figure,caption
+RQ1,figures/srv_serror_rate/01_boxplot.png,"Boxplot dùng toàn bộ dữ liệu; điểm ngoại lệ chỉ ẩn khỏi hình để dễ đọc, không bị loại khỏi kiểm định."
+RQ1,figures/srv_serror_rate/02_mean_ci95.png,"Điểm là trung bình từng nhóm; thanh sai số là CI 95% của trung bình nhóm, không phải độ lệch chuẩn hay CI của chênh lệch."
+RQ1,figures/srv_serror_rate/03_ecdf.png,ECDF dùng tối đa 5.000 quan sát/nhóm với random_state=18015 để hình rõ và tệp gọn; kiểm định vẫn dùng toàn bộ dữ liệu.
+RQ1,figures/srv_serror_rate/04_qq_plot.png,Q-Q plot dùng tối đa 1.000 quan sát/nhóm để chẩn đoán hình dạng; sai lệch rõ không được che khuất bởi số điểm quá lớn.
+RQ1,figures/srv_serror_rate/05_boundary_mass.png,"Tỷ lệ giá trị bằng 0 (và bằng 1 với biến tỷ lệ) cho thấy dữ liệu rời rạc/tập trung tại biên, là giới hạn của xấp xỉ ANOVA/t-test chuẩn."
+RQ2,figures/srv_rerror_rate/01_boxplot.png,"Boxplot dùng toàn bộ dữ liệu; điểm ngoại lệ chỉ ẩn khỏi hình để dễ đọc, không bị loại khỏi kiểm định."
+RQ2,figures/srv_rerror_rate/02_mean_ci95.png,"Điểm là trung bình từng nhóm; thanh sai số là CI 95% của trung bình nhóm, không phải độ lệch chuẩn hay CI của chênh lệch."
+RQ2,figures/srv_rerror_rate/03_ecdf.png,ECDF dùng tối đa 5.000 quan sát/nhóm với random_state=18015 để hình rõ và tệp gọn; kiểm định vẫn dùng toàn bộ dữ liệu.
+RQ2,figures/srv_rerror_rate/04_qq_plot.png,Q-Q plot dùng tối đa 1.000 quan sát/nhóm để chẩn đoán hình dạng; sai lệch rõ không được che khuất bởi số điểm quá lớn.
+RQ2,figures/srv_rerror_rate/05_boundary_mass.png,"Tỷ lệ giá trị bằng 0 (và bằng 1 với biến tỷ lệ) cho thấy dữ liệu rời rạc/tập trung tại biên, là giới hạn của xấp xỉ ANOVA/t-test chuẩn."
+RQ3,figures/count/01_boxplot.png,"Boxplot dùng toàn bộ dữ liệu; điểm ngoại lệ chỉ ẩn khỏi hình để dễ đọc, không bị loại khỏi kiểm định."
+RQ3,figures/count/02_mean_ci95.png,"Điểm là trung bình từng nhóm; thanh sai số là CI 95% của trung bình nhóm, không phải độ lệch chuẩn hay CI của chênh lệch."
+RQ3,figures/count/03_ecdf.png,ECDF dùng tối đa 5.000 quan sát/nhóm với random_state=18015 để hình rõ và tệp gọn; kiểm định vẫn dùng toàn bộ dữ liệu.
+RQ3,figures/count/04_qq_plot.png,Q-Q plot dùng tối đa 1.000 quan sát/nhóm để chẩn đoán hình dạng; sai lệch rõ không được che khuất bởi số điểm quá lớn.
+RQ3,figures/count/05_boundary_mass.png,"Tỷ lệ giá trị bằng 0 (và bằng 1 với biến tỷ lệ) cho thấy dữ liệu rời rạc/tập trung tại biên, là giới hạn của xấp xỉ ANOVA/t-test chuẩn."
+All,figures/comparison/mean_difference_forest.png,Mỗi panel dùng đơn vị riêng; đường 0 biểu thị không có chênh lệch trung bình. Không so độ dài tuyệt đối giữa các panel khác đơn vị.
+All,figures/comparison/effect_size_forest.png,Hedges g là chỉ số mô tả chuẩn hóa bằng SD gộp; CI dùng xấp xỉ chuẩn và cần đọc cùng chênh lệch trên đơn vị gốc.

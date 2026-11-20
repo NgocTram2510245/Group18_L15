@@ -1,0 +1,30 @@
+% !TEX root = ../main.tex
+% CHU SO HUU: nguoi tong hop | KHONG THEO PREAMBLE, KHONG BEGIN DOCUMENT TRONG THAN PHAN NAY.
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\label{app:files}
+Thư mục \texttt{code/} đi kèm báo cáo gồm mã Python, dữ liệu, notebook và các tệp kết quả của từng phần (Bảng~\ref{tab:app:files}). Dữ liệu đã làm sạch \texttt{train\_clean.csv} và \texttt{test\_clean.csv} nằm trong \texttt{code/data/}. Thư viện cần cài được ghi trong các tệp \texttt{requirements.txt} của từng thư mục.
+
+\begin{table}[H]
+\centering
+\caption{Tệp mã nguồn và kết quả kèm theo báo cáo}
+\label{tab:app:files}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{3.6cm}}
+\toprule
+Task & Thư mục & Tệp chính & Cách chạy \\
+\midrule
+Task 1, Task 5 & --- & Không có. & --- \\
+Task 2 (dữ liệu, mô tả) & \texttt{code/} & \path{preprocessing.py} (kiểm tra chất lượng, gán nhãn, tạo \texttt{train\_clean.csv}, \texttt{test\_clean.csv}, các bảng mô tả và ba hình \path{task2_*.pdf}); từ điển dữ liệu \texttt{data\_dictionary.csv} được hoàn thiện thủ công, script chỉ sinh bản tự động \texttt{data\_dictionary\_auto.csv}; ánh xạ nhãn trong \texttt{code/data/}. & \texttt{python} \path{preprocessing.py} (cần \path{data/raw/KDDTrain+.txt}, \path{KDDTest+.txt} và \path{KDDTrain+.arff}) \\
+Task 3.1 (Pearson) & \texttt{code/task31\_pearson/} & \texttt{pearson\_correlation.py} (ma trận, cặp $|r|>0{,}95$); \path{hypothesis_tests/pearson_hypothesis_tests.py} (kiểm định chín cặp, độ nhạy); tệp \texttt{pearson\_matrix.csv}, \path{high_correlation_pairs.csv}, \path{pearson_selected_tests.csv}. & \texttt{python} \path{pearson_correlation.py}; \texttt{python} \path{hypothesis_tests/pearson_hypothesis_tests.py} \texttt{--input} \path{train_clean.csv} \\
+Task 3.2 và 3.3 (Wilson, ANOVA) & \path{code/task32_33_wilson_anova/} & \texttt{anova\_utils.py} (Wilson, Welch ANOVA, Games--Howell), \texttt{report\_assets.py} (hình), \texttt{test\_anova\_utils.py}, \texttt{anova\_analysis.ipynb}, thư mục \texttt{results/}. & \texttt{python anova\_utils.py} hoặc \texttt{run\_analysis.ps1} \\
+Task 3.4 (Chi-square) & \path{code/task34_chi_square/} & \texttt{task34\_chi\_square.py}; \texttt{ket\_qua/} (bảng quan sát, kỳ vọng, phần dư). & \texttt{python} \path{task34_chi_square.py} (cần \texttt{train\_clean.csv} cùng thư mục) \\
+Kiểm định hai mẫu & \texttt{code/task35\_hai\_mau/} & \texttt{two\_sample\_utils.py}, \texttt{execute\_notebook.py}, \path{two_sample_analysis.ipynb}, \path{test_two_sample_utils.py}, thư mục \texttt{results/}. & \texttt{python} \path{two_sample_utils.py}; \texttt{python} \path{execute_notebook.py}; hoặc \texttt{run\_analysis.ps1} \\
+Task 4 (Logistic) & \texttt{code/task4\_logistic/} & \texttt{task4\_logistic.py}, \texttt{requirements.txt}, thư mục \texttt{outputs/} (hệ số, độ đo, phân tích lỗi). & \texttt{python} \path{task4_logistic.py} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\end{document}

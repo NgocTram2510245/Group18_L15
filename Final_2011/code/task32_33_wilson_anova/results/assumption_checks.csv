@@ -1,0 +1,29 @@
+﻿rq,feature,analysis_scale,scope,diagnostic,statistic,p_value,n_or_sample_size,variance,excess_kurtosis,iqr_outlier_proportion,warning
+RQ1,count,original,Normal,group_shape,3.8775692171810427,1.536995295566664e-82,5000,2918.817974858656,17.078822032999486,0.11869088101213192,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ1,count,original,DoS,group_shape,0.6933736423338605,9.91815118634232e-42,5000,10908.9143123426,1.1842444262971021,0.03050493173949964,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ1,count,original,Probe,group_shape,1.9770620824604832,3.6513184904714216e-78,5000,24483.037939177048,2.34638195644548,0.20950583390528482,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ1,count,original,R2L,group_shape,1.2918689731846578,1.762675531865592e-43,995,0.2313317088460411,1.1978956092286683,0.0020100502512562816,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ1,count,original,U2R,group_shape,5.556837408283203,3.1580377248472126e-15,52,550.1191553544495,31.793960327439635,0.25,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ1,count,original,all_groups,Brown-Forsythe (median-centered Levene),5817.047508635843,0.0,125973,,,,Phương sai không đồng nhất
+RQ1,count,original,all_groups,sample-size imbalance,1295.0576923076924,,125973,,,,max(n)/min(n) = 1295.1; U2R nhỏ.
+RQ2,serror_rate,original,Normal,group_shape,8.616723966613325,7.784633920734869e-93,5000,0.008875805239986928,80.29349696928642,0.0326685772834593,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ2,serror_rate,original,DoS,group_shape,-1.148440733708737,6.136722406276172e-78,5000,0.18710763367773708,-0.675823815936238,0.0,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ2,serror_rate,original,Probe,group_shape,4.833142763395382,6.984623535494535e-88,5000,0.0286234301572874,23.102142712369677,0.20615991763898422,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ2,serror_rate,original,R2L,group_shape,8.849607462088883,7.076041309360577e-56,995,0.010067313832745216,79.72724722431008,0.01507537688442211,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ2,serror_rate,original,U2R,group_shape,4.943766984800153,2.271952404561759e-15,52,0.03695701357466063,23.337600000000002,0.038461538461538464,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ2,serror_rate,original,all_groups,Brown-Forsythe (median-centered Levene),5279.289433203422,0.0,125973,,,,Phương sai không đồng nhất
+RQ2,serror_rate,original,all_groups,sample-size imbalance,1295.0576923076924,,125973,,,,max(n)/min(n) = 1295.1; U2R nhỏ.
+RQ3,src_bytes,log1p,Normal,group_shape,-0.16852347752203636,6.935960881142794e-56,5000,3.4011168000237326,4.812613582173022,0.17403442080097412,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ3,src_bytes,log1p,DoS,group_shape,3.1731234906117503,4.1457119152261595e-86,5000,5.058230689944282,9.157122399311424,0.10224922159078538,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ3,src_bytes,log1p,Probe,group_shape,2.7471658087811996,2.7761827037127154e-66,5000,1.7083714719119674,27.429452067872027,0.0015442690459849004,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ3,src_bytes,log1p,R2L,group_shape,1.7623010925078317,1.574580131721425e-40,995,6.89277079376588,5.9909307365684725,0.10050251256281408,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ3,src_bytes,log1p,U2R,group_shape,-0.6811120836989017,1.6062812774043089e-06,52,9.18019279962473,-1.099570069839747,0.0,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ3,src_bytes,log1p,all_groups,Brown-Forsythe (median-centered Levene),364.3551604388223,1.58511644207e-312,125973,,,,Phương sai không đồng nhất
+RQ3,src_bytes,log1p,all_groups,sample-size imbalance,1295.0576923076924,,125973,,,,max(n)/min(n) = 1295.1; U2R nhỏ.
+RQ4,duration,log1p,Normal,group_shape,4.407261846846215,4.082408737050318e-87,5000,2.326657002559795,19.674850416042304,0.11815630429294804,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ4,duration,log1p,DoS,group_shape,38.03429431227298,9.820887534881407e-96,5000,0.003567115835778072,1495.7408663681642,0.0008927210573301108,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ4,duration,log1p,Probe,group_shape,2.8683377553479312,2.0467100515033784e-85,5000,7.800695254334556,6.440709473015357,0.1369251887439945,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ4,duration,log1p,R2L,group_shape,2.3942558778102807,1.465512479984502e-45,995,6.471052897334811,4.314033236685989,0.15477386934673368,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ4,duration,log1p,U2R,group_shape,-0.49242780130744307,6.35937823309988e-06,52,4.533352819190277,-1.2639798451731759,0.0,Shapiro dùng mẫu tối đa 5.000; không dùng một mình để chọn kiểm định.
+RQ4,duration,log1p,all_groups,Brown-Forsythe (median-centered Levene),1318.151750607262,0.0,125973,,,,Phương sai không đồng nhất
+RQ4,duration,log1p,all_groups,sample-size imbalance,1295.0576923076924,,125973,,,,max(n)/min(n) = 1295.1; U2R nhỏ.

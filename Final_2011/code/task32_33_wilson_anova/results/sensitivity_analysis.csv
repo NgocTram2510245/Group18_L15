@@ -1,0 +1,9 @@
+﻿rq,feature,analysis_variable,method,statistic,df_numerator,df_denominator,p_value,p_display,estimand_note
+RQ1,count,count,Classical one-way ANOVA (sensitivity),21428.453146708478,4.0,125968.0,0.0,< 1e-300,Equality of means on the named analysis scale.
+RQ1,count,count,Kruskal-Wallis (sensitivity),61913.26442505599,4.0,,0.0,< 1e-300,Rank-distribution test; not an equivalent test of raw means/medians.
+RQ2,serror_rate,serror_rate,Classical one-way ANOVA (sensitivity),51426.25697825211,4.0,125968.0,0.0,< 1e-300,Equality of means on the named analysis scale.
+RQ2,serror_rate,serror_rate,Kruskal-Wallis (sensitivity),72445.74273171401,4.0,,0.0,< 1e-300,Rank-distribution test; not an equivalent test of raw means/medians.
+RQ3,src_bytes,log1p(src_bytes),Classical one-way ANOVA (sensitivity),40721.03765283152,4.0,125968.0,0.0,< 1e-300,Equality of means on the named analysis scale.
+RQ3,src_bytes,log1p(src_bytes),Kruskal-Wallis (sensitivity),68347.04983221697,4.0,,0.0,< 1e-300,Rank-distribution test; not an equivalent test of raw means/medians.
+RQ4,duration,log1p(duration),Classical one-way ANOVA (sensitivity),1353.36888862945,4.0,125968.0,0.0,< 1e-300,Equality of means on the named analysis scale.
+RQ4,duration,log1p(duration),Kruskal-Wallis (sensitivity),7340.697272332976,4.0,,0.0,< 1e-300,Rank-distribution test; not an equivalent test of raw means/medians.

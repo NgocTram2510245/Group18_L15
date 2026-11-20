@@ -1,0 +1,69 @@
+% !TEX root = ../main.tex
+% CHU SO HUU: Mỹ Uyên và Mai Quyên | KHONG THEO PREAMBLE, KHONG BEGIN DOCUMENT TRONG THAN PHAN NAY.
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\section{Phân tích tương quan Pearson}
+\label{sec:t31:phuong-phap}
+
+NSL-KDD được xây dựng nhằm cải thiện một số hạn chế của KDD Cup 99
+\cite{task1_tavallaee2009}. Các đặc trưng thời lượng, lưu lượng và trạng thái
+kết nối có thể cùng phản ánh một hành vi mạng, tạo thông tin tuyến tính
+trùng lặp. Nhóm dùng tương quan Pearson để xem xét khả năng dư thừa,
+không tự động loại biến dựa trên tương quan cao.
+
+\subsection{Hệ số Pearson và quy trình lựa chọn biến}
+\label{sec:t31:pearson-r}
+Hệ số tương quan Pearson mẫu giữa hai biến định lượng $X,Y$ được tính bởi
+\begin{equation}
+ r_{XY}=\frac{\sum_{i=1}^{n}(x_i-\bar{x})(y_i-\bar{y})}
+ {\sqrt{\sum_{i=1}^{n}(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^{n}(y_i-\bar{y})^2}}.
+ \label{eq:t31:pearson}
+\end{equation}
+Trong đó $n$ là số kết nối, $x_i,y_i$ là giá trị quan sát thứ $i$,
+còn $\bar{x},\bar{y}$ là các trung bình mẫu. Với $r\in[-1,1]$,
+dấu dương/âm thể hiện chiều tương quan; $|r|$ càng gần 1 thì tương quan
+tuyến tính càng mạnh. $r$ gần 0 không loại trừ quan hệ phi tuyến;
+tương quan không chứng minh quan hệ nhân quả.
+
+Phân tích dùng $125\,973$ kết nối của tập huấn luyện \texttt{KDDTrain+},
+nhất quán với \texttt{train\_clean.csv}. Loại ba biến danh nghĩa
+\texttt{protocol\_type}, \texttt{service}, \texttt{flag}, các cột
+nhãn/metadata và biến hằng \texttt{num\_outbound\_cmds}. Còn 37 đặc trưng
+định lượng, xét các cặp không trùng lặp; ngưỡng $|r|>0{,}95$ dùng để sàng lọc
+cặp tương quan rất cao, không phải quy tắc tự động loại biến.
+
+Ba biến danh nghĩa nêu trên không được đưa trực tiếp vào tính Pearson vì mã
+số nhóm không biểu thị khoảng cách định lượng. Bốn cột nhãn/metadata được
+loại khỏi tập đặc trưng gồm \nolinkurl{attack_name}, \texttt{difficulty},
+\nolinkurl{attack_category} và \nolinkurl{label_binary}. Biến
+\texttt{num\_outbound\_cmds} có phương sai bằng không nên không thể
+tính hệ số Pearson với các biến còn lại.
+
+\subsection{Kiểm định ý nghĩa thống kê của tương quan}
+\label{sec:t31:kiem-dinh}
+Nhóm kiểm định hai phía trên chín cặp tiêu biểu cho tương quan rất cao,
+trung bình, âm, yếu và gần bằng không. Với mỗi cặp $X,Y$, đặt
+\begin{equation}
+ H_0:\rho_{XY}=0,\qquad H_1:\rho_{XY}\neq 0,
+ \label{eq:t31:hypotheses}
+\end{equation}
+trong đó $\rho_{XY}$ là hệ số tương quan Pearson của tổng thể, phân biệt
+với hệ số mẫu $r_{XY}$. Chọn mức ý nghĩa $\alpha=0{,}05$. Thống kê kiểm định là
+\begin{equation}
+ t= r\sqrt{\frac{n-2}{1-r^2}}, \qquad df=n-2=125\,971.
+ \label{eq:t31:t-stat}
+\end{equation}
+Giả sử các cặp quan sát độc lập và phân phối chuẩn hai chiều phù hợp,
+dưới $H_0$ thì thống kê có phân phối Student với $df=n-2$ bậc tự do.
+Giá trị $p$ hai phía được tính là $2P(T_{df}\geq|t_{\mathrm{obs}}|)$.
+Quy tắc ra quyết định: bác bỏ $H_0$ khi $p<0{,}05$; nếu không,
+\emph{chưa đủ bằng chứng} để bác bỏ $H_0$.
+
+Vì lựa chọn cặp sau khảo sát ma trận, đây là phân tích \emph{khám phá}.
+Nhóm tính thêm $p$ điều chỉnh Holm cho chín cặp, không phải cả 666 cặp.
+Kết nối mạng có thể phụ thuộc thời gian/nguồn phát; biến đếm thường lệch và
+có ngoại lệ, khiến giả định kiểm định chưa chắc thoả mãn. Vì vậy, cần đọc
+$p$ cùng $r$, độ nhạy với ngoại lệ và ý nghĩa chuyên ngành; không tự động
+suy rộng sang mọi lưu lượng mạng thực tế.
+
+\end{document}

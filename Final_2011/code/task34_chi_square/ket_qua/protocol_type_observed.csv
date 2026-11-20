@@ -1,0 +1,4 @@
+protocol_type,Normal,DoS,Probe,R2L,U2R
+tcp,53600,42188,5857,995,49
+udp,12434,892,1664,0,3
+icmp,1309,2847,4135,0,0

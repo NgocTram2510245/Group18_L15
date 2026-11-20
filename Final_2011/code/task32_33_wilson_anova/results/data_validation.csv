@@ -1,0 +1,9 @@
+﻿check,value,status
+row_count,125973,PASS
+required_columns,"attack_name, attack_category, label_binary, count, serror_rate, src_bytes, duration",PASS
+missing_values,0,PASS
+numeric_coercion_failures,0,PASS
+finite_values,True,PASS
+five_expected_groups,"DoS, Normal, Probe, R2L, U2R",PASS
+feature_domains,True,PASS
+binary_label_consistency,True,PASS

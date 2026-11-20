@@ -1,0 +1,109 @@
+% !TEX root = ../main.tex
+% CHU SO HUU: Mỹ Uyên và Mai Quyên | KHONG THEO PREAMBLE, KHONG BEGIN DOCUMENT TRONG THAN PHAN NAY.
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\section{Kết quả phân tích tương quan Pearson}
+\label{sec:t31:ket-qua}
+
+\subsection{Dữ liệu, ma trận tương quan và heatmap}
+Tập huấn luyện gồm $125\,973$ quan sát. Tệp \nolinkurl{train_clean.csv}
+có 45 cột: 41 đặc trưng gốc và bốn cột nhãn/metadata. Dữ liệu không
+có giá trị thiếu hoặc bản ghi trùng. Theo quy trình ở
+Mục~\ref{sec:t31:pearson-r}, còn 37 biến số không hằng (Bảng~\ref{tab:t31:data}).
+
+\begin{table}[htbp]
+\centering
+\caption{Tóm tắt dữ liệu đầu vào của phân tích Pearson}
+\label{tab:t31:data}
+\small
+\begin{tabular}{lr}
+\toprule
+Thông tin & Kết quả\\
+\midrule
+Số quan sát (tập huấn luyện) & $125\,973$\\
+Số đặc trưng gốc & 41\\
+Số cột nhãn/metadata trong dữ liệu sạch & 4\\
+Giá trị thiếu / bản ghi trùng & 0 / 0\\
+Biến hằng không đưa vào Pearson & \texttt{num\_outbound\_cmds}\\
+Số biến định lượng được phân tích & 37\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Ma trận tương quan có kích thước $37\times37$, đối xứng, đường chéo chính
+bằng 1 và không có giá trị không xác định hoặc vô cực. Số cặp khác nhau
+là $37(37-1)/2=666$. Ma trận đầy đủ được lưu trong
+\texttt{pearson\_matrix.csv}; danh sách các cặp vượt ngưỡng được lưu
+trong \texttt{high\_correlation\_pairs.csv} (các tệp này nằm trong thư mục
+kèm theo báo cáo, xem Phụ lục~\ref{app:files}). Hình~\ref{fig:t31:heatmap}
+cho thấy các cụm tương quan; việc xác định cặp vượt ngưỡng được tính
+trực tiếp từ hệ số chứ không suy từ màu sắc.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\linewidth]{figures/task31_pearson_heatmap.png}
+\caption{Heatmap Pearson của 37 đặc trưng định lượng trên tập \texttt{KDDTrain+}.}
+\label{fig:t31:heatmap}
+\end{figure}
+\FloatBarrier
+
+\subsection{Các cặp tương quan rất cao và khả năng dư thừa}
+Lọc tam giác trên của ma trận với $|r|>0{,}95$ cho 10/666 cặp;
+\emph{tất cả đều tương quan thuận} (Bảng~\ref{tab:t31:highcorr}).
+
+Trong 10 cặp, một cặp liên quan đến biến đếm \emph{root}, sáu cặp thuộc
+nhóm tỷ lệ lỗi SYN và ba cặp thuộc nhóm tỷ lệ lỗi REJ. Ở nhóm root,
+\texttt{num\_compromised} đếm các điều kiện compromised, còn
+\texttt{num\_root} đếm số lần truy cập root; hai đặc trưng liên hệ chặt
+nhưng không đồng nghĩa về định nghĩa. Ở nhóm SYN, các biến
+\nolinkurl{serror_rate}, \nolinkurl{srv_serror_rate},
+\nolinkurl{dst_host_serror_rate} và \nolinkurl{dst_host_srv_serror_rate}
+đo tỷ lệ lỗi tại các phạm vi tổng hợp khác nhau. Sáu cặp có
+$0{,}977596\leq r\leq0{,}993289$. Ở nhóm REJ, ba cặp vượt ngưỡng
+liên quan đến \nolinkurl{rerror_rate}, \nolinkurl{srv_rerror_rate} và
+\nolinkurl{dst_host_srv_rerror_rate}, với
+$0{,}964449\leq r\leq0{,}989008$. Những phạm vi thống kê khác nhau có
+thể mang thông tin riêng dù tương quan rất cao.
+
+\subsection{Kết quả kiểm định giả thuyết Pearson}
+Bảng~\ref{tab:t31:tests} báo cáo kiểm định hai phía cho chín cặp minh hoạ,
+dùng cùng $n=125\,973$ kết nối và $df=125\,971$.
+
+Có tám trong chín cặp cho $p<0{,}05$; kết quả quyết định không đổi sau
+điều chỉnh Holm cho đúng chín phép thử được trình bày. Các cặp P1--P4 có
+$r>0{,}97$, phù hợp với tương quan tuyến tính thuận rất mạnh trong
+Bảng~\ref{tab:t31:highcorr}. Cặp P5 (cùng tỷ lệ dịch vụ) có
+$r=0{,}788978$, còn P6 (số kết nối) có $r=0{,}471079$. Cặp P7
+liên hệ lỗi SYN và REJ có $r=-0{,}227536$, phản ánh tương quan
+nghịch tương đối yếu trong mẫu.
+
+Đặc biệt, P8 (\texttt{duration}, \texttt{src\_bytes}) có
+$r=0{,}070737$ nhưng $p=1{,}929\cdot10^{-139}$: với cỡ mẫu rất lớn,
+mối liên hệ tuyến tính rất yếu vẫn có thể đạt ý nghĩa thống kê.
+Ngược lại, P9 (\texttt{src\_bytes}, \texttt{dst\_bytes}) cho
+$r=0{,}000204$ và $p=0{,}9423$, nên chưa bác bỏ $H_0$;
+điều đó \emph{không chứng minh} hai đặc trưng độc lập. Khoảng tin cậy
+xấp xỉ 95\% theo biến đổi Fisher cho $\rho$ của P9 là
+$[-0{,}005318;\,0{,}005726]$. Giá trị $p$ rất nhỏ bị làm tròn thành 0
+trong tính toán số được trình bày $p<10^{-300}$, không phải xác suất bằng 0.
+
+\subsection{Thảo luận và đề xuất đặc trưng cần xem xét}
+Cặp root P1 nhạy với các quan sát có số đếm cực lớn. Để chẩn đoán,
+nhóm tính lại $r$ sau khi chỉ giữ các dòng có \emph{cả hai} số đếm
+không vượt 10. Có $86/125\,973$ dòng bị tạm loại khỏi phép kiểm tra độ nhạy,
+và $r$ giảm từ $0{,}998833$ xuống $0{,}095623$. Đây \emph{không phải}
+bước làm sạch dữ liệu: các trường hợp cực trị có thể quan trọng cho nhận diện
+xâm nhập. Kết quả nhắc rằng tương quan cao chưa chắc bền vững trên mọi
+phần dữ liệu.
+
+Trên cơ sở kết quả mô tả và kiểm định, nhóm đưa năm đặc trưng vào danh sách
+\emph{cần xem xét tiếp}: \nolinkurl{num_root}, \nolinkurl{srv_serror_rate},
+\nolinkurl{dst_host_srv_serror_rate}, \nolinkurl{srv_rerror_rate},
+\nolinkurl{dst_host_srv_rerror_rate}. Đây không phải danh sách các biến đã bị
+xóa. Những tỷ lệ lỗi được biểu diễn trong khoảng $[0,1]$, không phải
+phần trăm $0$--$100$. Chưa có thử nghiệm hiệu quả mô hình trước và sau khi
+loại biến, nên không thể kết luận đặc trưng nào hoàn toàn thay thế được
+đặc trưng khác. Quyết định chọn biến còn cần dựa vào định nghĩa mạng,
+độ nhạy với ngoại lệ và đánh giá mô hình độc lập.
+
+\end{document}

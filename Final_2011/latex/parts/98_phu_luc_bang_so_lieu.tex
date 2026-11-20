@@ -1,0 +1,566 @@
+% !TEX root = ../main.tex
+% CHU SO HUU: nguoi tong hop | KHONG THEO PREAMBLE, KHONG BEGIN DOCUMENT TRONG THAN PHAN NAY.
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+\section{Chương~2: Dữ liệu và tiền xử lý}
+
+\begin{table}[H]
+\centering
+\caption{Kiểm tra cấu trúc và chất lượng của hai tập dữ liệu gốc}
+\label{tab:t2:quality}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{10.1cm}rr}
+\toprule
+Tiêu chí / đơn vị & Train & Test \\
+\midrule
+Quy mô (dòng) & 125\,973 & 22\,544 \\
+Số trường trong TXT & 43 & 43 \\
+Giá trị thiếu (ô) & 0 & 0 \\
+Chuỗi rỗng / chỉ khoảng trắng (ô) & 0 & 0 \\
+Giá trị vô hạn ở trường số (ô) & 0 & 0 \\
+Lỗi chuyển kiểu số (ô) & 0 & 0 \\
+Dòng lặp dư theo 43 trường & 0 & 0 \\
+Dòng lặp dư theo 41 đặc trưng & 16 & 57 \\
+Nhóm trùng 41 đặc trưng & 15 & 57 \\
+Dòng thuộc nhóm trùng đặc trưng & 31 & 114 \\
+Nhóm đặc trưng có nhãn gốc khác nhau & 15 & 57 \\
+Dòng thuộc nhóm xung đột nhãn & 31 & 114 \\
+Nhóm đặc trưng có cả Normal và Attack & 7 & 54 \\
+Dòng thuộc nhóm xung đột nhị phân & 14 & 108 \\
+Giá trị âm ở 38 đặc trưng số (ô) & 0 & 0 \\
+Tỷ lệ ngoài $[0,1]$ (ô) & 0 & 0 \\
+Sai miền ở năm biến nhị phân (ô) & 0 & 0 \\
+\texttt{su\_attempted}=2 (dòng) & 59 & 2 \\
+Đặc trưng hằng (biến) & 1 & 1 \\
+Gần hằng, không hằng; tần suất mốt $\geq99\%$ (biến) & 12 & 10 \\
+\bottomrule
+\end{tabular}
+\par\smallskip\footnotesize Dòng lặp dư: số dòng còn lại sau khi giữ một dòng trong mỗi tổ hợp trùng. Nhóm trùng và dòng liên quan được đếm riêng; không cộng các dòng tiêu chí với nhau.
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Đối chiếu dữ liệu trước và sau chuẩn hóa nhãn}
+\label{tab:t2:beforeafter}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{7.5cm}rrrr}
+\toprule
+Chỉ tiêu & \multicolumn{2}{c}{Train} & \multicolumn{2}{c}{Test} \\ & Trước & Sau & Trước & Sau \\
+\midrule
+Số dòng & 125\,973 & 125\,973 & 22\,544 & 22\,544 \\
+Tổng số trường & 43 & 45 & 43 & 45 \\
+Đặc trưng mạng & 41 & 41 & 41 & 41 \\
+Nhãn dẫn xuất bổ sung & 0 & 2 & 0 & 2 \\
+Giá trị thiếu (ô) & 0 & 0 & 0 & 0 \\
+Dòng bị loại & --- & 0 & --- & 0 \\
+Tổng nhãn năm nhóm & --- & 125\,973 & --- & 22\,544 \\
+Tổng Normal/Attack & --- & 125\,973 & --- & 22\,544 \\
+\bottomrule
+\end{tabular}
+\par\smallskip\footnotesize Giữ nguyên 41 đặc trưng, \texttt{attack\_name} và \texttt{difficulty}; bổ sung nhãn nhóm và nhãn nhị phân.
+\end{table}
+
+\section{Chương~3: Phương pháp Xác suất và Thống kê}
+
+\begin{table}[H]
+  \centering
+  \caption{Thang đánh giá độ mạnh của liên hệ theo Cramér's V\cite{task34_kim2017}}
+  \label{tab:t34:cramer-scale}
+  \begin{tabular}{cccc}
+    \toprule
+    $k = \min(r-1,\, c-1)$ & Yếu (nhỏ) & Trung bình & Mạnh (lớn) \\
+    \midrule
+    $1$ & $0{,}10$ & $0{,}30$ & $0{,}50$ \\
+    $2$ & $0{,}07$ & $0{,}21$ & $0{,}35$ \\
+    $3$ & $0{,}06$ & $0{,}17$ & $0{,}29$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Chương~4: Kết quả và thảo luận}
+
+\begin{table}[H]
+\centering
+\caption{Xu hướng trung tâm và độ phân tán trên KDDTrain+ ($n=125\,973$ cho mỗi biến)}
+\label{tab:t2:descriptive}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Đặc trưng & Trung bình & Trung vị & ĐLC mẫu & Min & Max \\
+\midrule
+\texttt{duration} & 287,14 & 0,00 & 2\,604,52 & 0 & 42\,908 \\
+\texttt{src\_bytes} & 45\,566,74 & 44,00 & 5\,870\,331,18 & 0 & 1.380e09 \\
+\texttt{dst\_bytes} & 19\,779,11 & 0,00 & 4\,021\,269,15 & 0 & 1.310e09 \\
+\texttt{count} & 84,11 & 14,00 & 114,51 & 0 & 511 \\
+\texttt{srv\_count} & 27,74 & 8,00 & 72,64 & 0 & 511 \\
+\texttt{serror\_rate} & 0,284 & 0,000 & 0,446 & 0 & 1 \\
+\bottomrule
+\end{tabular}
+\par\smallskip\footnotesize \texttt{duration}: giây; \texttt{src\_bytes}, \texttt{dst\_bytes}: byte; \texttt{count}, \texttt{srv\_count}: số kết nối; \texttt{serror\_rate}: tỷ lệ 0--1. Ký hiệu eN nghĩa là nhân $10^N$.
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Phân vị, phương sai mẫu và tỷ lệ bằng 0 trên KDDTrain+}
+\label{tab:t2:quantiles}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Đặc trưng & $Q_1$ & $Q_3$ & IQR & Phương sai mẫu & Bằng 0 (\%) \\
+\midrule
+\texttt{duration} & 0 & 0 & 0 & 6\,783\,500,00 & 92,05 \\
+\texttt{src\_bytes} & 0 & 276 & 276 & 3.446e13 & 39,21 \\
+\texttt{dst\_bytes} & 0 & 516 & 516 & 1.617e13 & 53,95 \\
+\texttt{count} & 2 & 143 & 141 & 13\,112,22 & 0,01 \\
+\texttt{srv\_count} & 2 & 18 & 16 & 5\,275,97 & 0,01 \\
+\texttt{serror\_rate} & 0 & 1 & 1 & 0,199 & 68,93 \\
+\bottomrule
+\end{tabular}
+\par\smallskip\footnotesize Phương sai có đơn vị bình phương: giây$^2$, byte$^2$, kết nối$^2$; phương sai của tỷ lệ không có đơn vị vật lý. IQR giữ đơn vị gốc.
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Phân bố năm nhóm và tổng hợp nhị phân trên KDDTrain+}
+\label{tab:t2:labels}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrr}
+\toprule
+Nhãn & Tần số & Tỷ lệ (\%) \\
+\midrule
+Normal & 67\,343 & 53,458 \\
+DoS & 45\,927 & 36,458 \\
+Probe & 11\,656 & 9,253 \\
+R2L & 995 & 0,790 \\
+U2R & 52 & 0,041 \\
+\midrule Tổng & 125\,973 & 100,000 \\
+\midrule Normal (nhị phân) & 67\,343 & 53,458 \\
+Attack (nhị phân) & 58\,630 & 46,542 \\
+\bottomrule
+\end{tabular}
+\par\smallskip\footnotesize Attack là tổng DoS, Probe, R2L và U2R; hai hàng nhị phân là cách gộp lại cùng mẫu, không cộng thêm vào tổng năm nhóm.
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{So sánh trực tiếp Normal và Attack trên KDDTrain+}
+\label{tab:t2:comparison}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrrr}
+\toprule
+Đặc trưng & Nhóm ($n$) & TB & Trung vị & ĐLC mẫu & $Q_1$--$Q_3$ \\
+\midrule
+\texttt{src\_bytes} & Normal (67\,343) & 13\,133,28 & 233 & 418\,113,13 & 129--324 \\
+\texttt{src\_bytes} & Attack (58\,630) & 82\,820,14 & 0 & 8\,593\,024,60 & 0--0 \\
+\texttt{count} & Normal (67\,343) & 22,52 & 4 & 54,03 & 1--14 \\
+\texttt{count} & Attack (58\,630) & 154,85 & 138 & 124,33 & 40--241 \\
+\texttt{serror\_rate} & Normal (67\,343) & 0,013 & 0 & 0,094 & 0--0 \\
+\texttt{serror\_rate} & Attack (58\,630) & 0,596 & 1 & 0,487 & 0--1 \\
+\bottomrule
+\end{tabular}
+\par\smallskip\footnotesize TB: trung bình; ĐLC: độ lệch chuẩn. \texttt{src\_bytes}: byte; \texttt{count}: kết nối; \texttt{serror\_rate}: tỷ lệ 0--1. Tính trên dữ liệu gốc, không logarit hóa.
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Các cặp đặc trưng có $|r|>0{,}95$}
+\label{tab:t31:highcorr}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}Xr@{}}
+\toprule
+Đặc trưng thứ nhất & Đặc trưng thứ hai & $r$\\
+\midrule
+\texttt{num\_compromised} & \texttt{num\_root} & 0{,}998833\\
+\texttt{serror\_rate} & \texttt{srv\_serror\_rate} & 0{,}993289\\
+\texttt{rerror\_rate} & \texttt{srv\_rerror\_rate} & 0{,}989008\\
+\texttt{srv\_serror\_rate} & \texttt{dst\_host\_srv\_serror\_rate} & 0{,}986252\\
+\texttt{dst\_host\_serror\_rate} & \texttt{dst\_host\_srv\_serror\_rate} & 0{,}985052\\
+\texttt{serror\_rate} & \texttt{dst\_host\_srv\_serror\_rate} & 0{,}981139\\
+\texttt{serror\_rate} & \texttt{dst\_host\_serror\_rate} & 0{,}979373\\
+\texttt{srv\_serror\_rate} & \texttt{dst\_host\_serror\_rate} & 0{,}977596\\
+\texttt{srv\_rerror\_rate} & \texttt{dst\_host\_srv\_rerror\_rate} & 0{,}970208\\
+\texttt{rerror\_rate} & \texttt{dst\_host\_srv\_rerror\_rate} & 0{,}964449\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Kiểm định $H_0:\rho=0$ của chín cặp đặc trưng ($\alpha=0{,}05$)}
+\label{tab:t31:tests}
+\footnotesize
+\setlength{\tabcolsep}{3.8pt}
+\renewcommand{\arraystretch}{1.06}
+\begin{tabular}{@{}cp{6.0cm}rcl@{}}
+\toprule
+Mã & Cặp biến $(X,Y)$ & $r$ & $p$ hai phía & Quyết định\\
+\midrule
+P1 & \shortstack[l]{\texttt{num\_compromised} \\ \texttt{num\_root}} & 0{,}998833 & $<10^{-300}$ & Bác bỏ $H_0$\\
+P2 & \shortstack[l]{\texttt{serror\_rate} \\ \texttt{srv\_serror\_rate}} & 0{,}993289 & $<10^{-300}$ & Bác bỏ $H_0$\\
+P3 & \shortstack[l]{\texttt{rerror\_rate} \\ \texttt{srv\_rerror\_rate}} & 0{,}989008 & $<10^{-300}$ & Bác bỏ $H_0$\\
+P4 & \shortstack[l]{\texttt{serror\_rate} \\ \texttt{dst\_host\_serror\_rate}} & 0{,}979373 & $<10^{-300}$ & Bác bỏ $H_0$\\
+P5 & \shortstack[l]{\texttt{same\_srv\_rate} \\ \texttt{dst\_host\_same\_srv\_rate}} & 0{,}788978 & $<10^{-300}$ & Bác bỏ $H_0$\\
+P6 & \shortstack[l]{\texttt{count} \\ \texttt{srv\_count}} & 0{,}471079 & $<10^{-300}$ & Bác bỏ $H_0$\\
+P7 & \shortstack[l]{\texttt{serror\_rate} \\ \texttt{rerror\_rate}} & $-0{,}227536$ & $<10^{-300}$ & Bác bỏ $H_0$\\
+P8 & \shortstack[l]{\texttt{duration} \\ \texttt{src\_bytes}} & 0{,}070737 & $1{,}929\cdot10^{-139}$ & Bác bỏ $H_0$\\
+P9 & \shortstack[l]{\texttt{src\_bytes} \\ \texttt{dst\_bytes}} & 0{,}000204 & 0{,}9423 & Chưa bác bỏ $H_0$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Ước lượng tỷ lệ và khoảng tin cậy Wilson 95\% trên KDDTrain+}
+\label{tab:t32:wilson}
+\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{lrrr}
+\toprule
+Nhóm & Số quan sát & Tỷ lệ (\%) & Khoảng tin cậy 95\% (\%) \\
+\midrule
+Normal & 67\,343 & 53,458 & [53,183; 53,734] \\
+DoS    & 45\,927 & 36,458 & [36,192; 36,724] \\
+Probe  & 11\,656 &  9,253 & [ 9,094;  9,414] \\
+R2L    &    995 &  0,790 & [ 0,742;  0,840] \\
+U2R    &     52 &  0,041 & [ 0,031;  0,054] \\
+\midrule
+Tổng   & 125\,973 & 100,000 & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Trung bình và trung vị theo nhóm trên thang gốc}
+\label{tab:t33:descriptive}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrr}
+\toprule
+Đặc trưng & Thống kê & Normal & DoS & Probe & R2L & U2R \\
+\midrule
+\texttt{count} & Trung bình & 22,52 & 178,09 & 77,05 & 1,30 & 5,81 \\
+                & Trung vị   & 4 & 172 & 1 & 1 & 1 \\
+\texttt{serror\_rate} & Trung bình & 0,013 & 0,748 & 0,047 & 0,012 & 0,038 \\
+                & Trung vị   & 0 & 1 & 0 & 0 & 0 \\
+\texttt{src\_bytes} & Trung bình & 13\,133,28 & 1\,176,32 & 385\,679,84 & 307\,727,30 & 906,23 \\
+                & Trung vị   & 233 & 0 & 1 & 334 & 273 \\
+\texttt{duration} & Trung bình & 168,59 & 0,006 & 2\,074,86 & 633,42 & 80,94 \\
+                & Trung vị   & 0 & 0 & 0 & 0 & 46 \\
+\bottomrule
+\end{tabular}}
+\par\smallskip
+\footnotesize Cỡ mẫu theo thứ tự Normal, DoS, Probe, R2L, U2R là 67\,343, 45\,927,
+11\,656, 995 và 52. \texttt{count}: kết nối; \texttt{src\_bytes}: byte;
+\texttt{duration}: giây; \texttt{serror\_rate}: tỷ lệ 0--1.
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Kết quả Welch ANOVA cho bốn câu hỏi nghiên cứu}
+\label{tab:t33:omnibus}
+\small
+\setlength{\tabcolsep}{3.5pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllrrrr}
+\toprule
+RQ & Biến phân tích & $F$ & Bậc tự do $(df_1;df_2)$ & p thô & p Holm & $\eta^2_{\mathrm{mô\ tả}}$ & $\omega^2_{\mathrm{mô\ tả}}$ \\
+\midrule
+RQ1 & \texttt{count} & 35\,907,45 & (4; 405,490) & $<10^{-300}$ & $<10^{-300}$ & 0,4049 & 0,4049 \\
+RQ2 & \texttt{serror\_rate} & 31\,976,20 & (4; 386,813) & $<10^{-300}$ & $<10^{-300}$ & 0,6202 & 0,6202 \\
+RQ3 & $\ln(1+\texttt{src\_bytes})$ & 42\,494,96 & (4; 387,016) & $<10^{-300}$ & $<10^{-300}$ & 0,5639 & 0,5639 \\
+RQ4 & $\ln(1+\texttt{duration})$ & 1\,652,44 & (4; 386,205) & $2{,}16\times10^{-241}$ & $2{,}16\times10^{-241}$ & 0,0412 & 0,0412 \\
+\bottomrule
+\end{tabular}}
+\par\smallskip
+\footnotesize $\eta^2$ và $\omega^2$ được tính từ tổng bình phương cổ điển trên thang
+phân tích, nên là chỉ số mô tả, không phải effect size suy ra trực tiếp từ Welch $F$.
+Không dùng các giá trị này để xếp hạng khả năng dự đoán của đặc trưng.
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Thống kê mô tả ba đặc trưng theo nhãn trên KDDTrain+}
+\label{tab:t35:descriptive}
+\scriptsize
+\setlength{\tabcolsep}{2.7pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrrrrrrr}
+\toprule
+Đặc trưng & Nhóm & $n$ & TB & Trung vị & ĐLC & Phương sai & Min & Q1 & Q3 & Max & Tỷ lệ 0 \\
+\midrule
+\texttt{srv\_serror\_rate} & Normal & 67\,343 & 0,01208 & 0 & 0,08643 & 0,00747 & 0 & 0 & 0 & 1 & 96,546\% \\
+ & Attack & 58\,630 & 0,59307 & 1 & 0,49023 & 0,24033 & 0 & 0 & 1 & 1 & 40,486\% \\
+\texttt{srv\_rerror\_rate} & Normal & 67\,343 & 0,04463 & 0 & 0,20226 & 0,04091 & 0 & 0 & 0 & 1 & 94,687\% \\
+ & Attack & 58\,630 & 0,20911 & 0 & 0,40449 & 0,16361 & 0 & 0 & 0 & 1 & 78,462\% \\
+\texttt{count} & Normal & 67\,343 & 22,518 & 4 & 54,026 & 2\,918,818 & 0 & 1 & 14 & 511 & 0,0148\% \\
+ & Attack & 58\,630 & 154,850 & 138 & 124,334 & 15\,459,064 & 0 & 40 & 241 & 511 & 0,0051\% \\
+\bottomrule
+\end{tabular}}
+\par\smallskip
+\footnotesize TB: trung bình; ĐLC: độ lệch chuẩn mẫu. Hai biến tỷ lệ có miền 0--1;
+\texttt{count} có đơn vị kết nối. Không loại ngoại lệ khi tính bảng.
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Kết quả Welch cho RQ1 - \texttt{srv\_serror\_rate}}
+\label{tab:t35:rq1}
+\small
+\begin{tabular}{rrrrrrr}
+\toprule
+$\widehat\Delta$ & SE & $t$ & $\nu$ & p Holm & KTC 95\% của $\Delta$ & Hedges $g$ \\
+\midrule
+$-0{,}58099$ & 0,002052 & $-283{,}157$ & 61\,805,40 & $<10^{-300}$ & $[-0{,}58501;-0{,}57697]$ & $-1{,}7070$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Kết quả Welch cho RQ2 - \texttt{srv\_rerror\_rate}}
+\label{tab:t35:rq2}
+\small
+\begin{tabular}{rrrrrrr}
+\toprule
+$\widehat\Delta$ & SE & $t$ & $\nu$ & p Holm & KTC 95\% của $\Delta$ & Hedges $g$ \\
+\midrule
+$-0{,}16448$ & 0,001843 & $-89{,}230$ & 83\,489,74 & $<10^{-300}$ & $[-0{,}16810;-0{,}16087]$ & $-0{,}5254$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Kết quả Welch cho RQ3 - \texttt{count}}
+\label{tab:t35:rq3}
+\small
+\begin{tabular}{rrrrrrr}
+\toprule
+$\widehat\Delta$ & SE & $t$ & $\nu$ & p Holm & KTC 95\% của $\Delta$ & Hedges $g$ \\
+\midrule
+$-132{,}332$ & 0,5541 & $-238{,}828$ & 77\,661,21 & $<10^{-300}$ & $[-133{,}418;-131{,}246]$ & $-1{,}4143$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Tổng hợp ba kiểm định Welch hai mẫu độc lập}
+\label{tab:t35:summary}
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrrrrl}
+\toprule
+Biến & TB N & TB A & $\widehat\Delta$ & $t$ & $\nu$ & p thô & p Holm & KTC 95\% & $g$ / Quyết định \\
+\midrule
+\texttt{srv\_serror\_rate} & 0,01208 & 0,59307 & $-0,58099$ & $-283,157$ & 61\,805,40 & $<10^{-300}$ & $<10^{-300}$ & $[-0,58501;-0,57697]$ & $-1,7070$ / Bác bỏ $H_0$ \\
+\texttt{srv\_rerror\_rate} & 0,04463 & 0,20911 & $-0,16448$ & $-89,230$ & 83\,489,74 & $<10^{-300}$ & $<10^{-300}$ & $[-0,16810;-0,16087]$ & $-0,5254$ / Bác bỏ $H_0$ \\
+\texttt{count} & 22,518 & 154,850 & $-132,332$ & $-238,828$ & 77\,661,21 & $<10^{-300}$ & $<10^{-300}$ & $[-133,418;-131,246]$ & $-1,4143$ / Bác bỏ $H_0$ \\
+\bottomrule
+\end{tabular}}
+\par\smallskip
+\footnotesize TB N/A: trung bình Normal/Attack; $\widehat\Delta=$ Normal $-$ Attack.
+Hedges $g$ dùng SD gộp và được xem là effect size mô tả khi phương sai khác nhau.
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Bảng chéo tần số quan sát $O_{ij}$ giữa \texttt{protocol\_type} và \texttt{attack\_category}}
+  \label{tab:t34:chi2-observed}
+  \begin{tabular}{lrrrrrr}
+    \toprule
+    & \multicolumn{5}{c}{\texttt{attack\_category}} & \\
+    \cmidrule(lr){2-6}
+    \texttt{protocol\_type} & DoS & Normal & Probe & R2L & U2R & Tổng \\
+    \midrule
+    ICMP & $2\,847$  & $1\,309$  & $4\,135$ & $0$   & $0$  & $8\,291$ \\
+    TCP  & $42\,188$ & $53\,600$ & $5\,857$ & $995$ & $49$ & $102\,689$ \\
+    UDP  & $892$     & $12\,434$ & $1\,664$ & $0$   & $3$  & $14\,993$ \\
+    \midrule
+    Tổng & $45\,927$ & $67\,343$ & $11\,656$ & $995$ & $52$ & $125\,973$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Kết quả kiểm định chéo 5 phần trên tập KDDTrain+ của Mô hình B}
+\label{tab:t4:cv}
+\small
+\setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{rrrrrrr}
+\toprule
+$C$ & $F_1$ trung bình & $SE(F_1)$ & Accuracy & $SE(\text{Acc})$ & ROC-AUC & $SE(\text{AUC})$ \\
+\midrule
+0,001 & 0,9663 & 0,0005 & 0,9688 & 0,0004 & 0,9957 & 0,0002 \\
+0,010 & 0,9791 & 0,0006 & 0,9806 & 0,0006 & 0,9971 & 0,0002 \\
+0,100 & 0,9819 & 0,0004 & 0,9832 & 0,0004 & 0,9976 & 0,0001 \\
+1,000 & 0,9835 & 0,0005 & 0,9847 & 0,0004 & 0,9978 & 0,0001 \\
+10,000 & \textbf{0,9844} & 0,0005 & 0,9855 & 0,0005 & 0,9979 & 0,0001 \\
+100,000 & 0,9844 & 0,0005 & 0,9855 & 0,0004 & 0,9979 & 0,0001 \\
+\bottomrule
+\end{tabular}%
+}
+\par\smallskip\footnotesize $SE = \text{Độ lệch chuẩn} / \sqrt{5}$. Giá trị $C=10$ được lựa chọn theo quy tắc một sai số chuẩn (1-SE rule), bảo đảm mức độ điều chuẩn mạnh hơn trong khi $F_1$ sai khác không đáng kể so với $C=100$.
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Ước lượng tham số và tỷ số odds của Mô hình A (statsmodels Logit)}
+\label{tab:t4:coefA}
+\small
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrrr}
+\toprule
+Biến đặc trưng & $\hat\beta_j$ & $\widehat{SE}$ & $z$ (Wald) & $p$-value & $OR_j$ & CI 95\% $OR$ & VIF \\
+\midrule
+Hệ số chặn (\texttt{const}) & $-0{,}0336$ & 0,0249 & $-1{,}35$ & 0,1781 & 0,967 & $[0{,}921;\ 1{,}015]$ & --- \\
+\texttt{src\_bytes} & $-0{,}1961$ & 0,0220 & $-8{,}91$ & $<0{,}001$ & 0,822 & $[0{,}787;\ 0{,}858]$ & 5,09 \\
+\texttt{dst\_bytes} & $-0{,}5079$ & 0,0206 & $-24{,}62$ & $<0{,}001$ & 0,602 & $[0{,}578;\ 0{,}627]$ & 3,88 \\
+\texttt{count} & $1{,}1815$ & 0,0229 & $51{,}60$ & $<0{,}001$ & 3,259 & $[3{,}116;\ 3{,}409]$ & 3,11 \\
+\texttt{dst\_host\_srv\_count} & $-1{,}0452$ & 0,0175 & $-59{,}66$ & $<0{,}001$ & 0,352 & $[0{,}340;\ 0{,}364]$ & 2,92 \\
+\texttt{serror\_rate} & $1{,}8013$ & 0,0320 & $56{,}37$ & $<0{,}001$ & 6,057 & $[5{,}690;\ 6{,}449]$ & 9,38 \\
+\texttt{rerror\_rate} & $0{,}6178$ & 0,0191 & $32{,}28$ & $<0{,}001$ & 1,855 & $[1{,}787;\ 1{,}926]$ & 4,49 \\
+\texttt{same\_srv\_rate} & $-0{,}5348$ & 0,0338 & $-15{,}82$ & $<0{,}001$ & 0,586 & $[0{,}548;\ 0{,}626]$ & 8,31 \\
+\texttt{diff\_srv\_rate} & $-0{,}3988$ & 0,0139 & $-28{,}65$ & $<0{,}001$ & 0,671 & $[0{,}653;\ 0{,}690]$ & 1,48 \\
+\texttt{dst\_host\_same\_src\_port\_rate} & $0{,}6454$ & 0,0132 & $48{,}84$ & $<0{,}001$ & 1,907 & $[1{,}858;\ 1{,}957]$ & 2,11 \\
+\texttt{protocol\_type\_icmp} & $2{,}7221$ & 0,0522 & $52{,}15$ & $<0{,}001$ & 15,213 & $[13{,}733;\ 16{,}851]$ & 2,27 \\
+\texttt{protocol\_type\_udp} & $-0{,}6463$ & 0,0466 & $-13{,}88$ & $<0{,}001$ & 0,524 & $[0{,}478;\ 0{,}574]$ & 1,95 \\
+\bottomrule
+\end{tabular}%
+}
+\par\smallskip\footnotesize Thống kê tỷ số hợp lý $G = 134\,954{,}4$ ($df=11$, $p<0{,}001$). Pseudo-$R^2$ McFadden $= 0{,}7755$; $\text{AIC}=39\,102{,}1$; $\text{BIC}=39\,219{,}1$. Mức tham chiếu của giao thức là \texttt{tcp}. Toàn bộ $\text{VIF} < 10$.
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Độ đo đánh giá hiệu năng phân loại của hai mô hình trên Train và Test}
+\label{tab:t4:metrics}
+\small
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrrrr}
+\toprule
+Mô hình & Tập dữ liệu & $n$ & Accuracy & Precision & Recall & Specificity & $F_1$-score & ROC-AUC \\
+\midrule
+\textbf{Mô hình B} & Train & 125\,973 & 0,9857 & 0,9861 & 0,9831 & 0,9880 & 0,9846 & 0,9980 \\
+(Toàn phần) & & & $[0{,}9850; 0{,}9863]$ & $[0{,}9851; 0{,}9870]$ & $[0{,}9820; 0{,}9841]$ & $[0{,}9871; 0{,}9888]$ & --- & --- \\
+& Test & 22\,544 & \textbf{0,7478} & \textbf{0,9141} & \textbf{0,6147} & \textbf{0,9237} & \textbf{0,7351} & \textbf{0,7878} \\
+& & & $[0{,}7421; 0{,}7535]$ & $[0{,}9080; 0{,}9199]$ & $[0{,}6063; 0{,}6231]$ & $[0{,}9182; 0{,}9288]$ & --- & --- \\
+\midrule
+\textbf{Mô hình A} & Train & 125\,973 & 0,9513 & 0,9564 & 0,9380 & 0,9628 & 0,9471 & 0,9775 \\
+(Tập gọn) & & & $[0{,}9501; 0{,}9524]$ & $[0{,}9547; 0{,}9581]$ & $[0{,}9360; 0{,}9399]$ & $[0{,}9613; 0{,}9642]$ & --- & --- \\
+& Test & 22\,544 & 0,7454 & 0,9501 & 0,5834 & 0,9595 & 0,7229 & 0,8249 \\
+& & & $[0{,}7397; 0{,}7511]$ & $[0{,}9451; 0{,}9547]$ & $[0{,}5749; 0{,}5919]$ & $[0{,}9554; 0{,}9633]$ & --- & --- \\
+\bottomrule
+\end{tabular}%
+}
+\par\smallskip\footnotesize Các khoảng trong ngoặc vuông là khoảng tin cậy Wilson 95\%. Ngưỡng phân loại là 0,5. Lớp dương tính là Attack ($Y=1$).
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Tỷ lệ phân loại đúng theo từng nhóm lưu lượng trên Train và Test}
+\label{tab:t4:cat}
+\small
+\setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrr}
+\toprule
+Tập & Nhóm & Quy mô ($n$) & Nhận đúng & Bỏ sót & Tỷ lệ (\%) & Khoảng tin cậy 95\% \\
+\midrule
+Train & Normal & 67\,343 & 66\,532 & 811 & 98,80 (Specificity) & $[98{,}71;\ 98{,}88]$ \\
+& DoS & 45\,927 & 45\,848 & 79 & 99,83 (Recall) & $[99{,}79;\ 99{,}86]$ \\
+& Probe & 11\,656 & 11\,369 & 287 & 97,54 (Recall) & $[97{,}24;\ 97{,}80]$ \\
+& R2L & 995 & 391 & 604 & 39,30 (Recall) & $[36{,}31;\ 42{,}37]$ \\
+& U2R & 52 & 32 & 20 & 61,54 (Recall) & $[47{,}96;\ 73{,}53]$ \\
+\midrule
+Test & Normal & 9\,711 & 8\,970 & 741 & 92,37 (Specificity) & $[91{,}82;\ 92{,}88]$ \\
+& DoS & 7\,460 & 5\,930 & 1\,530 & 79,49 (Recall) & $[78{,}56;\ 80{,}39]$ \\
+& Probe & 2\,421 & 1\,854 & 567 & 76,58 (Recall) & $[74{,}85;\ 78{,}22]$ \\
+& R2L & 2\,885 & 78 & 2\,807 & \textbf{2,70} (Recall) & $[2{,}17;\ 3{,}36]$ \\
+& U2R & 67 & 27 & 40 & 40,30 (Recall) & $[29{,}39;\ 52{,}26]$ \\
+\bottomrule
+\end{tabular}%
+}
+\par\smallskip\footnotesize Đối với Normal, tỷ lệ đúng là Specificity; đối với 4 nhóm tấn công, tỷ lệ đúng là Recall. Khoảng tin cậy Wilson 95\%.
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Khả năng phát hiện các dạng tấn công đã học và tấn công mới trên KDDTest+}
+\label{tab:t4:seen}
+\small
+\setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrr}
+\toprule
+Phân nhóm tấn công & Số lượng ($n$) & Nhận diện ($TP$) & Bỏ sót ($FN$) & Recall (\%) & Khoảng tin cậy 95\% \\
+\midrule
+Đã có trong Train & 9\,083 & 6\,865 & 2\,218 & \textbf{75,58\%} & $[74{,}69\%;\ 76{,}45\%]$ \\
+Chỉ có trong Test (Mới) & 3\,750 & 1\,024 & 2\,726 & \textbf{27,31\%} & $[25{,}90\%;\ 28{,}76\%]$ \\
+\bottomrule
+\end{tabular}%
+}
+\par\smallskip\footnotesize Khoảng tin cậy Wilson 95\% cho tỷ lệ Recall.
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Danh sách các dạng tấn công bị bỏ sót nhiều nhất trên KDDTest+}
+\label{tab:t4:top_missed}
+\small
+\setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrl}
+\toprule
+Tên tấn công & Nhóm & Tổng số ($n$) & Nhận diện & Bỏ sót ($FN$) & Recall (\%) & Xuất hiện ở Train? \\
+\midrule
+\texttt{guess\_passwd} & R2L & 1\,231 & 0 & 1\,231 & 0,00\% & Có (53 dòng) \\
+\texttt{warezmaster} & R2L & 944 & 69 & 875 & 7,31\% & Có (20 dòng) \\
+\texttt{processtable} & DoS & 685 & 0 & 685 & 0,00\% & Không (Tấn công mới) \\
+\texttt{mscan} & Probe & 996 & 455 & 541 & 45,68\% & Không (Tấn công mới) \\
+\texttt{apache2} & DoS & 737 & 246 & 491 & 33,38\% & Không (Tấn công mới) \\
+\texttt{snmpguess} & R2L & 331 & 3 & 328 & 0,91\% & Không (Tấn công mới) \\
+\texttt{mailbomb} & DoS & 293 & 0 & 293 & 0,00\% & Không (Tấn công mới) \\
+\texttt{snmpgetattack} & R2L & 178 & 1 & 177 & 0,56\% & Không (Tấn công mới) \\
+\texttt{httptunnel} & R2L & 133 & 2 & 131 & 1,50\% & Không (Tấn công mới) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Độ chính xác phân loại của Mô hình B theo mức độ khó trên KDDTest+}
+\label{tab:t4:diff}
+\small
+\setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrr}
+\toprule
+Khoảng độ khó & Số quan sát ($n$) & Tấn công thực & Dự đoán đúng & Accuracy (\%) & Khoảng tin cậy 95\% \\
+\midrule
+$0 - 10$ (Rất khó) & 1\,423 & 1\,171 & 123 & \textbf{8,64\%} & $[7{,}29\%;\ 10{,}22\%]$ \\
+$11 - 15$ (Khó) & 3\,378 & 3\,215 & 955 & \textbf{28,27\%} & $[26{,}78\%;\ 29{,}81\%]$ \\
+$16 - 20$ (Trung bình) & 7\,049 & 5\,312 & 5\,101 & \textbf{72,36\%} & $[71{,}31\%;\ 73{,}40\%]$ \\
+$21$ (Rất dễ) & 10\,694 & 3\,135 & 10\,680 & \textbf{99,87\%} & $[99{,}78\%;\ 99{,}92\%]$ \\
+\bottomrule
+\end{tabular}%
+}
+\par\smallskip\footnotesize Khoảng tin cậy Wilson 95\% cho Accuracy.
+\end{table}
+
+\end{document}
